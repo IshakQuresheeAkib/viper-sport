@@ -14,3 +14,7 @@ pnpm-debug.log*
 *.tsbuildinfo
 .agents
 node_modules
+.cursorrules
+.cursor/mcp.json
+.worktrees
+stitch-designs
