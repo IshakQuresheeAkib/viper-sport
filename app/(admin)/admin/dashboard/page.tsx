@@ -26,7 +26,7 @@ async function getRegistrations() {
   if (result.error) {
     throw new Error("Could not load registrations");
   }
-
+console.log(result);
   return result.data;
 }
 
