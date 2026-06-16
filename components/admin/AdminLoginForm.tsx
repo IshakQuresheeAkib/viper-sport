@@ -21,7 +21,6 @@ export function AdminLoginForm() {
 
     const supabase = createSupabaseBrowserClient();
     const result = await supabase.auth.signInWithPassword({ email, password });
-    console.log('result: ', result);
 
     setIsSubmitting(false);
 
