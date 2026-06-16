@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
+import { shouldSkipAnimation } from "@/lib/animation";
 
 const stats = [
   { value: 500, suffix: "M+", label: "views across football content" },
@@ -19,11 +20,7 @@ export function StatsSection() {
       return;
     }
 
-    const connection = navigator as Navigator & {
-      connection?: { effectiveType?: string };
-    };
-
-    if (connection.connection?.effectiveType === "2g") {
+    if (shouldSkipAnimation()) {
       return;
     }
 

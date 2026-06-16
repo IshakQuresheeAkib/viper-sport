@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { Bell, ChevronDown, Circle } from "lucide-react";
+import { shouldSkipAnimation } from "@/lib/animation";
 
 const navLinks = [
   { href: "#", label: "Home" },
@@ -18,14 +19,6 @@ const socialLinks = [
   { href: "https://www.instagram.com/", label: "IG", ariaLabel: "Instagram" },
   { href: "https://www.youtube.com/", label: "YT", ariaLabel: "YouTube" }
 ] as const;
-
-function shouldSkipAnimation(): boolean {
-  const connection = navigator as Navigator & {
-    connection?: { effectiveType?: string };
-  };
-
-  return connection.connection?.effectiveType === "2g";
-}
 
 export function HeroSection() {
   const sectionRef = useRef<HTMLElement | null>(null);
