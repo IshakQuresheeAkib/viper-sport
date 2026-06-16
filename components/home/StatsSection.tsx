@@ -5,10 +5,10 @@ import gsap from "gsap";
 import { shouldSkipAnimation } from "@/lib/animation";
 
 const stats = [
-  { value: 500, suffix: "M+", label: "views across football content" },
-  { value: 1.4, suffix: "M+", label: "followers in the community" },
-  { value: 500, suffix: "+", label: "expected event registrations" }
-];
+  { value: 500, suffix: "M+", label: "Views", glow: true },
+  { value: 1.4, suffix: "M+", label: "Followers", glow: false },
+  { value: 5, suffix: "+", label: "Years Exp", glow: false }
+] as const;
 
 export function StatsSection() {
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -16,16 +16,23 @@ export function StatsSection() {
   useEffect(() => {
     const section = sectionRef.current;
 
-    if (!section) {
-      return;
-    }
-
-    if (shouldSkipAnimation()) {
+    if (!section || shouldSkipAnimation()) {
       return;
     }
 
     const counters = section.querySelectorAll("[data-count]");
+    const cards = section.querySelectorAll("[data-stat-card]");
+
     const ctx = gsap.context(() => {
+      gsap.set(cards, { opacity: 0, y: 20, willChange: "transform" });
+      gsap.to(cards, {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: "power3.out",
+        stagger: 0.1
+      });
+
       counters.forEach((counter) => {
         const target = Number(counter.getAttribute("data-count"));
         const data = { value: 0 };
@@ -33,10 +40,11 @@ export function StatsSection() {
           value: target,
           duration: 1.5,
           ease: "power3.out",
-          scrollTrigger: undefined,
           onUpdate: () => {
             counter.textContent =
-              target % 1 === 0 ? Math.round(data.value).toString() : data.value.toFixed(1);
+              target % 1 === 0
+                ? Math.round(data.value).toString()
+                : data.value.toFixed(1);
           }
         });
       });
@@ -46,15 +54,29 @@ export function StatsSection() {
   }, []);
 
   return (
-    <section id="stats" ref={sectionRef} className="bg-[#1d1a1a] py-16 text-white">
-      <div className="container grid gap-4 md:grid-cols-3">
+    <section
+      id="stats"
+      ref={sectionRef}
+      className="relative z-10 -mt-10 w-full bg-kinetic-surface py-12 text-kinetic-on-surface lg:mt-10"
+    >
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-3 px-4 md:grid-cols-3 lg:gap-6 lg:px-8">
         {stats.map((stat) => (
-          <div key={stat.label} className="border-l border-white/16 pl-6">
-            <p className="text-5xl font-black">
+          <div
+            key={stat.label}
+            data-stat-card
+            className={`glass-card flex flex-col items-center justify-center rounded-xl p-6 lg:p-12 ${
+              stat.glow ? "glow-border" : "border border-white/10"
+            }`}
+          >
+            <p
+              className={`font-display text-[2rem] font-extrabold lg:text-5xl ${
+                stat.glow ? "text-kinetic-primary-container" : "text-kinetic-primary"
+              }`}
+            >
               <span data-count={stat.value}>{stat.value}</span>
               {stat.suffix}
             </p>
-            <p className="mt-3 text-sm font-medium uppercase tracking-[0.16em] text-white/64">
+            <p className="mt-2 text-xs font-bold uppercase tracking-widest text-kinetic-secondary lg:text-base">
               {stat.label}
             </p>
           </div>

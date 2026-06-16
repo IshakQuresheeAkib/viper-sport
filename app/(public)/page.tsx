@@ -3,19 +3,22 @@ import { CollabSection } from "@/components/home/CollabSection";
 import { ContactSection } from "@/components/home/ContactSection";
 import { EventBanner } from "@/components/home/EventBanner";
 import { GallerySection } from "@/components/home/GallerySection";
-import { HeroSection } from "@/components/home/HeroSection";
+import { HeroScrollHint, HeroSection } from "@/components/home/HeroSection";
+import { MobileBottomNav } from "@/components/home/MobileBottomNav";
 import { StatsSection } from "@/components/home/StatsSection";
 
 export default function HomePage() {
   return (
-    <main>
+    <main className="bg-kinetic-surface pb-24 font-body text-kinetic-on-surface md:pb-0">
       <HeroSection />
-      <AboutSection />
       <StatsSection />
+      <EventBanner />
+      <HeroScrollHint />
+      <AboutSection />
       <CollabSection />
       <GallerySection />
-      <EventBanner />
       <ContactSection />
+      <MobileBottomNav />
     </main>
   );
 }

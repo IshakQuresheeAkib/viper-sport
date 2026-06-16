@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Anybody, Geist, Geist_Mono } from "next/font/google";
+import { Anybody, Geist, Geist_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
@@ -17,6 +17,12 @@ const anybody = Anybody({
   variable: "--font-anybody",
   subsets: ["latin"],
   weight: ["700", "800"]
+});
+
+const plusJakarta = Plus_Jakarta_Sans({
+  variable: "--font-plus-jakarta",
+  subsets: ["latin"],
+  weight: ["400", "700"]
 });
 
 export const metadata: Metadata = {
@@ -44,7 +50,7 @@ export default function RootLayout({
     <html data-scroll-behavior="smooth" lang="en">
       <SpeedInsights />
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${anybody.variable}`}
+        className={`${geistSans.variable} ${geistMono.variable} ${anybody.variable} ${plusJakarta.variable}`}
         suppressHydrationWarning
       >
         {children}

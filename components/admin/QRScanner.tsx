@@ -1,10 +1,9 @@
 "use client";
 
 import { Html5Qrcode } from "html5-qrcode";
-import { Camera, Loader2 } from "lucide-react";
+import { CheckCircle2, Focus, Loader2, QrCode } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { Button } from "@/components/ui/Button";
-import type { CheckInResponse } from "@/types";
+import type { CheckInResponse, Registration } from "@/types";
 
 type ScanState = "idle" | "scanning" | "submitting";
 
@@ -12,6 +11,7 @@ export function QRScanner() {
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const [state, setState] = useState<ScanState>("idle");
   const [message, setMessage] = useState<string | null>(null);
+  const [result, setResult] = useState<Registration | null>(null);
 
   useEffect(() => {
     return () => {
@@ -42,28 +42,127 @@ export function QRScanner() {
 
   async function startScanner() {
     setMessage(null);
+    setResult(null);
     const scanner = new Html5Qrcode("qr-reader");
     scannerRef.current = scanner;
     setState("scanning");
-    await scanner.start(
-      { facingMode: "environment" },
-      { fps: 10, qrbox: { width: 240, height: 240 } },
-      (decodedText) => {
-        void scanner.stop().finally(() => submitCheckIn(decodedText));
-      },
-      undefined
-    );
+
+    try {
+      await scanner.start(
+        { facingMode: "environment" },
+        { fps: 10, qrbox: { width: 240, height: 240 } },
+        (decodedText) => {
+          void scanner.stop().finally(() => submitCheckIn(decodedText));
+        },
+        undefined
+      );
+    } catch {
+      setMessage("Could not access the camera.");
+      setState("idle");
+    }
+  }
+
+  function getInitials(registration: Registration) {
+    return `${registration.first_name[0] ?? ""}${registration.last_name[0] ?? ""}`.toUpperCase();
   }
 
   return (
-    <section className="surface rounded-md p-5">
-      <h2 className="text-2xl font-black">QR scan</h2>
-      <div id="qr-reader" className="mt-4 min-h-72 overflow-hidden rounded-md bg-muted" />
-      {message ? <p className="mt-4 font-semibold">{message}</p> : null}
-      <Button className="mt-5" disabled={state !== "idle"} onClick={startScanner}>
-        {state === "submitting" ? <Loader2 className="animate-spin" size={18} /> : <Camera size={18} />}
-        Start camera
-      </Button>
+    <section className="flex flex-col items-center">
+      <div className="relative size-72 overflow-hidden rounded-xl border border-kinetic-primary-container/30 admin-glass-card admin-glow-active md:size-96">
+        <div id="qr-reader" className="absolute inset-0 z-0 [&>video]:size-full [&>video]:object-cover" />
+
+        {state === "idle" ? (
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-kinetic-surface-container/80 p-6 text-center">
+            <QrCode className="mb-4 size-12 text-kinetic-primary-container" aria-hidden="true" />
+            <p className="text-sm text-kinetic-on-surface-variant">
+              Start the camera to scan attendee QR codes at the gate.
+            </p>
+            <button
+              type="button"
+              onClick={() => void startScanner()}
+              className="mt-6 inline-flex items-center gap-2 rounded-lg bg-kinetic-primary-container px-5 py-3 text-sm font-bold uppercase text-kinetic-on-primary-container transition-colors hover:bg-kinetic-primary-fixed"
+            >
+              Start camera
+            </button>
+          </div>
+        ) : null}
+
+        {state !== "idle" ? (
+          <>
+            <div className="pointer-events-none absolute inset-4 z-20">
+              <div className="absolute left-0 top-0 size-8 rounded-tl-lg border-l-2 border-t-2 border-kinetic-primary-container" />
+              <div className="absolute right-0 top-0 size-8 rounded-tr-lg border-r-2 border-t-2 border-kinetic-primary-container" />
+              <div className="absolute bottom-0 left-0 size-8 rounded-bl-lg border-b-2 border-l-2 border-kinetic-primary-container" />
+              <div className="absolute bottom-0 right-0 size-8 rounded-br-lg border-b-2 border-r-2 border-kinetic-primary-container" />
+            </div>
+            <div className="scanner-line pointer-events-none absolute inset-x-0 z-20 h-1 bg-kinetic-primary-container shadow-[0_0_15px_rgba(227,254,149,0.8)]" />
+          </>
+        ) : null}
+
+        {state === "submitting" ? (
+          <div className="absolute inset-0 z-30 flex items-center justify-center bg-kinetic-surface/70">
+            <Loader2 className="size-10 animate-spin text-kinetic-primary-container" aria-hidden="true" />
+          </div>
+        ) : null}
+      </div>
+
+      <div className="mt-6 flex items-center gap-2 rounded-full border border-white/5 bg-kinetic-surface-variant/80 px-4 py-2">
+        <Focus className="size-4 animate-pulse text-kinetic-primary-container" aria-hidden="true" />
+        <span className="text-xs font-bold uppercase text-kinetic-on-surface">
+          {state === "scanning" ? "Align QR code within frame" : "Ready to scan"}
+        </span>
+      </div>
+
+      {message ? (
+        <p className="mt-4 text-sm font-semibold text-kinetic-primary-container">{message}</p>
+      ) : null}
+
+      {result ? (
+        <div className="admin-glass-card admin-glow-active mt-8 w-full max-w-md overflow-hidden rounded-xl border-t-2 border-t-kinetic-primary-container">
+          <div className="flex items-center gap-4 border-b border-white/10 p-6">
+            <div className="flex size-16 items-center justify-center overflow-hidden rounded-full border border-white/5 bg-kinetic-surface-variant font-display text-xl font-bold text-kinetic-primary">
+              {getInitials(result)}
+            </div>
+            <div className="flex-1">
+              <h3 className="font-display text-xl font-bold text-kinetic-primary">
+                {result.first_name} {result.last_name}
+              </h3>
+              <p className="mt-1 text-xs font-bold uppercase tracking-widest text-kinetic-on-surface-variant">
+                ID: {result.registration_id}
+              </p>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4 bg-kinetic-surface/50 px-6 py-4">
+            <div>
+              <span className="mb-1 block text-xs font-bold uppercase text-kinetic-on-surface-variant">
+                Phone
+              </span>
+              <span className="font-display text-lg font-bold text-kinetic-on-surface">
+                {result.phone}
+              </span>
+            </div>
+            <div>
+              <span className="mb-1 block text-xs font-bold uppercase text-kinetic-on-surface-variant">
+                Status
+              </span>
+              <span className="inline-flex items-center gap-1 text-xs font-bold uppercase text-kinetic-primary-container">
+                <span className="size-2 rounded-full bg-kinetic-primary-container" />
+                {result.checked_in ? "Checked in" : "Clear"}
+              </span>
+            </div>
+          </div>
+          <div className="p-6">
+            <button
+              type="button"
+              onClick={() => void submitCheckIn(result.registration_id)}
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-kinetic-primary-container py-4 font-display text-lg font-bold uppercase text-kinetic-on-primary-container transition-colors hover:bg-kinetic-primary-fixed active:scale-95"
+            >
+              <CheckCircle2 className="size-5" aria-hidden="true" />
+              Confirm check-in
+            </button>
+          </div>
+        </div>
+      ) : null}
     </section>
   );
 }

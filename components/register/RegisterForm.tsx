@@ -1,17 +1,19 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2 } from "lucide-react";
+import { ArrowRight, Badge, Loader2, Phone, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
 import { registerSchema, type RegisterInput } from "@/lib/validations/register.schema";
 import { useRegistrationStore } from "@/store/useRegistrationStore";
 import type { RegisterResponse } from "@/types";
 
-export function RegisterForm() {
+interface RegisterFormProps {
+  variant?: "simple" | "card";
+}
+
+export function RegisterForm({ variant = "card" }: RegisterFormProps) {
   const router = useRouter();
   const setRegistration = useRegistrationStore((state) => state.setRegistration);
   const [formError, setFormError] = useState<string | null>(null);
@@ -54,40 +56,111 @@ export function RegisterForm() {
     router.push(`/register/success?id=${encodeURIComponent(payload.registration_id)}`);
   }
 
-  return (
-    <form className="surface grid gap-5 rounded-md p-5" onSubmit={handleSubmit(onSubmit)}>
-      <div className="grid gap-2">
-        <label className="text-sm font-bold" htmlFor="first_name">
-          First name
+  const formContent = (
+    <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
+      <div className="flex flex-col gap-1">
+        <label
+          className="text-xs font-bold uppercase text-kinetic-on-surface-variant"
+          htmlFor="first_name"
+        >
+          First Name
         </label>
-        <Input id="first_name" autoComplete="given-name" {...register("first_name")} />
+        <div className="glass-input flex h-12 items-center rounded-lg px-3 md:h-14 md:px-4">
+          <User className="mr-3 size-5 text-kinetic-secondary" aria-hidden="true" />
+          <input
+            id="first_name"
+            autoComplete="given-name"
+            placeholder="Enter your first name"
+            className="w-full border-none bg-transparent p-0 text-base text-kinetic-on-surface outline-none placeholder:text-kinetic-secondary/50 focus:ring-0"
+            {...register("first_name")}
+          />
+        </div>
         {errors.first_name ? (
-          <p className="text-sm font-semibold text-[#b42318]">{errors.first_name.message}</p>
+          <p className="text-sm font-semibold text-kinetic-error">{errors.first_name.message}</p>
         ) : null}
       </div>
-      <div className="grid gap-2">
-        <label className="text-sm font-bold" htmlFor="last_name">
-          Last name
+
+      <div className="flex flex-col gap-1">
+        <label
+          className="text-xs font-bold uppercase text-kinetic-on-surface-variant"
+          htmlFor="last_name"
+        >
+          Last Name
         </label>
-        <Input id="last_name" autoComplete="family-name" {...register("last_name")} />
+        <div className="glass-input flex h-12 items-center rounded-lg px-3 md:h-14 md:px-4">
+          <Badge className="mr-3 size-5 text-kinetic-secondary" aria-hidden="true" />
+          <input
+            id="last_name"
+            autoComplete="family-name"
+            placeholder="Enter your last name"
+            className="w-full border-none bg-transparent p-0 text-base text-kinetic-on-surface outline-none placeholder:text-kinetic-secondary/50 focus:ring-0"
+            {...register("last_name")}
+          />
+        </div>
         {errors.last_name ? (
-          <p className="text-sm font-semibold text-[#b42318]">{errors.last_name.message}</p>
+          <p className="text-sm font-semibold text-kinetic-error">{errors.last_name.message}</p>
         ) : null}
       </div>
-      <div className="grid gap-2">
-        <label className="text-sm font-bold" htmlFor="phone">
-          Bangladesh phone number
+
+      <div className="flex flex-col gap-1">
+        <label
+          className="text-xs font-bold uppercase text-kinetic-on-surface-variant"
+          htmlFor="phone"
+        >
+          Phone Number
         </label>
-        <Input id="phone" autoComplete="tel" placeholder="017XXXXXXXX" {...register("phone")} />
+        <div className="glass-input flex h-12 items-center rounded-lg px-3 md:h-14 md:px-4">
+          <Phone className="mr-3 size-5 text-kinetic-secondary" aria-hidden="true" />
+          <span className="mr-2 text-base text-kinetic-primary">+880</span>
+          <div className="mr-2 h-6 w-px bg-white/10" />
+          <input
+            id="phone"
+            autoComplete="tel"
+            placeholder="1XXXXXXXXX"
+            className="w-full border-none bg-transparent p-0 text-base text-kinetic-on-surface outline-none placeholder:text-kinetic-secondary/50 focus:ring-0"
+            {...register("phone")}
+          />
+        </div>
         {errors.phone ? (
-          <p className="text-sm font-semibold text-[#b42318]">{errors.phone.message}</p>
+          <p className="text-sm font-semibold text-kinetic-error">{errors.phone.message}</p>
         ) : null}
       </div>
-      {formError ? <p className="text-sm font-semibold text-[#b42318]">{formError}</p> : null}
-      <Button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? <Loader2 className="animate-spin" size={18} /> : null}
-        Complete registration
-      </Button>
+
+      {formError ? (
+        <p className="text-sm font-semibold text-kinetic-error">{formError}</p>
+      ) : null}
+
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className="retro-btn mt-3 flex w-full items-center justify-center gap-3 py-4 font-display text-xl font-bold disabled:opacity-60 md:text-2xl"
+      >
+        {isSubmitting ? <Loader2 className="size-5 animate-spin" /> : null}
+        Register Now
+        <ArrowRight className="size-5" aria-hidden="true" />
+      </button>
     </form>
+  );
+
+  if (variant === "simple") {
+    return (
+      <section className="w-full max-w-md rounded-xl border border-white/5 bg-kinetic-surface-variant/30 p-6 shadow-2xl backdrop-blur-md">
+        {formContent}
+      </section>
+    );
+  }
+
+  return (
+    <section className="kinetic-glass-card rounded-xl p-6 sm:p-8 md:p-10">
+      <div className="mb-8 text-center lg:text-left">
+        <h2 className="font-display text-2xl font-bold text-kinetic-primary md:text-3xl">
+          Secure Your Spot
+        </h2>
+        <p className="mt-2 text-sm text-kinetic-on-surface-variant md:text-base">
+          Register for exclusive access
+        </p>
+      </div>
+      {formContent}
+    </section>
   );
 }
