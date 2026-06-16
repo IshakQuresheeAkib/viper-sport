@@ -1,0 +1,17 @@
+
+> viper-sport@0.1.0 dev
+> next dev --port 3000
+
+▲ Next.js 16.2.9 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.170:3000
+✓ Ready in 1280ms
+
+○ Compiling / ...
+ GET / 200 in 4.1s (next.js: 3.8s, application-code: 343ms)
+ GET / 200 in 109ms (next.js: 9ms, application-code: 100ms)
+ GET /register 200 in 739ms (next.js: 695ms, application-code: 45ms)
+ GET / 200 in 54ms (next.js: 3ms, application-code: 51ms)
+ GET /admin 200 in 629ms (next.js: 454ms, application-code: 175ms)
+ GET /register 200 in 186ms (next.js: 3ms, application-code: 184ms)
+[?25h
