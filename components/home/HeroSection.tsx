@@ -1,69 +1,155 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
-import { CalendarDays, MapPin, Play, Share2 } from "lucide-react";
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { Bell, ChevronDown, Circle } from "lucide-react";
+
+const navLinks = [
+  { href: "#", label: "Home" },
+  { href: "#stats", label: "Stats" },
+  { href: "#events", label: "Events" },
+  { href: "#about", label: "Profile" }
+] as const;
+
+const socialLinks = [
+  { href: "https://www.tiktok.com/", label: "TT", ariaLabel: "TikTok" },
+  { href: "https://www.instagram.com/", label: "IG", ariaLabel: "Instagram" },
+  { href: "https://www.youtube.com/", label: "YT", ariaLabel: "YouTube" }
+] as const;
+
+function shouldSkipAnimation(): boolean {
+  const connection = navigator as Navigator & {
+    connection?: { effectiveType?: string };
+  };
+
+  return connection.connection?.effectiveType === "2g";
+}
 
 export function HeroSection() {
+  const sectionRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+
+    if (!section || shouldSkipAnimation()) {
+      return;
+    }
+
+    const animatedItems = section.querySelectorAll("[data-hero-animate]");
+
+    const ctx = gsap.context(() => {
+      gsap.set(animatedItems, { opacity: 0, y: 20, willChange: "transform" });
+      gsap.to(animatedItems, {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: "power3.out",
+        stagger: 0.12
+      });
+    }, section);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section className="relative min-h-[92svh] overflow-hidden bg-[#210306] text-white">
-      <Image
-        src="https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=1800&q=80"
-        alt="Football crowd under stadium lights"
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover opacity-45"
-      />
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(33,3,6,0.92),rgba(33,3,6,0.62),rgba(33,3,6,0.22))]" />
-      <div className="container relative flex min-h-[92svh] items-center py-16">
-        <div className="max-w-3xl">
-          <p className="mb-4 text-sm font-semibold uppercase tracking-[0.24em] text-white/75">
-            ViperSport Bangladesh
+    <section
+      ref={sectionRef}
+      className="relative min-h-[85svh] overflow-hidden bg-hero-surface text-white"
+    >
+      <header className="absolute inset-x-0 top-0 z-40 flex items-center justify-between px-4 py-3 md:hidden">
+        <div className="flex items-center gap-3">
+          <Circle className="size-6 fill-white text-white" aria-hidden="true" />
+          <p className="font-display text-2xl font-bold tracking-tighter text-white">
+            Viper sport
           </p>
-          <h1 className="text-5xl font-black leading-[1.02] sm:text-6xl lg:text-7xl">
-            Fuad Abdul-Aziz
-          </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-white/84">
-            UK-based football creator, founder of ViperSport, and host of the
-            Argentina vs Austria live match show in Sylhet.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
+        </div>
+      </header>
+
+      <header className="sticky top-0 z-40 hidden items-center justify-between bg-linear-to-b from-hero-surface/80 to-transparent px-4 py-3 backdrop-blur-md md:flex md:px-8">
+        <div className="flex items-center gap-3">
+          <Circle className="size-6 fill-white text-white" aria-hidden="true" />
+          <p className="font-display text-2xl font-bold tracking-tighter text-white">FAZIZ</p>
+        </div>
+        <nav className="flex gap-10">
+          {navLinks.map((link, index) => (
+            <Link
+              key={link.label}
+              href={link.href}
+              className={`text-xs font-bold uppercase tracking-wider ${
+                index === 0 ? "text-white" : "text-white/60 hover:text-white"
+              }`}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+        <button
+          type="button"
+          aria-label="Notifications"
+          className="glass-card rounded-full p-2 hover:bg-white/10"
+        >
+          <Bell className="size-5 text-white" />
+        </button>
+      </header>
+
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/images/home/fuad-hero.jpg"
+          alt="Fuad Abdul-Aziz holding a microphone in a stadium"
+          fill
+          priority
+          sizes="100vw"
+          className="hero-mask object-cover object-top opacity-90"
+        />
+        <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-hero-surface via-hero-surface/60 to-transparent" />
+      </div>
+
+      <div className="container relative z-10 flex min-h-[85svh] flex-col justify-end pb-12 pt-24">
+        <div className="flex flex-col gap-6">
+          <div
+            data-hero-animate
+            className="glass-card relative -top-6 inline-block w-fit rounded-2xl p-6 shadow-2xl"
+          >
+            <h1 className="font-display text-[2.75rem] font-extrabold uppercase leading-[0.9] tracking-tighter text-white sm:text-5xl lg:text-7xl">
+              Fuad <br />
+              <span className="text-primary">Abdul-Aziz</span>
+            </h1>
+            <p className="mt-3 text-base font-bold uppercase tracking-[0.2em] text-white/80">
+              ViperSport Manager
+            </p>
+          </div>
+
+          <div data-hero-animate className="flex gap-4">
+            {socialLinks.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                aria-label={link.ariaLabel}
+                className="glass-card flex size-10 items-center justify-center rounded-full text-xs font-bold uppercase hover:bg-primary hover:text-white"
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+
+          <div data-hero-animate className="mt-2">
             <Link
               href="/register"
-              className="inline-flex h-12 items-center justify-center rounded-md bg-white px-6 text-sm font-bold text-primary transition hover:bg-[#f6dedb]"
+              className="hero-glow inline-flex w-full items-center justify-center rounded-lg bg-primary px-8 py-4 text-sm font-bold uppercase tracking-wide text-white hover:bg-white hover:text-primary sm:w-auto"
             >
-              Register for the event
+              Register the Event
             </Link>
-            <a
-              href="#contact"
-              className="inline-flex h-12 items-center justify-center rounded-md border border-white/35 px-6 text-sm font-bold text-white transition hover:bg-white/10"
-            >
-              Sponsor inquiry
-            </a>
           </div>
-          <div className="mt-9 grid gap-3 text-sm text-white/78 sm:grid-cols-2">
-            <span className="flex items-center gap-2">
-              <CalendarDays size={18} /> 22 June 2026, 9:00 PM
-            </span>
-            <span className="flex items-center gap-2">
-              <MapPin size={18} /> Shahi Eidgah Maidan, Sylhet
-            </span>
-          </div>
-          <div className="mt-8 flex gap-3">
-            <a
-              href="https://www.instagram.com/"
-              aria-label="Instagram"
-              className="grid size-11 place-items-center rounded-md bg-white/10 text-white hover:bg-white/20"
-            >
-              <Share2 size={19} />
-            </a>
-            <a
-              href="https://www.youtube.com/"
-              aria-label="YouTube"
-              className="grid size-11 place-items-center rounded-md bg-white/10 text-white hover:bg-white/20"
-            >
-              <Play size={20} />
-            </a>
-          </div>
+        </div>
+
+        <div
+          data-hero-animate
+          className="mt-10 flex flex-col items-center gap-2 text-center text-white/50"
+        >
+          <ChevronDown className="size-8" aria-hidden="true" />
+          <p className="text-base text-white/60">Scroll for more</p>
         </div>
       </div>
     </section>

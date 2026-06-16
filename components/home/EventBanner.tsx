@@ -3,7 +3,7 @@ import { ArrowRight, MapPin } from "lucide-react";
 
 export function EventBanner() {
   return (
-    <section className="bg-primary py-16 text-white">
+    <section id="events" className="bg-primary py-16 text-white">
       <div className="container flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <p className="text-sm font-bold uppercase tracking-[0.2em] text-white/72">

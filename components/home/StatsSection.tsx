@@ -49,7 +49,7 @@ export function StatsSection() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="bg-[#1d1a1a] py-16 text-white">
+    <section id="stats" ref={sectionRef} className="bg-[#1d1a1a] py-16 text-white">
       <div className="container grid gap-4 md:grid-cols-3">
         {stats.map((stat) => (
           <div key={stat.label} className="border-l border-white/16 pl-6">
