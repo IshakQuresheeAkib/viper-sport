@@ -21,6 +21,8 @@ export type PublicRegistration = Pick<
   | "checked_in"
 >;
 
+export type RegistrationLookup = PublicRegistration & Pick<Registration, "id">;
+
 export type RegisterResponse = {
   registration_id: string;
   first_name: string;

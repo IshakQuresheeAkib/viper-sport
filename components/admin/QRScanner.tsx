@@ -4,7 +4,7 @@ import { Html5Qrcode } from "html5-qrcode";
 import { CheckCircle2, Focus, Loader2, QrCode } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
-import type { CheckInResponse, PublicRegistration, Registration } from "@/types";
+import type { CheckInResponse, Registration, RegistrationLookup } from "@/types";
 
 type ScanState = "idle" | "scanning" | "submitting";
 
@@ -16,9 +16,9 @@ function getInitials(registration: Pick<Registration, "first_name" | "last_name"
   return `${registration.first_name[0] ?? ""}${registration.last_name[0] ?? ""}`.toUpperCase();
 }
 
-function toRegistration(payload: PublicRegistration): Registration {
+function toRegistration(payload: RegistrationLookup): Registration {
   return {
-    id: payload.registration_id,
+    id: payload.id,
     registration_id: payload.registration_id,
     first_name: payload.first_name,
     last_name: payload.last_name,
@@ -50,7 +50,7 @@ export function QRScanner({ registrations }: QRScannerProps) {
       return null;
     }
 
-    const payload = (await response.json()) as PublicRegistration;
+    const payload = (await response.json()) as RegistrationLookup;
     return toRegistration(payload);
   }
 
