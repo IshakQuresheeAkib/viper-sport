@@ -1,15 +1,19 @@
 "use client";
 
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Search } from "lucide-react";
 import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
 import type { CheckInResponse, Registration } from "@/types";
+
+function getInitials(registration: Registration) {
+  return `${registration.first_name[0] ?? ""}${registration.last_name[0] ?? ""}`.toUpperCase();
+}
 
 export function ManualSearch({ registrations }: { registrations: Registration[] }) {
   const [query, setQuery] = useState("");
   const [message, setMessage] = useState<string | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [localRegistrations, setLocalRegistrations] = useState(registrations);
 
   const matches = useMemo(() => {
     const normalized = query.trim().toLowerCase();
@@ -18,13 +22,20 @@ export function ManualSearch({ registrations }: { registrations: Registration[] 
       return [];
     }
 
-    return registrations
+    return localRegistrations
       .filter((registration) => {
         const name = `${registration.first_name} ${registration.last_name}`.toLowerCase();
-        return name.includes(normalized) || registration.phone.includes(normalized);
+        return (
+          name.includes(normalized) ||
+          registration.phone.includes(normalized) ||
+          registration.registration_id.toLowerCase().includes(normalized)
+        );
       })
       .slice(0, 6);
-  }, [query, registrations]);
+  }, [query, localRegistrations]);
+
+  const selected =
+    matches.find((registration) => registration.id === selectedId) ?? matches[0] ?? null;
 
   async function checkIn(registrationId: string) {
     const response = await fetch("/api/admin/checkin", {
@@ -42,45 +53,122 @@ export function ManualSearch({ registrations }: { registrations: Registration[] 
 
     const payload = (await response.json()) as CheckInResponse;
     setMessage(payload.already_checked_in ? "Already checked in." : "Check-in confirmed.");
+    setLocalRegistrations((current) =>
+      current.map((registration) =>
+        registration.registration_id === registrationId
+          ? { ...registration, checked_in: true, checked_in_at: payload.checked_in_at }
+          : registration
+      )
+    );
   }
 
   return (
-    <section className="surface rounded-md p-5">
-      <h2 className="text-2xl font-black">Manual search</h2>
-      <Input
-        className="mt-4"
-        onChange={(event) => setQuery(event.target.value)}
-        placeholder="Search by phone or name"
-        value={query}
-      />
-      {message ? <p className="mt-4 font-semibold">{message}</p> : null}
-      <div className="mt-4 grid gap-3">
-        {matches.map((registration) => (
-          <div
-            key={registration.id}
-            className="flex flex-col gap-3 rounded-md border border-border bg-white p-4 sm:flex-row sm:items-center sm:justify-between"
-          >
-            <div>
-              <p className="font-bold">
-                {registration.first_name} {registration.last_name}
-              </p>
-              <p className="text-sm text-muted-foreground">
-                {registration.phone} · {registration.registration_id}
-              </p>
-              <div className="mt-2">
-                {registration.checked_in ? (
-                  <Badge tone="green">Checked in</Badge>
-                ) : (
-                  <Badge tone="amber">Pending</Badge>
-                )}
-              </div>
+    <section className="mx-auto flex w-full max-w-md flex-col gap-6">
+      <div className="relative">
+        <Search
+          className="pointer-events-none absolute left-3 top-1/2 size-5 -translate-y-1/2 text-kinetic-on-surface-variant"
+          aria-hidden="true"
+        />
+        <input
+          className="w-full rounded-lg border border-kinetic-outline-variant bg-kinetic-surface-container-high py-3 pl-10 pr-4 text-kinetic-on-surface transition-colors placeholder:text-kinetic-on-surface-variant/50 focus:border-kinetic-primary-container focus:outline-none focus:ring-1 focus:ring-kinetic-primary-container"
+          onChange={(event) => {
+            setQuery(event.target.value);
+            setSelectedId(null);
+            setMessage(null);
+          }}
+          placeholder="Search by phone, name, or ID..."
+          value={query}
+        />
+      </div>
+
+      {message ? (
+        <p className="text-center text-sm font-semibold text-kinetic-primary-container">{message}</p>
+      ) : null}
+
+      {query.trim() ? (
+        <div className="flex flex-col gap-2">
+          {matches.length === 0 ? (
+            <p className="py-8 text-center text-sm text-kinetic-on-surface-variant">
+              No matching registrations found.
+            </p>
+          ) : (
+            matches.map((registration) => (
+              <button
+                key={registration.id}
+                type="button"
+                onClick={() => setSelectedId(registration.id)}
+                className={`flex w-full cursor-pointer items-center justify-start gap-3 rounded-xl border px-4 py-3 text-left transition-colors ${
+                  selected?.id === registration.id
+                    ? "admin-glow-active border-kinetic-primary-container/30 bg-kinetic-surface-container-high"
+                    : "border-white/5 bg-kinetic-surface-container hover:bg-kinetic-surface-container-high"
+                }`}
+              >
+                <div className="flex size-10 items-center justify-center rounded-full border border-kinetic-outline-variant bg-kinetic-surface-bright font-display text-sm font-bold text-kinetic-primary">
+                  {getInitials(registration)}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate font-bold text-kinetic-on-surface">
+                    {registration.first_name} {registration.last_name}
+                  </p>
+                  <p className="truncate font-mono text-xs text-kinetic-on-surface-variant">
+                    {registration.phone} · {registration.registration_id}
+                  </p>
+                </div>
+              </button>
+            ))
+          )}
+        </div>
+      ) : null}
+
+      {selected ? (
+        <div className="admin-glass-card admin-glow-active overflow-hidden rounded-xl border-t-2 border-t-kinetic-primary-container">
+          <div className="flex items-center gap-4 border-b border-white/10 p-6">
+            <div className="flex size-16 items-center justify-center rounded-full border border-white/5 bg-kinetic-surface-variant font-display text-xl font-bold text-kinetic-primary">
+              {getInitials(selected)}
             </div>
-            <Button onClick={() => checkIn(registration.registration_id)} variant="secondary">
-              <CheckCircle2 size={17} /> Check in
+            <div className="flex-1">
+              <h3 className="font-display text-xl font-bold text-kinetic-primary">
+                {selected.first_name} {selected.last_name}
+              </h3>
+              <p className="mt-1 text-xs font-bold uppercase tracking-widest text-kinetic-on-surface-variant">
+                ID: {selected.registration_id}
+              </p>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4 bg-kinetic-surface/50 px-6 py-4">
+            <div>
+              <span className="mb-1 block text-xs font-bold uppercase text-kinetic-on-surface-variant">
+                Phone
+              </span>
+              <span className="font-display text-lg font-bold text-kinetic-on-surface">
+                {selected.phone}
+              </span>
+            </div>
+            <div>
+              <span className="mb-1 block text-xs font-bold uppercase text-kinetic-on-surface-variant">
+                Status
+              </span>
+              <span className="inline-flex items-center gap-1 text-xs font-bold uppercase text-kinetic-primary-container">
+                <span className="size-2 rounded-full bg-kinetic-primary-container" />
+                {selected.checked_in ? "Checked in" : "Clear"}
+              </span>
+            </div>
+          </div>
+          <div className="p-6">
+            <Button
+              type="button"
+              variant="lime"
+              fullWidth
+              disabled={selected.checked_in}
+              onClick={() => void checkIn(selected.registration_id)}
+              className="rounded-lg py-4 normal-case"
+            >
+              <CheckCircle2 className="size-5" aria-hidden="true" />
+              Confirm check-in
             </Button>
           </div>
-        ))}
-      </div>
+        </div>
+      ) : null}
     </section>
   );
 }

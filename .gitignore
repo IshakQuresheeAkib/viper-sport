@@ -17,4 +17,5 @@ node_modules
 .cursorrules
 .cursor/mcp.json
 .worktrees
-stitch-designs
+.stitch
+.cursor

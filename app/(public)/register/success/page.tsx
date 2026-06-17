@@ -8,9 +8,13 @@ export const metadata: Metadata = {
 
 export default function RegistrationSuccessPage() {
   return (
-    <main className="min-h-svh py-10">
-      <div className="container">
-        <Suspense fallback={<p className="font-semibold">Loading registration...</p>}>
+    <main className="relative flex min-h-svh items-center justify-center overflow-hidden bg-kinetic-surface px-4 py-12 font-body text-kinetic-on-surface">
+      <div className="container flex justify-center">
+        <Suspense
+          fallback={
+            <p className="font-semibold text-kinetic-on-surface">Loading registration...</p>
+          }
+        >
           <SuccessCard />
         </Suspense>
       </div>

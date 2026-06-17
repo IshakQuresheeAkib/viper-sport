@@ -21,10 +21,10 @@ export function GallerySection() {
       <div className="container">
         <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
           <div>
-            <p className="text-sm font-bold uppercase tracking-[0.2em] text-primary">
+            <p className="text-sm font-bold uppercase tracking-[0.2em] text-kinetic-primary-container">
               Highlights
             </p>
-            <h2 className="mt-3 text-3xl font-black sm:text-4xl">
+            <h2 className="mt-3 font-display text-3xl font-extrabold text-kinetic-primary sm:text-4xl">
               Match energy, creator coverage, fan moments.
             </h2>
           </div>
