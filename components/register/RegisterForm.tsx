@@ -1,7 +1,8 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowRight, Badge, Loader2, Phone, User } from "lucide-react";
+import { ArrowRight, Badge, Phone, User } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -111,12 +112,10 @@ export function RegisterForm({ variant = "card" }: RegisterFormProps) {
         </label>
         <div className="glass-input flex h-12 items-center rounded-lg px-3 md:h-14 md:px-4">
           <Phone className="mr-3 size-5 text-kinetic-secondary" aria-hidden="true" />
-          <span className="mr-2 text-base text-kinetic-primary">+880</span>
-          <div className="mr-2 h-6 w-px bg-white/10" />
           <input
             id="phone"
             autoComplete="tel"
-            placeholder="1XXXXXXXXX"
+            placeholder="01XXXXXXXX"
             className="w-full border-none bg-transparent p-0 text-base text-kinetic-on-surface outline-none placeholder:text-kinetic-secondary/50 focus:ring-0"
             {...register("phone")}
           />
@@ -130,15 +129,10 @@ export function RegisterForm({ variant = "card" }: RegisterFormProps) {
         <p className="text-sm font-semibold text-kinetic-error">{formError}</p>
       ) : null}
 
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className="retro-btn mt-3 flex w-full items-center justify-center gap-3 py-4 font-display text-xl font-bold disabled:opacity-60 md:text-2xl"
-      >
-        {isSubmitting ? <Loader2 className="size-5 animate-spin" /> : null}
+      <Button type="submit" fullWidth loading={isSubmitting} className="mt-3 py-4 text-xl md:text-2xl">
         Register Now
         <ArrowRight className="size-5" aria-hidden="true" />
-      </button>
+      </Button>
     </form>
   );
 

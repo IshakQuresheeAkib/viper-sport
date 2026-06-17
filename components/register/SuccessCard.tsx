@@ -1,12 +1,14 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { CheckCircle, Download, Share2 } from "lucide-react";
+import Link from "next/link";
+import { Button } from "@/components/ui/Button";
 import { createQrDataUrl } from "@/lib/qr";
+import { buildPassImage } from "@/lib/pass";
 import { shouldSkipAnimation } from "@/lib/animation";
 import type { PublicRegistration } from "@/types";
 
@@ -167,14 +169,21 @@ export function SuccessCard() {
     await navigator.clipboard.writeText(shareText);
   }
 
-  function handleSaveQr() {
+  async function handleDownloadPass() {
     if (!qrUrl || !registration) {
       return;
     }
 
+    const passUrl = await buildPassImage({
+      registrationId: registration.registration_id,
+      firstName: registration.first_name,
+      lastName: registration.last_name,
+      qrDataUrl: qrUrl
+    });
+
     const link = document.createElement("a");
-    link.href = qrUrl;
-    link.download = `${registration.registration_id}-qr.png`;
+    link.href = passUrl;
+    link.download = `${registration.registration_id}-pass.png`;
     link.click();
   }
 
@@ -183,7 +192,7 @@ export function SuccessCard() {
       <div className="kinetic-glass-card max-w-md rounded-xl p-6 text-center">
         <h1 className="font-display text-3xl font-bold">Registration unavailable</h1>
         <p className="mt-3 text-kinetic-on-surface-variant">Missing registration ID.</p>
-        <Link className="mt-6 inline-flex font-bold text-kinetic-primary-container" href="/register">
+        <Link href="/register" className="mt-6 inline-block font-bold text-kinetic-primary-container">
           Back to registration
         </Link>
       </div>
@@ -195,7 +204,7 @@ export function SuccessCard() {
       <div className="kinetic-glass-card max-w-md rounded-xl p-6 text-center">
         <h1 className="font-display text-3xl font-bold">Registration unavailable</h1>
         <p className="mt-3 text-kinetic-on-surface-variant">{error}</p>
-        <Link className="mt-6 inline-flex font-bold text-kinetic-primary-container" href="/register">
+        <Link href="/register" className="mt-6 inline-block font-bold text-kinetic-primary-container">
           Back to registration
         </Link>
       </div>
@@ -247,6 +256,14 @@ export function SuccessCard() {
               Argentina vs Austria
             </h2>
           </div>
+          <div className="flex flex-col gap-1">
+            <span className="text-sm font-semibold text-kinetic-primary-fixed">
+              22 June 2026 &middot; 9:00 PM
+            </span>
+            <span className="text-xs text-kinetic-on-surface-variant">
+              Shahi Eidgah Maidan, TV Gate, Sylhet
+            </span>
+          </div>
         </div>
 
         <div className="ticket-cutout relative z-10 my-[-10px] flex h-10 w-full items-center">
@@ -297,22 +314,24 @@ export function SuccessCard() {
         data-success-animate
         className="relative z-10 mt-6 flex w-full max-w-sm gap-4"
       >
-        <button
+        <Button
           type="button"
-          onClick={handleSaveQr}
-          className="flex flex-1 items-center justify-center gap-2 rounded-full bg-kinetic-primary-container py-3 text-base font-bold text-kinetic-on-primary-container shadow-[0_0_20px_rgba(211,237,134,0.15)] transition-all hover:bg-kinetic-primary-fixed active:scale-95"
+          variant="lime"
+          onClick={() => void handleDownloadPass()}
+          className="flex-1 rounded-full normal-case"
         >
           <Download className="size-5" aria-hidden="true" />
-          Save QR
-        </button>
-        <button
+          Download Pass
+        </Button>
+        <Button
           type="button"
+          variant="neutral"
           onClick={() => void handleShare()}
-          className="flex flex-1 items-center justify-center gap-2 rounded-full border border-kinetic-outline/30 bg-kinetic-surface-variant/30 py-3 text-base font-bold text-kinetic-on-surface backdrop-blur-md transition-all hover:bg-kinetic-surface-variant/50 active:scale-95"
+          className="flex-1 rounded-full border-kinetic-outline/30 bg-kinetic-surface-variant/30 normal-case backdrop-blur-md hover:bg-kinetic-surface-variant/50"
         >
           <Share2 className="size-5" aria-hidden="true" />
           Share
-        </button>
+        </Button>
       </div>
     </div>
   );

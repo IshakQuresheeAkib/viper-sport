@@ -1,6 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
-import { buildRegistrationSms, sendSms } from "@/lib/sms";
 import { registerSchema } from "@/lib/validations/register.schema";
 import type { RegisterResponse, Registration } from "@/types";
 
@@ -46,7 +45,7 @@ export async function POST(request: NextRequest) {
     .select("registration_id, first_name, last_name")
     .eq("phone", parsed.data.phone)
     .maybeSingle<Pick<Registration, "registration_id" | "first_name" | "last_name">>();
-console.log(existing);
+
   if (existing.error) {
     return NextResponse.json({ error: "Could not check registration." }, { status: 500 });
   }
@@ -73,15 +72,6 @@ console.log(existing);
   if (inserted.error) {
     return NextResponse.json({ error: "Could not complete registration." }, { status: 500 });
   }
-
-  void sendSms({
-    phone: parsed.data.phone,
-    message: buildRegistrationSms({
-      firstName: inserted.data.first_name,
-      lastName: inserted.data.last_name,
-      registrationId: inserted.data.registration_id
-    })
-  });
 
   const response: RegisterResponse = {
     ...inserted.data,

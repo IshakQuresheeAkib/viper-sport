@@ -2,6 +2,7 @@
 
 import { CheckCircle2, Search } from "lucide-react";
 import { useMemo, useState } from "react";
+import { Button } from "@/components/ui/Button";
 import type { CheckInResponse, Registration } from "@/types";
 
 function getInitials(registration: Registration) {
@@ -88,7 +89,7 @@ export function ManualSearch({ registrations }: { registrations: Registration[] 
                 key={registration.id}
                 type="button"
                 onClick={() => setSelectedId(registration.id)}
-                className={`flex items-center gap-3 rounded-xl border px-4 py-3 text-left transition-colors ${
+                className={`flex w-full cursor-pointer items-center justify-start gap-3 rounded-xl border px-4 py-3 text-left transition-colors ${
                   selected?.id === registration.id
                     ? "admin-glow-active border-kinetic-primary-container/30 bg-kinetic-surface-container-high"
                     : "border-white/5 bg-kinetic-surface-container hover:bg-kinetic-surface-container-high"
@@ -146,15 +147,17 @@ export function ManualSearch({ registrations }: { registrations: Registration[] 
             </div>
           </div>
           <div className="p-6">
-            <button
+            <Button
               type="button"
+              variant="lime"
+              fullWidth
               disabled={selected.checked_in}
               onClick={() => void checkIn(selected.registration_id)}
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-kinetic-primary-container py-4 font-display text-lg font-bold uppercase text-kinetic-on-primary-container transition-colors hover:bg-kinetic-primary-fixed active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
+              className="rounded-lg py-4 normal-case"
             >
               <CheckCircle2 className="size-5" aria-hidden="true" />
               Confirm check-in
-            </button>
+            </Button>
           </div>
         </div>
       ) : null}

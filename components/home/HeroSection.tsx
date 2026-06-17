@@ -4,24 +4,21 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import {
-  Bell,
-  ChevronDown,
-  Circle
-} from "lucide-react";
+import { ArrowRight, Bell, ChevronDown, Circle } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 import { shouldSkipAnimation } from "@/lib/animation";
 
 const navLinks = [
   { href: "#", label: "Home", active: true },
   { href: "#stats", label: "Stats", active: false },
   { href: "#events", label: "Events", active: false },
-  { href: "#about", label: "Profile", active: false }
+  { href: "#about", label: "Profile", active: false },
 ] as const;
 
 const socialLinks = [
   { href: "https://www.tiktok.com/", label: "TT", ariaLabel: "TikTok" },
   { href: "https://www.instagram.com/", label: "IG", ariaLabel: "Instagram" },
-  { href: "https://www.youtube.com/", label: "YT", ariaLabel: "YouTube" }
+  { href: "https://www.youtube.com/", label: "YT", ariaLabel: "YouTube" },
 ] as const;
 
 export function HeroSection() {
@@ -29,13 +26,9 @@ export function HeroSection() {
 
   useEffect(() => {
     const section = sectionRef.current;
-
-    if (!section || shouldSkipAnimation()) {
-      return;
-    }
+    if (!section || shouldSkipAnimation()) return;
 
     const animatedItems = section.querySelectorAll("[data-hero-animate]");
-
     const ctx = gsap.context(() => {
       gsap.set(animatedItems, { opacity: 0, y: 20, willChange: "transform" });
       gsap.to(animatedItems, {
@@ -43,7 +36,7 @@ export function HeroSection() {
         y: 0,
         duration: 0.8,
         ease: "power3.out",
-        stagger: 0.12
+        stagger: 0.2,
       });
     }, section);
 
@@ -53,50 +46,15 @@ export function HeroSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative flex min-h-[751px] items-center overflow-hidden bg-kinetic-surface pt-24 text-kinetic-on-surface lg:min-h-[85vh]"
+      className="relative flex min-h-[85vh] flex-col overflow-hidden bg-black text-white"
     >
-      <header className="sticky top-0 z-40 hidden w-full bg-linear-to-b from-kinetic-surface/80 to-transparent backdrop-blur-md md:block">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2 md:px-8">
-          <div className="flex items-center gap-3">
-            <Circle className="size-6 fill-kinetic-primary text-kinetic-primary" aria-hidden="true" />
-            <p className="font-display text-2xl font-bold tracking-tighter text-kinetic-primary">
-              FAZIZ
-            </p>
-          </div>
-          <nav className="flex gap-12">
-            {navLinks.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className={`text-xs font-bold uppercase tracking-wider ${
-                  link.active
-                    ? "text-kinetic-primary"
-                    : "text-kinetic-on-surface-variant hover:opacity-80"
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
-          <button
-            type="button"
-            aria-label="Notifications"
-            className="glass-card rounded-full p-2 hover:opacity-80"
-          >
-            <Bell className="size-5 text-kinetic-primary" />
-          </button>
-        </div>
-      </header>
+      {/* ── Background: left solid black panel ── */}
+      <div
+        className="absolute inset-y-0 left-0 hidden w-1/2 bg-black lg:block"
+        aria-hidden="true"
+      />
 
-      <header className="absolute inset-x-0 top-0 z-40 flex items-center justify-between px-4 py-3 md:hidden">
-        <div className="flex items-center gap-3">
-          <Circle className="size-6 fill-kinetic-primary text-kinetic-primary" aria-hidden="true" />
-          <p className="font-display text-2xl font-bold tracking-tighter text-kinetic-primary">
-            Viper sport
-          </p>
-        </div>
-      </header>
-
+      {/* ── Background: right photo panel ── */}
       <div className="absolute inset-0 z-0 lg:left-1/2 lg:w-1/2">
         <Image
           src="/images/home/fuad-hero.jpg"
@@ -104,48 +62,101 @@ export function HeroSection() {
           fill
           priority
           sizes="(max-width: 1024px) 100vw, 50vw"
-          className="object-cover object-top opacity-90 hero-mask lg:object-center lg:[mask-image:linear-gradient(to_left,black_70%,transparent_100%)]"
+          className="object-cover object-top lg:object-center"
         />
-        <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-kinetic-surface via-kinetic-surface/60 to-transparent lg:bg-linear-to-r lg:from-kinetic-surface lg:via-transparent lg:to-transparent" />
+        {/* Mobile: bottom-to-top scrim so text is readable */}
+        <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black via-black/55 to-transparent lg:hidden" />
+        {/* Desktop: subtle left edge bleed into black */}
+        <div className="pointer-events-none absolute inset-y-0 left-0 hidden w-20 bg-linear-to-r from-black to-transparent lg:block" />
       </div>
 
-      <div className="relative z-10 mx-auto flex h-[751px] w-full max-w-7xl flex-col justify-end px-4 pb-12 lg:h-auto lg:justify-center lg:px-8 lg:pb-0">
-        <div className="flex flex-col gap-6 lg:w-1/2">
+      {/* ── Desktop nav — in flex flow (left half only), never overlaps content ── */}
+      <header
+        data-hero-animate
+        className="relative z-20 hidden w-1/2 items-center justify-between px-8 pb-2 pt-8 lg:flex"
+      >
+        <div className="flex items-center gap-3">
+          <Circle className="size-5 fill-white text-white" aria-hidden="true" />
+          <span className="font-display text-2xl font-bold tracking-tighter text-white">
+            ViperSport
+          </span>
+        </div>
+        <nav className="flex gap-10">
+          {navLinks.map((link) => (
+            <Link
+              key={link.label}
+              href={link.href}
+              className={`text-xs font-bold uppercase tracking-wider transition-opacity ${
+                link.active ? "text-white" : "text-white/55 hover:text-white"
+              }`}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+        <button
+          type="button"
+          aria-label="Notifications"
+          className="glass-card cursor-pointer rounded-full p-2 transition-opacity hover:opacity-80"
+        >
+          <Bell className="size-4 text-white" />
+        </button>
+      </header>
+
+      {/* ── Mobile nav — absolute, sits above photo ── */}
+      <header className="absolute inset-x-0 top-0 z-40 flex items-center px-4 py-4 lg:hidden">
+        <div className="flex items-center gap-3">
+          <Circle className="size-5 fill-white text-white" aria-hidden="true" />
+          <span className="font-display text-2xl font-bold tracking-tighter text-white">
+            ViperSport
+          </span>
+        </div>
+      </header>
+
+      {/* ── Main content — flex-1 centers card in the remaining height ── */}
+      <div className="relative z-10 flex flex-1 flex-col justify-end px-4 pb-14 pt-24 lg:justify-center lg:px-0 lg:pb-0 lg:pt-0">
+        {/*
+          On desktop: ml-[calc(50%-210px)] centers the 420 px card exactly at the
+          left/right boundary so it overlaps into the photo (as in the reference).
+        */}
+        <div className="flex w-full flex-col gap-5 lg:ml-[calc(50%-210px)] lg:w-[420px]">
+          {/* Glass name card */}
           <div
             data-hero-animate
-            className="glass-card relative -top-6 inline-block w-fit rounded-2xl border border-white/10 p-6 shadow-2xl backdrop-blur-xl lg:static"
+            className="glass-card rounded-3xl border border-white/10 p-7 shadow-2xl backdrop-blur-xl lg:p-9"
           >
-            <h1 className="font-display text-[3rem] font-extrabold uppercase leading-[0.9] tracking-tighter text-kinetic-primary lg:text-[4.5rem]">
-              Fuad <br />
-              <span className="text-kinetic-primary-container drop-shadow-md">
-                Abdul-Aziz
+            <h1 className="font-display text-[2.75rem] font-extrabold uppercase leading-[0.88] tracking-tighter text-white lg:text-[4rem]">
+              Fuad
+              <br />
+              <span className="text-kinetic-primary-container">
+                Abdul&#8209;Aziz
               </span>
             </h1>
-            <p className="mt-3 text-base font-bold uppercase tracking-widest text-kinetic-primary-container">
-              ViperSport Manager
+            <p className="mt-3 text-xs font-bold uppercase tracking-[0.2em] text-kinetic-primary-container lg:text-sm">
+              Founder of ViperSport
             </p>
           </div>
 
-          <div data-hero-animate className="flex gap-4 lg:mt-4">
+          {/* Social links */}
+          <div data-hero-animate className="flex gap-3">
             {socialLinks.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
                 aria-label={link.ariaLabel}
-                className="glass-card flex size-10 items-center justify-center rounded-full text-xs font-bold uppercase transition-colors hover:bg-kinetic-primary-container hover:text-kinetic-surface lg:size-12"
+                className="glass-card flex size-11 items-center justify-center rounded-full text-xs font-bold uppercase text-white transition-colors hover:bg-kinetic-primary-container hover:text-black"
               >
                 {link.label}
               </a>
             ))}
           </div>
 
-          <div data-hero-animate className="mt-4 lg:mt-8">
-            <Link
-              href="/register"
-              className="inline-flex w-full items-center justify-center rounded-lg bg-kinetic-primary-container px-8 py-4 text-sm font-bold uppercase tracking-wide text-kinetic-on-primary-container shadow-[0_0_20px_rgba(211,237,134,0.4)] transition-all hover:bg-white active:scale-95 sm:w-auto"
-            >
-              Register the Event
-            </Link>
+          {/* CTA */}
+          <div data-hero-animate>
+            <Button variant="lime" fullWidth href="/register">
+              Register The Event
+              <ArrowRight className="size-5" aria-hidden="true" />
+            </Button>
           </div>
         </div>
       </div>
@@ -156,8 +167,13 @@ export function HeroSection() {
 export function HeroScrollHint() {
   return (
     <section className="mx-auto w-full max-w-7xl px-4 py-12 text-center opacity-50">
-      <ChevronDown className="mx-auto mb-4 size-10 text-kinetic-secondary" aria-hidden="true" />
-      <p className="font-body text-base text-kinetic-secondary">Scroll for more</p>
+      <ChevronDown
+        className="mx-auto mb-4 size-10 text-kinetic-secondary"
+        aria-hidden="true"
+      />
+      <p className="font-body text-base text-kinetic-secondary">
+        Scroll for more
+      </p>
     </section>
   );
 }

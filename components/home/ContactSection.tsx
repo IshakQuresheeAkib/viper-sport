@@ -50,7 +50,7 @@ export function ContactSection() {
             placeholder="Message"
             required
           />
-          <Button type="submit" className="w-fit">
+          <Button type="submit" variant="coral" className="w-fit px-4 py-2 text-sm">
             <Send size={17} /> Send inquiry
           </Button>
         </form>

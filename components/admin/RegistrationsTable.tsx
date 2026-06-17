@@ -2,6 +2,7 @@
 
 import { Download, Search } from "lucide-react";
 import { useEffect, useMemo } from "react";
+import { Button } from "@/components/ui/Button";
 import { useAdminStore } from "@/store/useAdminStore";
 import type { AdminStatusFilter, Registration } from "@/types";
 
@@ -122,28 +123,31 @@ export function RegistrationsTable({ registrations }: { registrations: Registrat
           <div className="flex flex-wrap items-center gap-2">
             <div className="flex gap-2 overflow-x-auto pb-1 md:pb-0">
               {statusOptions.map((option) => (
-                <button
+                <Button
                   key={option.value}
                   type="button"
+                  variant="neutral"
+                  active={statusFilter === option.value}
                   onClick={() => setStatusFilter(option.value)}
-                  className={`whitespace-nowrap rounded-full px-4 py-2 text-xs font-bold uppercase transition-colors ${
-                    statusFilter === option.value
-                      ? "bg-kinetic-primary-container text-kinetic-on-primary-container"
-                      : "border border-kinetic-outline-variant bg-kinetic-surface-container-highest text-kinetic-on-surface-variant hover:bg-kinetic-surface-bright"
+                  className={`rounded-full px-4 py-2 text-sm normal-case whitespace-nowrap ${
+                    statusFilter !== option.value
+                      ? "border-kinetic-outline-variant bg-kinetic-surface-container-highest text-kinetic-on-surface-variant shadow-none hover:bg-kinetic-surface-bright"
+                      : ""
                   }`}
                 >
                   {option.label}
-                </button>
+                </Button>
               ))}
             </div>
-            <button
+            <Button
               type="button"
+              variant="neutral"
               onClick={exportCsv}
-              className="inline-flex items-center gap-2 rounded-full border border-kinetic-outline-variant bg-kinetic-surface-container-highest px-4 py-2 text-xs font-bold uppercase text-kinetic-on-surface-variant transition-colors hover:bg-kinetic-surface-bright"
+              className="rounded-full border-kinetic-outline-variant bg-kinetic-surface-container-highest px-4 py-2 text-sm normal-case text-kinetic-on-surface-variant hover:bg-kinetic-surface-bright"
             >
               <Download className="size-4" aria-hidden="true" />
               CSV
-            </button>
+            </Button>
           </div>
         </div>
       </div>

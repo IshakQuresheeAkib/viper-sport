@@ -72,7 +72,6 @@ body {
 }
 
 a {
-  color: inherit;
   text-decoration: none;
 }
 
@@ -130,8 +129,6 @@ select {
 }
 
 .retro-btn {
-  background-color: #f86d6c;
-  color: #13140d;
   text-transform: uppercase;
   border-radius: 0;
   clip-path: polygon(

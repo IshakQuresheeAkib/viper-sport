@@ -59,7 +59,7 @@ export function RegisterEventDetails() {
                 Featuring National Stars
               </p>
               <p className="mt-1 text-base text-kinetic-primary md:text-lg">
-                Fahmidul Islam, Sheikh Mursalin, Topu Barman, Md. Saad Uddin
+                Fahmidul Islam and Md. Saad Uddin
               </p>
             </div>
           </div>

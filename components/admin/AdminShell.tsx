@@ -11,6 +11,7 @@ import {
   QrCode,
   User
 } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 interface AdminShellProps {
@@ -79,10 +80,10 @@ export function AdminShell({ children, title, eyebrow = "Live Event Admin", acti
           <button
             type="button"
             onClick={() => void signOut()}
-            className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-kinetic-secondary-fixed-dim transition-colors hover:bg-kinetic-surface-container-highest hover:text-kinetic-primary"
+            className="flex w-full cursor-pointer items-center justify-start gap-3 rounded-xl px-4 py-3 text-xs font-bold uppercase text-kinetic-secondary-fixed-dim transition-colors hover:bg-kinetic-surface-container-highest hover:text-kinetic-primary"
           >
             <LogOut className="size-5" aria-hidden="true" />
-            <span className="text-xs font-bold uppercase">Sign out</span>
+            Sign out
           </button>
         </div>
       </aside>
@@ -101,8 +102,8 @@ export function AdminShell({ children, title, eyebrow = "Live Event Admin", acti
             </p>
             <button
               type="button"
-              className="relative flex items-center justify-center rounded-full p-2 text-kinetic-primary transition-opacity hover:opacity-80"
               aria-label="Notifications"
+              className="relative cursor-pointer rounded-full p-2 text-kinetic-primary transition-opacity hover:opacity-80"
             >
               <Bell className="size-5" aria-hidden="true" />
               <span className="absolute right-1 top-1 size-2 rounded-full border border-kinetic-surface bg-kinetic-error" />
@@ -158,7 +159,7 @@ export function AdminShell({ children, title, eyebrow = "Live Event Admin", acti
             <button
               type="button"
               onClick={() => void signOut()}
-              className="flex flex-col items-center justify-center text-kinetic-secondary-fixed-dim opacity-60 transition-transform hover:text-kinetic-primary active:scale-90"
+              className="flex cursor-pointer flex-col text-kinetic-secondary-fixed-dim opacity-60 transition-transform hover:text-kinetic-primary active:scale-90"
             >
               <User className="mb-1 size-5" aria-hidden="true" />
               <span className="text-[10px] font-bold uppercase">Profile</span>
@@ -172,13 +173,10 @@ export function AdminShell({ children, title, eyebrow = "Live Event Admin", acti
 
 export function AdminScanQrLink() {
   return (
-    <Link
-      href="/admin/checkin"
-      className="clip-retro-sm flex w-full items-center justify-center gap-2 bg-[#f86d6c] px-6 py-3 text-sm font-bold uppercase tracking-wider text-kinetic-on-primary-fixed transition-all hover:opacity-90 active:scale-95 sm:w-auto lg:text-base"
-    >
+    <Button href="/admin/checkin" variant="coral" className="w-full px-6 py-3 text-sm sm:w-auto lg:text-base">
       <QrCode className="size-5" aria-hidden="true" />
       Scan QR
-    </Link>
+    </Button>
   );
 }
 
@@ -186,7 +184,7 @@ export function AdminBackLink({ href = "/admin/dashboard" }: { href?: string }) 
   return (
     <Link
       href={href}
-      className="flex items-center justify-center rounded-full p-2 text-kinetic-on-surface-variant transition-opacity hover:opacity-80"
+      className="rounded-full p-2 text-kinetic-on-surface-variant transition-opacity hover:opacity-80"
       aria-label="Go back"
     >
       <ArrowLeft className="size-5" aria-hidden="true" />

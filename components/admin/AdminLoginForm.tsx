@@ -1,7 +1,8 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowRight, Eye, EyeOff, Loader2, Lock, User } from "lucide-react";
+import { ArrowRight, Eye, EyeOff, Lock, User } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -88,7 +89,7 @@ export function AdminLoginForm() {
             <button
               type="button"
               onClick={() => setShowPassword((value) => !value)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-kinetic-outline transition-colors hover:text-kinetic-on-surface"
+              className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer text-kinetic-outline transition-colors hover:text-kinetic-on-surface"
               aria-label={showPassword ? "Hide password" : "Show password"}
             >
               {showPassword ? (
@@ -108,23 +109,20 @@ export function AdminLoginForm() {
         ) : null}
 
         <div className="pt-2">
-          <button
+          <Button
             type="submit"
-            disabled={isSubmitting}
-            className="clip-retro group relative flex w-full items-center justify-between overflow-hidden bg-kinetic-error px-6 py-4 text-lg font-bold uppercase text-kinetic-on-error shadow-[0_0_15px_rgba(255,180,171,0.2)] transition-colors hover:bg-kinetic-error-container hover:text-kinetic-on-error-container disabled:opacity-60"
+            fullWidth
+            loading={isSubmitting}
+            variant="coral"
+            className="group relative justify-between overflow-hidden py-4 text-lg"
           >
-            <div className="absolute inset-0 z-0 translate-y-full bg-white/20 transition-transform duration-300 ease-out group-hover:translate-y-0" />
             <span className="relative z-10 tracking-wide">
               {isSubmitting ? "Signing in..." : "Login as Admin"}
             </span>
             <span className="relative z-10 transition-transform group-hover:translate-x-1">
-              {isSubmitting ? (
-                <Loader2 className="size-5 animate-spin" aria-hidden="true" />
-              ) : (
-                <ArrowRight className="size-5" aria-hidden="true" />
-              )}
+              <ArrowRight className="size-5" aria-hidden="true" />
             </span>
-          </button>
+          </Button>
         </div>
       </form>
     </div>

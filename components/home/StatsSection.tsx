@@ -24,13 +24,13 @@ export function StatsSection() {
     const cards = section.querySelectorAll("[data-stat-card]");
 
     const ctx = gsap.context(() => {
-      gsap.set(cards, { opacity: 0, y: 20, willChange: "transform" });
+      gsap.set(cards, { opacity: 0, y: 30, willChange: "transform" });
       gsap.to(cards, {
         opacity: 1,
         y: 0,
         duration: 0.8,
-        ease: "power3.out",
-        stagger: 0.1
+        ease: "power4.inOut",
+        stagger: 0.3
       });
 
       counters.forEach((counter) => {
@@ -38,7 +38,7 @@ export function StatsSection() {
         const data = { value: 0 };
         gsap.to(data, {
           value: target,
-          duration: 1.5,
+          duration: 2,
           ease: "power3.out",
           onUpdate: () => {
             counter.textContent =
@@ -64,14 +64,10 @@ export function StatsSection() {
           <div
             key={stat.label}
             data-stat-card
-            className={`glass-card flex flex-col items-center justify-center rounded-xl p-6 lg:p-12 ${
-              stat.glow ? "glow-border" : "border border-white/10"
-            }`}
+            className='glass-card flex flex-col items-center justify-center rounded-xl p-6 lg:p-12 glow-border'
           >
             <p
-              className={`font-display text-[2rem] font-extrabold lg:text-5xl ${
-                stat.glow ? "text-kinetic-primary-container" : "text-kinetic-primary"
-              }`}
+              className='font-display text-[2rem] font-extrabold lg:text-5xl text-kinetic-primary-container'
             >
               <span data-count={stat.value}>{stat.value}</span>
               {stat.suffix}

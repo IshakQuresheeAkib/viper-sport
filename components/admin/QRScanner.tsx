@@ -3,11 +3,35 @@
 import { Html5Qrcode } from "html5-qrcode";
 import { CheckCircle2, Focus, Loader2, QrCode } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import type { CheckInResponse, Registration } from "@/types";
+import { Button } from "@/components/ui/Button";
+import type { CheckInResponse, PublicRegistration, Registration } from "@/types";
 
 type ScanState = "idle" | "scanning" | "submitting";
 
-export function QRScanner() {
+interface QRScannerProps {
+  registrations: Registration[];
+}
+
+function getInitials(registration: Pick<Registration, "first_name" | "last_name">) {
+  return `${registration.first_name[0] ?? ""}${registration.last_name[0] ?? ""}`.toUpperCase();
+}
+
+function toRegistration(payload: PublicRegistration): Registration {
+  return {
+    id: payload.registration_id,
+    registration_id: payload.registration_id,
+    first_name: payload.first_name,
+    last_name: payload.last_name,
+    phone: payload.phone,
+    qr_data: "",
+    sms_sent: false,
+    checked_in: payload.checked_in,
+    checked_in_at: null,
+    created_at: payload.created_at
+  };
+}
+
+export function QRScanner({ registrations }: QRScannerProps) {
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const [state, setState] = useState<ScanState>("idle");
   const [message, setMessage] = useState<string | null>(null);
@@ -18,6 +42,44 @@ export function QRScanner() {
       void scannerRef.current?.stop().catch(() => undefined);
     };
   }, []);
+
+  async function fetchRegistration(registrationId: string): Promise<Registration | null> {
+    const response = await fetch(`/api/register/${encodeURIComponent(registrationId)}`);
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const payload = (await response.json()) as PublicRegistration;
+    return toRegistration(payload);
+  }
+
+  async function resolveRegistration(registrationId: string): Promise<Registration | null> {
+    const normalized = registrationId.trim();
+    const localMatch = registrations.find((item) => item.registration_id === normalized);
+
+    if (localMatch) {
+      return localMatch;
+    }
+
+    return fetchRegistration(normalized);
+  }
+
+  async function handleScan(registrationId: string) {
+    setState("submitting");
+    setMessage(null);
+
+    const registration = await resolveRegistration(registrationId);
+
+    if (!registration) {
+      setMessage("Registration not found for this QR code.");
+      setState("idle");
+      return;
+    }
+
+    setResult(registration);
+    setState("idle");
+  }
 
   async function submitCheckIn(registrationId: string) {
     setState("submitting");
@@ -37,6 +99,11 @@ export function QRScanner() {
 
     const payload = (await response.json()) as CheckInResponse;
     setMessage(payload.already_checked_in ? "Already checked in." : "Check-in confirmed.");
+    setResult((current) =>
+      current && current.registration_id === registrationId
+        ? { ...current, checked_in: true, checked_in_at: payload.checked_in_at }
+        : current
+    );
     setState("idle");
   }
 
@@ -52,7 +119,7 @@ export function QRScanner() {
         { facingMode: "environment" },
         { fps: 10, qrbox: { width: 240, height: 240 } },
         (decodedText) => {
-          void scanner.stop().finally(() => submitCheckIn(decodedText));
+          void scanner.stop().finally(() => handleScan(decodedText));
         },
         undefined
       );
@@ -60,10 +127,6 @@ export function QRScanner() {
       setMessage("Could not access the camera.");
       setState("idle");
     }
-  }
-
-  function getInitials(registration: Registration) {
-    return `${registration.first_name[0] ?? ""}${registration.last_name[0] ?? ""}`.toUpperCase();
   }
 
   return (
@@ -77,13 +140,14 @@ export function QRScanner() {
             <p className="text-sm text-kinetic-on-surface-variant">
               Start the camera to scan attendee QR codes at the gate.
             </p>
-            <button
+            <Button
               type="button"
+              variant="lime"
               onClick={() => void startScanner()}
-              className="mt-6 inline-flex items-center gap-2 rounded-lg bg-kinetic-primary-container px-5 py-3 text-sm font-bold uppercase text-kinetic-on-primary-container transition-colors hover:bg-kinetic-primary-fixed"
+              className="mt-6 px-4 py-2 text-sm normal-case"
             >
               Start camera
-            </button>
+            </Button>
           </div>
         ) : null}
 
@@ -152,14 +216,17 @@ export function QRScanner() {
             </div>
           </div>
           <div className="p-6">
-            <button
+            <Button
               type="button"
+              variant="lime"
+              fullWidth
+              disabled={result.checked_in}
               onClick={() => void submitCheckIn(result.registration_id)}
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-kinetic-primary-container py-4 font-display text-lg font-bold uppercase text-kinetic-on-primary-container transition-colors hover:bg-kinetic-primary-fixed active:scale-95"
+              className="rounded-lg py-4 normal-case"
             >
               <CheckCircle2 className="size-5" aria-hidden="true" />
               Confirm check-in
-            </button>
+            </Button>
           </div>
         </div>
       ) : null}
