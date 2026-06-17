@@ -13,6 +13,7 @@ export function ManualSearch({ registrations }: { registrations: Registration[] 
   const [query, setQuery] = useState("");
   const [message, setMessage] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [localRegistrations, setLocalRegistrations] = useState(registrations);
 
   const matches = useMemo(() => {
     const normalized = query.trim().toLowerCase();
@@ -21,7 +22,7 @@ export function ManualSearch({ registrations }: { registrations: Registration[] 
       return [];
     }
 
-    return registrations
+    return localRegistrations
       .filter((registration) => {
         const name = `${registration.first_name} ${registration.last_name}`.toLowerCase();
         return (
@@ -31,7 +32,7 @@ export function ManualSearch({ registrations }: { registrations: Registration[] 
         );
       })
       .slice(0, 6);
-  }, [query, registrations]);
+  }, [query, localRegistrations]);
 
   const selected =
     matches.find((registration) => registration.id === selectedId) ?? matches[0] ?? null;
@@ -52,6 +53,13 @@ export function ManualSearch({ registrations }: { registrations: Registration[] 
 
     const payload = (await response.json()) as CheckInResponse;
     setMessage(payload.already_checked_in ? "Already checked in." : "Check-in confirmed.");
+    setLocalRegistrations((current) =>
+      current.map((registration) =>
+        registration.registration_id === registrationId
+          ? { ...registration, checked_in: true, checked_in_at: payload.checked_in_at }
+          : registration
+      )
+    );
   }
 
   return (
