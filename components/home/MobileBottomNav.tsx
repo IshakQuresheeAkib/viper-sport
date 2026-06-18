@@ -1,17 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { BarChart3, Calendar, Home, ImageIcon, Mail, User } from "lucide-react";
+import { Calendar, Home, Mail, User } from "lucide-react";
 import { useActiveSection } from "@/hooks/useActiveSection";
 import { homeNavLinks, homeScrollSpySectionIds } from "@/lib/home-nav";
 import { cn } from "@/lib/utils";
 
 const tabIcons = {
   hero: Home,
-  stats: BarChart3,
   events: Calendar,
   about: User,
-  gallery: ImageIcon,
   contact: Mail,
 } as const;
 

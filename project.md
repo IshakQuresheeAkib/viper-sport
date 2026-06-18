@@ -27,13 +27,18 @@
 
 ---
 
-## Brand
+## Brand & Design System
 
-- **Primary:** `#990011` (deep red)
-- **Background:** `#FCF6F5` (off-white)
-- **Accent:** `#FFFFFF`
-- **Fonts:** To be decided (recommend: Inter or Geist for body, a bold display font for hero)
-- **Logo:** Not yet created
+The live UI uses the **Kinetic Dark** system defined in `Design.md` and `app/globals.css`.
+
+- **Surface:** `#13140d` (dark charcoal)
+- **Primary accent:** Electric lime `#d3ed86` (`kinetic-primary-container`) — CTAs, focus, glow borders
+- **Live / urgent:** Coral `#ffb4ab` (`kinetic-error`) — event banner, live indicators
+- **On-surface text:** `#e4e3d8` with secondary cream `#cec4c2`
+- **Display font:** Anybody (700/800) — hero, headings, stats
+- **Body font:** Plus Jakarta Sans (400/700) — paragraphs, forms, admin UI
+- **Utility font:** Geist Sans / Geist Mono (layout defaults)
+- **Legacy print red:** `#990011` — original brand; prefer kinetic lime tokens in-app
 
 ---
 
@@ -74,40 +79,57 @@
 
 ## Pages & Routes
 
-| Route | Description |
-|---|---|
-| `/` | Home — Fuad Abdul-Aziz portfolio |
-| `/register` | Public event registration form |
+| Route               | Description                              |
+| ------------------- | ---------------------------------------- |
+| `/`                 | Home — Fuad Abdul-Aziz portfolio         |
+| `/register`         | Public event registration form           |
 | `/register/success` | Post-registration success screen with QR |
-| `/admin` | Protected admin login |
-| `/admin/dashboard` | Registration stats + table |
-| `/admin/checkin` | QR scanner + manual search |
+| `/admin`            | Protected admin login                    |
+| `/admin/dashboard`  | Registration stats + table               |
+| `/admin/checkin`    | QR scanner + manual search               |
 
 ---
 
 ## Portfolio Sections (`/`)
 
-Ordered as they appear on the page:
+Ordered as they appear on `app/(public)/page.tsx`:
 
-1. **Hero** — Full-screen with name, tagline, social links, GSAP entrance animation.
-2. **About** — Short bio, born in Bangladesh, UK-based, founder of ViperSport.
-3. **Stats** — 500M+ views, 1.4M+ followers, highlight numbers with GSAP counter animation.
-4. **Collaborations** — Brand logos: Real Madrid, Apple, FIFA, Adidas, and others.
-5. **Highlights / Gallery** — Cloudinary-served video/image grid of key moments.
-6. **Event Banner** — Prominent CTA block for the live match show with Register button.
-7. **Contact** — Simple contact form or email link for brand/sponsor inquiries.
+| # | Section | Component | Notes |
+| - | ------- | --------- | ----- |
+| — | **Navigation** | `DesktopNavbar`, `MobileBottomNav` | Scroll-spy via `useActiveSection` + `lib/home-nav.ts` |
+| 1 | **Hero** | `HeroSection` | Full-viewport split layout, profile image, social links, GSAP entrance |
+| 2 | **Stats** | `StatsSection` | 500M+ views, 1.4M+ followers, 5+ years — GSAP counter animation |
+| 3 | **Event Banner** | `EventBanner` | `id="events"` — coral live accent, Register CTA → `/register` |
+| 4 | **Scroll hint** | `HeroScrollHint` | Desktop scroll affordance below hero |
+| 5 | **About** | `AboutSection` | `id="about"` — bio, Bangladesh/UK, ViperSport founder |
+| 6 | **Collaborations** | `CollabSection` | Real Madrid, Apple, FIFA, Adidas, ViperSport |
+| 7 | **Contact** | `ContactSection` | `id="contact"` — sponsorship form → `partnerships@vipersport.com` |
+| 8 | **Footer** | `FooterSection` | Copyright, social links |
+
+### Home navigation anchors
+
+Defined in `lib/home-nav.ts`:
+
+| Label | Anchor | Section ID |
+| ----- | ------ | ---------- |
+| Home | `#hero` | `hero` |
+| Events | `#events` | `events` |
+| Profile | `#about` | `about` |
+| Contact | `#contact` | `contact` |
 
 ---
 
-## Registration Form (`/register`)
+## Registration (`/register`)
+
+The register page uses a two-column layout: **RegisterEventDetails** (match, date, featured national stars) on the left and **RegisterForm** + **ViperSportProfile** on the right (sticky on desktop). Background uses a blurred profile image with kinetic charcoal scrim.
 
 ### Fields
 
-| Field | Type | Required |
-|---|---|---|
-| `first_name` | text | Yes |
-| `last_name` | text | Yes |
-| `phone` | text (BD format) | Yes |
+| Field        | Type             | Required |
+| ------------ | ---------------- | -------- |
+| `first_name` | text             | Yes      |
+| `last_name`  | text             | Yes      |
+| `phone`      | text (BD format) | Yes      |
 
 ### Behavior
 
@@ -115,14 +137,17 @@ Ordered as they appear on the page:
 - On submit → POST `/api/register`.
 - API route: deduplicates by phone (returns existing registration if already registered), inserts to Supabase, generates `registration_id` (UUID), fires SMS via sms.net.bd, returns registration data.
 - Redirects to `/register/success?id={registration_id}`.
-- Rate limited by IP (middleware or route handler).
+- Rate limited by IP in the route handler (5 requests / minute per IP).
+- Phone numbers normalized via `lib/phone.ts` before insert/lookup.
 
 ### Success Screen (`/register/success`)
 
-- Fetches registration by ID from URL param.
-- Displays: Name, Registration ID, Event details, QR code (generated client-side from `registration_id` using `qrcode`).
-- QR code also sent via SMS.
-- Option to save/screenshot QR.
+- Fetches registration by ID from URL search param (`?id=`).
+- **SuccessCard** displays name, registration ID, event details.
+- QR code generated client-side via `lib/qr.ts` (`qrcode` package).
+- Downloadable **ViperSport Pass** image via `lib/pass.ts` (canvas).
+- GSAP confetti animation; share via Web Share API where supported.
+- QR also sent via SMS; registration succeeds even if SMS fails.
 
 ### SMS Content (sms.net.bd)
 
@@ -151,11 +176,13 @@ Show this SMS or your QR code at the gate.
 ### Dashboard (`/admin/dashboard`)
 
 **Stats cards:**
+
 - Total Registrations
 - Checked-In Count
 - Remaining (not checked in)
 
 **Registrations Table:**
+
 - Columns: `#`, Name, Phone, Registration ID, Registered At, Status (checked-in / pending).
 - Search by name or phone (client-side filter on fetched data for ≤500 rows — no server pagination needed).
 - Filter by check-in status.
@@ -229,12 +256,12 @@ create policy "allow_admin_read" on admin_users
 
 ## API Routes
 
-| Method | Route | Description |
-|---|---|---|
-| POST | `/api/register` | Submit registration, send SMS |
-| GET | `/api/register/[id]` | Fetch registration by ID (for success page) |
-| GET | `/api/admin/registrations` | All registrations (authenticated) |
-| PATCH | `/api/admin/checkin` | Mark registration as checked in (authenticated) |
+| Method | Route                      | Description                                     |
+| ------ | -------------------------- | ----------------------------------------------- |
+| POST   | `/api/register`            | Submit registration, send SMS                   |
+| GET    | `/api/register/[id]`       | Fetch registration by ID (for success page)     |
+| GET    | `/api/admin/registrations` | All registrations (authenticated)               |
+| PATCH  | `/api/admin/checkin`       | Mark registration as checked in (authenticated) |
 
 ---
 
@@ -274,7 +301,6 @@ vipersport-event/
 │   │   ├── AboutSection.tsx
 │   │   ├── StatsSection.tsx
 │   │   ├── CollabSection.tsx
-│   │   ├── GallerySection.tsx
 │   │   ├── EventBanner.tsx
 │   │   └── ContactSection.tsx
 │   ├── register/
@@ -328,13 +354,13 @@ CLOUDINARY_API_SECRET=
 
 ### Scenarios & Mitigations
 
-| Scenario | Strategy |
-|---|---|
-| Supabase DB down at registration | Show user-friendly error. Optionally queue to localStorage and retry (progressive enhancement). |
-| SMS provider failure | SMS is fire-and-forget. Registration still completes. Show QR on success screen regardless. |
+| Scenario                            | Strategy                                                                                                |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| Supabase DB down at registration    | Show user-friendly error. Optionally queue to localStorage and retry (progressive enhancement).         |
+| SMS provider failure                | SMS is fire-and-forget. Registration still completes. Show QR on success screen regardless.             |
 | Venue internet down during check-in | Export full registrations CSV from admin before event. Use CSV as offline backup for manual gate check. |
-| QR scanner fails on device | Fallback manual search tab always available. |
-| Vercel function cold start slow | Keep API routes lean. `/api/register` is the only critical path — keep it under 200ms. |
+| QR scanner fails on device          | Fallback manual search tab always available.                                                            |
+| Vercel function cold start slow     | Keep API routes lean. `/api/register` is the only critical path — keep it under 200ms.                  |
 
 ### Recommended Pre-Event Action
 

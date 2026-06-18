@@ -55,7 +55,6 @@ export function StatsSection() {
 
   return (
     <section
-      id="stats"
       ref={sectionRef}
       className="relative z-10 -mt-10 w-full bg-kinetic-surface py-12 text-kinetic-on-surface lg:mt-10"
       aria-labelledby="stats-heading"
