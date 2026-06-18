@@ -294,7 +294,7 @@ export function SuccessCard() {
               22 June 2026 &middot; 9:00 PM
             </span>
             <span className="text-xs text-kinetic-on-surface-variant">
-              Shahi Eidgah Maidan, TV Gate, Sylhet
+              Kobi Nazrul Auditorium, Rikabibazar, Sylhet
             </span>
           </div>
         </div>

@@ -17,8 +17,7 @@ export function FooterSection() {
             ViperSport
           </Link>
           <p className="mx-auto max-w-md text-sm leading-relaxed text-kinetic-on-surface-variant">
-            Argentina vs Austria Live Show · 22 June 2026 · Shahi Eidgah Maidan,
-            Sylhet
+            Argentina vs Austria Live Show · 22 June 2026 · Kobi Nazrul Auditorium, Rikabibazar, Sylhet.
           </p>
         </div>
 
