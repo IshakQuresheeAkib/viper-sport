@@ -120,7 +120,9 @@ select {
   background: rgb(50 47 48 / 40%);
   backdrop-filter: blur(12px);
   border: 1px solid rgb(255 255 255 / 5%);
-  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  transition:
+    border-color 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out;
 }
 
 .glass-input:focus-within {
@@ -139,7 +141,9 @@ select {
     0 100%,
     0 10px
   );
-  transition: transform 0.1s, filter 0.2s;
+  transition:
+    transform 0.1s,
+    filter 0.2s;
 }
 
 .retro-btn:active {
@@ -235,6 +239,69 @@ select {
     linear-gradient(to bottom, rgb(255 255 255 / 3%) 1px, transparent 1px);
 }
 
+.hero-photo {
+  object-fit: cover;
+  object-position: center top;
+  width: 100%;
+  height: 100%;
+}
+
+@media (min-width: 1024px) {
+  .hero-photo {
+    object-position: 52% 22%;
+  }
+}
+
+@media (min-width: 1024px) and (max-height: 900px) {
+  .hero-photo {
+    object-position: 50% 12%;
+  }
+}
+
+@media (min-width: 1024px) and (max-height: 780px) {
+  .hero-photo {
+    object-position: 50% 6%;
+  }
+}
+
+@media (min-width: 1024px) and (max-height: 680px) {
+  .hero-photo {
+    object-position: 50% top;
+  }
+}
+
+@media (min-width: 1024px) and (max-height: 860px) {
+  .hero-name-card {
+    padding: 1.5rem;
+  }
+
+  .hero-name-card h1 {
+    font-size: 2.75rem;
+    line-height: 0.9;
+  }
+}
+
+@media (min-width: 1024px) and (max-height: 720px) {
+  .hero-name-card {
+    padding: 1.25rem;
+  }
+
+  .hero-name-card h1 {
+    font-size: 2.25rem;
+  }
+
+  .hero-name-card p {
+    margin-top: 0.5rem;
+    font-size: 0.65rem;
+  }
+
+  .hero-social-link {
+    width: 2.25rem;
+    height: 2.25rem;
+    font-size: 0.625rem;
+  }
+}
+
 .admin-glass-card {
   background: rgb(50 47 48 / 40%);
   backdrop-filter: blur(12px);
@@ -250,7 +317,11 @@ select {
 }
 
 .admin-data-strip {
-  background: linear-gradient(90deg, rgb(211 237 134 / 10%) 0%, rgb(211 237 134 / 0%) 100%);
+  background: linear-gradient(
+    90deg,
+    rgb(211 237 134 / 10%) 0%,
+    rgb(211 237 134 / 0%) 100%
+  );
   border-left: 2px solid #d3ed86;
 }
 

@@ -10,7 +10,11 @@ function getInitials(registration: Registration) {
   return `${registration.first_name[0] ?? ""}${registration.last_name[0] ?? ""}`.toUpperCase();
 }
 
-export function ManualSearch({ registrations }: { registrations: Registration[] }) {
+export function ManualSearch({
+  registrations,
+}: {
+  registrations: Registration[];
+}) {
   const [query, setQuery] = useState("");
   const [message, setMessage] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -25,7 +29,8 @@ export function ManualSearch({ registrations }: { registrations: Registration[] 
 
     return localRegistrations
       .filter((registration) => {
-        const name = `${registration.first_name} ${registration.last_name}`.toLowerCase();
+        const name =
+          `${registration.first_name} ${registration.last_name}`.toLowerCase();
         return (
           name.includes(normalized) ||
           registration.phone.includes(normalized) ||
@@ -36,15 +41,15 @@ export function ManualSearch({ registrations }: { registrations: Registration[] 
   }, [query, localRegistrations]);
 
   const selected =
-    matches.find((registration) => registration.id === selectedId) ?? matches[0] ?? null;
+    matches.find((registration) => registration.id === selectedId) ?? null;
 
   async function checkIn(registrationId: string) {
     const response = await fetch("/api/admin/checkin", {
       method: "PATCH",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ registration_id: registrationId })
+      body: JSON.stringify({ registration_id: registrationId }),
     });
 
     if (!response.ok) {
@@ -53,13 +58,21 @@ export function ManualSearch({ registrations }: { registrations: Registration[] 
     }
 
     const payload = (await response.json()) as CheckInResponse;
-    setMessage(payload.already_checked_in ? "Already checked in." : "Check-in confirmed.");
+    setMessage(
+      payload.already_checked_in
+        ? "Already checked in."
+        : "Check-in confirmed.",
+    );
     setLocalRegistrations((current) =>
       current.map((registration) =>
         registration.registration_id === registrationId
-          ? { ...registration, checked_in: true, checked_in_at: payload.checked_in_at }
-          : registration
-      )
+          ? {
+              ...registration,
+              checked_in: true,
+              checked_in_at: payload.checked_in_at,
+            }
+          : registration,
+      ),
     );
   }
 
@@ -78,7 +91,9 @@ export function ManualSearch({ registrations }: { registrations: Registration[] 
       />
 
       {message ? (
-        <p className="text-center text-sm font-semibold text-kinetic-primary-container">{message}</p>
+        <p className="text-center text-sm font-semibold text-kinetic-primary-container">
+          {message}
+        </p>
       ) : null}
 
       {query.trim() ? (
@@ -131,7 +146,7 @@ export function ManualSearch({ registrations }: { registrations: Registration[] 
               </p>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4 bg-kinetic-surface/50 px-6 py-4">
+          <div className="sm:grid grid-cols-2 justify-between gap-4 bg-kinetic-surface/50 px-6 py-4">
             <div>
               <span className="mb-1 block text-xs font-bold uppercase text-kinetic-on-surface-variant">
                 Phone
@@ -140,7 +155,7 @@ export function ManualSearch({ registrations }: { registrations: Registration[] 
                 {selected.phone}
               </span>
             </div>
-            <div>
+            <div className="w-fit">
               <span className="mb-1 block text-xs font-bold uppercase text-kinetic-on-surface-variant">
                 Status
               </span>

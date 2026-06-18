@@ -32,7 +32,7 @@ export function RegisterEventDetails() {
               <p className="text-xs font-bold uppercase tracking-wider text-kinetic-on-surface-variant">
                 Match
               </p>
-              <p className="text-base font-bold text-kinetic-primary md:text-lg">
+              <p className="text-sm text-kinetic-primary 2xl:text-lg">
                 Argentina vs Austria
               </p>
             </div>
@@ -45,7 +45,7 @@ export function RegisterEventDetails() {
               <p className="text-xs font-bold uppercase tracking-wider text-kinetic-on-surface-variant">
                 Date &amp; Time
               </p>
-              <p className="text-base font-bold text-kinetic-primary md:text-lg">
+              <p className="text-sm text-kinetic-primary 2xl:text-lg">
                 22 June 2026 • 9:00 PM
               </p>
             </div>
@@ -58,8 +58,8 @@ export function RegisterEventDetails() {
               <p className="text-xs font-bold uppercase tracking-wider text-kinetic-on-surface-variant">
                 Featuring National Stars
               </p>
-              <p className="mt-1 text-base text-kinetic-primary md:text-lg">
-                Fahmidul Islam and Md. Saad Uddin
+              <p className="mt-1 text-sm text-kinetic-primary 2xl:text-lg">
+                Fahmidul Islam, Topu Barman, and Md. Saad Uddin
               </p>
             </div>
           </div>

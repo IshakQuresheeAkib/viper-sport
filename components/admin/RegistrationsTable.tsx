@@ -104,7 +104,7 @@ export function RegistrationsTable({ registrations }: { registrations: Registrat
   }
 
   return (
-    <section className="mt-2 flex flex-col gap-4 overflow-hidden rounded-2xl border border-white/5 bg-kinetic-surface-container-low lg:p-6">
+    <section className="mt-2 flex flex-col overflow-hidden rounded-2xl border border-white/5 bg-kinetic-surface-container-low lg:p-6">
       <div className="flex flex-col gap-3 border-b border-white/5 px-4 pb-4 lg:px-0">
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div className="relative w-full md:max-w-[400px]">
@@ -120,8 +120,8 @@ export function RegistrationsTable({ registrations }: { registrations: Registrat
             />
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
-            <div className="flex gap-2 overflow-x-auto pb-1 md:pb-0">
+          <div className="flex flex-wrap items-center gap-1">
+            <div className="flex gap-1 overflow-x-auto pb-1 md:pb-0">
               {statusOptions.map((option) => (
                 <Button
                   key={option.value}
@@ -129,7 +129,7 @@ export function RegistrationsTable({ registrations }: { registrations: Registrat
                   variant="neutral"
                   active={statusFilter === option.value}
                   onClick={() => setStatusFilter(option.value)}
-                  className={`rounded-full px-4 py-2 text-sm normal-case whitespace-nowrap ${
+                  className={`rounded-full px-4 py-2 text-xs normal-case whitespace-nowrap ${
                     statusFilter !== option.value
                       ? "border-kinetic-outline-variant bg-kinetic-surface-container-highest text-kinetic-on-surface-variant shadow-none hover:bg-kinetic-surface-bright"
                       : ""
@@ -152,7 +152,7 @@ export function RegistrationsTable({ registrations }: { registrations: Registrat
         </div>
       </div>
 
-      <div className="flex flex-col gap-0.5 px-4 lg:hidden">
+      <div className="flex flex-col gap-0.5  lg:hidden">
         {filtered.length === 0 ? (
           <p className="py-8 text-center text-sm text-kinetic-on-surface-variant">
             No registrations match your filters.
@@ -161,7 +161,7 @@ export function RegistrationsTable({ registrations }: { registrations: Registrat
           filtered.map((registration) => (
             <div
               key={registration.id}
-              className={`relative grid grid-cols-1 items-center gap-1 px-4 py-3 transition-colors md:grid-cols-12 md:gap-4 ${
+              className={`relative grid grid-cols-1 items-center gap-1 px-1 sm:px-4 py-3 transition-colors md:grid-cols-12 md:gap-4 ${
                 registration.checked_in
                   ? "admin-data-strip bg-kinetic-surface-container hover:bg-kinetic-surface-container-highest"
                   : "border-l-2 border-transparent bg-kinetic-surface-container hover:bg-kinetic-surface-container-highest"
@@ -169,7 +169,7 @@ export function RegistrationsTable({ registrations }: { registrations: Registrat
             >
               <div className="col-span-1 flex items-center gap-3 md:col-span-5">
                 <div
-                  className={`flex size-10 items-center justify-center rounded-full border border-kinetic-outline-variant bg-kinetic-surface-bright font-display text-sm font-bold ${
+                  className={`hidden sm:flex size-10 items-center justify-center rounded-full border border-kinetic-outline-variant bg-kinetic-surface-bright font-display text-sm font-bold ${
                     registration.checked_in ? "text-kinetic-primary" : "text-kinetic-on-surface-variant"
                   }`}
                 >
@@ -211,7 +211,7 @@ export function RegistrationsTable({ registrations }: { registrations: Registrat
               <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-kinetic-on-surface-variant">
                 Reg. Date
               </th>
-              <th className="rounded-tr-lg px-4 py-3 text-right text-xs font-bold uppercase tracking-wider text-kinetic-on-surface-variant">
+              <th className="rounded-tr-lg px-4 py-3 text-center text-xs font-bold uppercase tracking-wider text-kinetic-on-surface-variant">
                 Status
               </th>
             </tr>

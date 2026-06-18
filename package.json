@@ -24,6 +24,7 @@
     "react": "latest",
     "react-dom": "latest",
     "react-hook-form": "latest",
+    "sonner": "^2.0.7",
     "tailwind-merge": "latest",
     "zod": "latest",
     "zustand": "latest"

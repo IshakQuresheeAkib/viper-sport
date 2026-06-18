@@ -15,7 +15,10 @@ export async function PATCH(request: Request) {
   const parsed = checkInSchema.safeParse(body);
 
   if (!parsed.success) {
-    return NextResponse.json({ error: "Invalid registration ID." }, { status: 422 });
+    return NextResponse.json(
+      { error: "Invalid registration ID." },
+      { status: 422 },
+    );
   }
 
   const existing = await supabase
@@ -25,18 +28,24 @@ export async function PATCH(request: Request) {
     .maybeSingle<Pick<Registration, "checked_in" | "checked_in_at">>();
 
   if (existing.error) {
-    return NextResponse.json({ error: "Could not load registration." }, { status: 500 });
+    return NextResponse.json(
+      { error: "Could not load registration." },
+      { status: 500 },
+    );
   }
 
   if (!existing.data) {
-    return NextResponse.json({ error: "Registration not found." }, { status: 404 });
+    return NextResponse.json(
+      { error: "Registration not found." },
+      { status: 404 },
+    );
   }
 
   if (existing.data.checked_in && existing.data.checked_in_at) {
     const response: CheckInResponse = {
       success: true,
       already_checked_in: true,
-      checked_in_at: existing.data.checked_in_at
+      checked_in_at: existing.data.checked_in_at,
     };
     return NextResponse.json(response);
   }
@@ -44,20 +53,22 @@ export async function PATCH(request: Request) {
   const checkedInAt = new Date().toISOString();
   const updated = await supabase
     .from("registrations")
-    .update({
-      checked_in: true,
-      checked_in_at: checkedInAt
-    })
-    .eq("registration_id", parsed.data.registration_id);
+    .update({ checked_in: true, checked_in_at: checkedInAt })
+    .eq("registration_id", parsed.data.registration_id)
+    .select("registration_id")
+    .single<Pick<Registration, "registration_id">>();
 
-  if (updated.error) {
-    return NextResponse.json({ error: "Could not check in registration." }, { status: 500 });
+  if (updated.error || !updated.data) {
+    return NextResponse.json(
+      { error: "Could not check in registration." },
+      { status: 500 },
+    );
   }
 
   const response: CheckInResponse = {
     success: true,
     already_checked_in: false,
-    checked_in_at: checkedInAt
+    checked_in_at: checkedInAt,
   };
 
   return NextResponse.json(response);

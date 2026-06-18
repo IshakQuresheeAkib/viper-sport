@@ -6,7 +6,10 @@ import { Button } from "@/components/ui/Button";
 import { KineticInput } from "@/components/ui/Input";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { adminLoginSchema, type AdminLoginInput } from "@/lib/validations/admin.schema";
+import {
+  adminLoginSchema,
+  type AdminLoginInput,
+} from "@/lib/validations/admin.schema";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 export function AdminLoginForm() {
@@ -15,13 +18,13 @@ export function AdminLoginForm() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    setError
+    setError,
   } = useForm<AdminLoginInput>({
     resolver: zodResolver(adminLoginSchema),
     defaultValues: {
       email: "",
-      password: ""
-    }
+      password: "",
+    },
   });
 
   async function onSubmit(values: AdminLoginInput) {
@@ -65,7 +68,9 @@ export function AdminLoginForm() {
         />
 
         {errors.root ? (
-          <p className="text-sm font-semibold text-kinetic-error">{errors.root.message}</p>
+          <p className="text-sm font-semibold text-kinetic-error">
+            {errors.root.message}
+          </p>
         ) : null}
 
         <div className="pt-2">

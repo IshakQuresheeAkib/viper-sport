@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { ViperSportProfile } from "@/components/shared/ViperSportProfile";
 import { RegisterEventDetails } from "@/components/register/RegisterEventDetails";
 import { RegisterForm } from "@/components/register/RegisterForm";
 
 export const metadata: Metadata = {
-  title: "Register"
+  title: "Register",
 };
 
 export default function RegisterPage() {
@@ -13,7 +14,7 @@ export default function RegisterPage() {
     <main className="relative flex min-h-svh flex-col items-center overflow-x-hidden bg-kinetic-charcoal px-4 py-12 font-body text-kinetic-on-surface md:px-8 lg:px-12">
       <div className="pointer-events-none fixed inset-0 -z-10">
         <Image
-          src="/images/home/fuad-hero.jpg"
+          src="/images/home/profile.webp"
           alt=""
           fill
           sizes="100vw"
@@ -38,7 +39,8 @@ export default function RegisterPage() {
         <div className="w-full lg:w-[60%]">
           <RegisterEventDetails />
         </div>
-        <div className="w-full lg:sticky lg:top-8 lg:w-[40%]">
+        <div className="flex w-full flex-col gap-6 lg:sticky lg:top-8 lg:w-[40%]">
+          <ViperSportProfile />
           <RegisterForm />
         </div>
       </div>

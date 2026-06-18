@@ -7,7 +7,11 @@ import { KineticInput } from "@/components/ui/Input";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { registerSchema, type RegisterInput } from "@/lib/validations/register.schema";
+import { toast } from "sonner";
+import {
+  registerSchema,
+  type RegisterInput,
+} from "@/lib/validations/register.schema";
 import { useRegistrationStore } from "@/store/useRegistrationStore";
 import type { RegisterResponse } from "@/types";
 
@@ -17,19 +21,21 @@ interface RegisterFormProps {
 
 export function RegisterForm({ variant = "card" }: RegisterFormProps) {
   const router = useRouter();
-  const setRegistration = useRegistrationStore((state) => state.setRegistration);
+  const setRegistration = useRegistrationStore(
+    (state) => state.setRegistration,
+  );
   const [formError, setFormError] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting }
+    formState: { errors, isSubmitting },
   } = useForm<RegisterInput>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
       first_name: "",
       last_name: "",
-      phone: ""
-    }
+      phone: "",
+    },
   });
 
   async function onSubmit(values: RegisterInput) {
@@ -38,14 +44,24 @@ export function RegisterForm({ variant = "card" }: RegisterFormProps) {
     const response = await fetch("/api/register", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(values)
+      body: JSON.stringify(values),
     });
 
     if (!response.ok) {
-      const payload = (await response.json().catch(() => null)) as { error?: string } | null;
-      setFormError(payload?.error ?? "Registration failed. Please try again.");
+      const payload = (await response.json().catch(() => null)) as {
+        error?: string;
+      } | null;
+      const message =
+        payload?.error ?? "Registration failed. Please try again.";
+
+      if (response.status === 409) {
+        toast.error(message);
+        return;
+      }
+
+      setFormError(message);
       return;
     }
 
@@ -53,9 +69,11 @@ export function RegisterForm({ variant = "card" }: RegisterFormProps) {
     setRegistration({
       registrationId: payload.registration_id,
       firstName: payload.first_name,
-      lastName: payload.last_name
+      lastName: payload.last_name,
     });
-    router.push(`/register/success?id=${encodeURIComponent(payload.registration_id)}`);
+    router.push(
+      `/register/success?id=${encodeURIComponent(payload.registration_id)}`,
+    );
   }
 
   const formContent = (
@@ -95,7 +113,12 @@ export function RegisterForm({ variant = "card" }: RegisterFormProps) {
         <p className="text-sm font-semibold text-kinetic-error">{formError}</p>
       ) : null}
 
-      <Button type="submit" fullWidth loading={isSubmitting} className="mt-3 py-4 text-xl md:text-2xl">
+      <Button
+        type="submit"
+        fullWidth
+        loading={isSubmitting}
+        className="mt-3 py-4 text-xl md:text-2xl"
+      >
         Register Now
         <ArrowRight className="size-5" aria-hidden="true" />
       </Button>
