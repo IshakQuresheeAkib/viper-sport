@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
+import { getPhoneLookupVariants, normalizePhone } from "@/lib/phone";
 import { registerSchema } from "@/lib/validations/register.schema";
 import type { RegisterResponse, Registration } from "@/types";
 
@@ -21,18 +22,6 @@ function isRateLimited(ip: string) {
 
   requestLog.set(ip, [...history, now]);
   return false;
-}
-
-/**
- * Normalise any accepted BD phone format to the canonical +880XXXXXXXXX form.
- * Accepts: 01XXXXXXXXX · 8801XXXXXXXXX · +8801XXXXXXXXX
- */
-function normalizePhone(phone: string): string {
-  const t = phone.trim();
-  if (t.startsWith("+880")) return t;
-  if (t.startsWith("880")) return "+" + t;
-  if (t.startsWith("0")) return "+880" + t.slice(1);
-  return t;
 }
 
 export async function POST(request: NextRequest) {
@@ -59,15 +48,14 @@ export async function POST(request: NextRequest) {
   }
 
   const phone = normalizePhone(parsed.data.phone);
+  const phoneVariants = getPhoneLookupVariants(phone);
 
   const supabase = createSupabaseAdminClient();
   const existing = await supabase
     .from("registrations")
     .select("registration_id, first_name, last_name")
-    .eq("phone", phone)
-    .maybeSingle<
-      Pick<Registration, "registration_id" | "first_name" | "last_name">
-    >();
+    .in("phone", phoneVariants)
+    .limit(1);
 
   if (existing.error) {
     return NextResponse.json(
@@ -76,7 +64,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  if (existing.data) {
+  if (existing.data?.[0]) {
     return NextResponse.json(
       { error: "This number is already used. Try a different number." },
       { status: 409 },
