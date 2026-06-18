@@ -1,6 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { createSupabaseAdminClient } from "@/lib/supabase/admin";
+import { isAuthenticatedAdmin } from "@/lib/auth/admin";
 import { getPhoneLookupVariants, normalizePhone } from "@/lib/phone";
+import { isRegistrationClosed } from "@/lib/registration";
+import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { registerSchema } from "@/lib/validations/register.schema";
 import type { RegisterResponse, Registration } from "@/types";
 
@@ -34,6 +36,13 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       { error: "Too many attempts. Try again soon." },
       { status: 429 },
+    );
+  }
+
+  if (isRegistrationClosed() && !(await isAuthenticatedAdmin())) {
+    return NextResponse.json(
+      { error: "Registration is closed. All seats are filled." },
+      { status: 403 },
     );
   }
 
