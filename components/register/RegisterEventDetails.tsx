@@ -3,19 +3,6 @@ import { Calendar, Globe, Star, Trophy } from "lucide-react";
 export function RegisterEventDetails() {
   return (
     <section className="kinetic-glass-card flex flex-col gap-8 rounded-xl p-6 sm:p-8 md:p-10">
-      <div className="flex flex-col gap-4">
-        <h2 className="flex items-center gap-3 font-display text-2xl font-bold text-kinetic-primary md:text-3xl">
-          <Globe className="size-6 text-kinetic-primary-fixed-dim md:size-8" aria-hidden="true" />
-          Our Mission
-        </h2>
-        <p className="text-base leading-relaxed text-kinetic-on-surface-variant md:text-lg">
-          Spearheaded by visionary <strong>Fuad Abdul Aziz</strong>, our objective
-          is to boldly promote Bangladesh on the global stage. We take immense pride
-          in our roots, bringing the passionate <strong>Sylheti language</strong> to
-          international football commentary, connecting our rich cultural heritage
-          with the world&apos;s most beautiful game.
-        </p>
-      </div>
 
       <div className="h-px w-full bg-linear-to-r from-transparent via-white/20 to-transparent" />
 

@@ -2,11 +2,11 @@ const brands = ["Real Madrid", "Apple", "FIFA", "Adidas", "ViperSport"];
 
 export function CollabSection() {
   return (
-    <section className="py-18">
+    <section className="py-20">
       <div className="container">
-        <p className="text-sm font-bold uppercase tracking-[0.2em] text-kinetic-primary-container">
+        <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-kinetic-primary-container">
           Collaborations
-        </p>
+        </h2>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
           {brands.map((brand) => (
             <div

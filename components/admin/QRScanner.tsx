@@ -45,7 +45,7 @@ export function QRScanner({ registrations }: QRScannerProps) {
 
   useEffect(() => {
     return () => {
-      void scannerRef.current?.stop().catch(() => undefined);
+      void releaseScanner();
     };
   }, []);
 
@@ -144,9 +144,37 @@ export function QRScanner({ registrations }: QRScannerProps) {
     setState("idle");
   }
 
+  async function releaseScanner() {
+    const scanner = scannerRef.current;
+    if (!scanner) {
+      return;
+    }
+
+    scannerRef.current = null;
+
+    try {
+      await scanner.stop();
+    } catch {
+      // Scanner may already be stopped.
+    }
+
+    try {
+      scanner.clear();
+    } catch {
+      // Container may already be cleared.
+    }
+  }
+
+  async function stopScanner() {
+    await releaseScanner();
+    setState("idle");
+  }
+
   async function startScanner() {
     setMessage(null);
     setResult(null);
+    await releaseScanner();
+
     const scanner = new Html5Qrcode("qr-reader");
     scannerRef.current = scanner;
     setState("scanning");
@@ -156,11 +184,12 @@ export function QRScanner({ registrations }: QRScannerProps) {
         { facingMode: "environment" },
         { fps: 10, qrbox: { width: 240, height: 240 } },
         (decodedText) => {
-          void scanner.stop().finally(() => handleScan(decodedText));
+          void releaseScanner().finally(() => handleScan(decodedText));
         },
         undefined,
       );
     } catch {
+      await releaseScanner();
       setMessage("Could not access the camera.");
       setState("idle");
     }
@@ -206,6 +235,19 @@ export function QRScanner({ registrations }: QRScannerProps) {
           </>
         ) : null}
 
+        {state === "scanning" ? (
+          <div className="absolute inset-x-0 bottom-4 z-30 flex justify-center px-4">
+            <Button
+              type="button"
+              variant="neutral"
+              onClick={() => void stopScanner()}
+              className="rounded-full px-4 py-2 text-xs normal-case"
+            >
+              Stop camera
+            </Button>
+          </div>
+        ) : null}
+
         {state === "submitting" ? (
           <div className="absolute inset-0 z-30 flex items-center justify-center bg-kinetic-surface/70">
             <Loader2
@@ -228,11 +270,17 @@ export function QRScanner({ registrations }: QRScannerProps) {
         </span>
       </div>
 
-      {message ? (
-        <p className="mt-4 text-sm font-semibold text-kinetic-primary-container">
-          {message}
-        </p>
-      ) : null}
+      <div
+        aria-live="polite"
+        aria-atomic="true"
+        className="mt-4 min-h-5 text-center"
+      >
+        {message ? (
+          <p className="text-sm font-semibold text-kinetic-primary-container">
+            {message}
+          </p>
+        ) : null}
+      </div>
 
       {result ? (
         <div className="admin-glass-card admin-glow-active mt-8 w-full max-w-md overflow-hidden rounded-xl border-t-2 border-t-kinetic-primary-container">

@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { CheckCircle, Download, Share2 } from "lucide-react";
 import Link from "next/link";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 import { createQrDataUrl } from "@/lib/qr";
 import { buildPassImage } from "@/lib/pass";
@@ -33,10 +34,12 @@ function createParticle(canvas: HTMLCanvasElement): ConfettiParticle {
     vx: (Math.random() - 0.5) * 15,
     vy: (Math.random() - 1) * 15 - 5,
     size: Math.random() * 4 + 2,
-    color: CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)] ?? "#d3ed86",
+    color:
+      CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)] ??
+      "#d3ed86",
     alpha: 1,
     gravity: 0.3,
-    drag: 0.96
+    drag: 0.96,
   };
 }
 
@@ -45,7 +48,9 @@ export function SuccessCard() {
   const registrationId = searchParams.get("id");
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const contentRef = useRef<HTMLDivElement | null>(null);
-  const [registration, setRegistration] = useState<PublicRegistration | null>(null);
+  const [registration, setRegistration] = useState<PublicRegistration | null>(
+    null,
+  );
   const [qrUrl, setQrUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -91,7 +96,7 @@ export function SuccessCard() {
     window.addEventListener("resize", resize);
 
     const particles: ConfettiParticle[] = Array.from({ length: 60 }, () =>
-      createParticle(canvas)
+      createParticle(canvas),
     );
 
     let frameId = 0;
@@ -139,7 +144,7 @@ export function SuccessCard() {
         y: 0,
         duration: 0.6,
         ease: "power3.out",
-        stagger: 0.1
+        stagger: 0.1,
       });
     }, content);
 
@@ -161,12 +166,14 @@ export function SuccessCard() {
     if (navigator.share) {
       await navigator.share({
         title: "ViperSport Pass",
-        text: shareText
+        text: shareText,
       });
+      toast.success("Pass shared successfully.");
       return;
     }
 
     await navigator.clipboard.writeText(shareText);
+    toast.success("Registration ID copied to clipboard.");
   }
 
   async function handleDownloadPass() {
@@ -178,7 +185,7 @@ export function SuccessCard() {
       registrationId: registration.registration_id,
       firstName: registration.first_name,
       lastName: registration.last_name,
-      qrDataUrl: qrUrl
+      qrDataUrl: qrUrl,
     });
 
     const link = document.createElement("a");
@@ -190,9 +197,16 @@ export function SuccessCard() {
   if (!registrationId) {
     return (
       <div className="kinetic-glass-card max-w-md rounded-xl p-6 text-center">
-        <h1 className="font-display text-3xl font-bold">Registration unavailable</h1>
-        <p className="mt-3 text-kinetic-on-surface-variant">Missing registration ID.</p>
-        <Link href="/register" className="mt-6 inline-block font-bold text-kinetic-primary-container">
+        <h1 className="font-display text-3xl font-bold">
+          Registration unavailable
+        </h1>
+        <p className="mt-3 text-kinetic-on-surface-variant">
+          Missing registration ID.
+        </p>
+        <Link
+          href="/register"
+          className="mt-6 inline-block font-bold text-kinetic-primary-container"
+        >
           Back to registration
         </Link>
       </div>
@@ -202,9 +216,14 @@ export function SuccessCard() {
   if (error) {
     return (
       <div className="kinetic-glass-card max-w-md rounded-xl p-6 text-center">
-        <h1 className="font-display text-3xl font-bold">Registration unavailable</h1>
+        <h1 className="font-display text-3xl font-bold">
+          Registration unavailable
+        </h1>
         <p className="mt-3 text-kinetic-on-surface-variant">{error}</p>
-        <Link href="/register" className="mt-6 inline-block font-bold text-kinetic-primary-container">
+        <Link
+          href="/register"
+          className="mt-6 inline-block font-bold text-kinetic-primary-container"
+        >
           Back to registration
         </Link>
       </div>
@@ -212,11 +231,18 @@ export function SuccessCard() {
   }
 
   if (!registration) {
-    return <p className="font-semibold text-kinetic-on-surface">Loading registration...</p>;
+    return (
+      <p className="font-semibold text-kinetic-on-surface" aria-live="polite">
+        Loading registration...
+      </p>
+    );
   }
 
   return (
-    <div ref={contentRef} className="relative flex w-full flex-col items-center">
+    <div
+      ref={contentRef}
+      className="relative flex w-full flex-col items-center"
+    >
       <canvas
         ref={canvasRef}
         className="pointer-events-none absolute inset-0 z-0 size-full"
@@ -228,11 +254,18 @@ export function SuccessCard() {
         className="relative z-10 mb-6 flex flex-col items-center"
       >
         <div className="glow-pulse mb-3 flex size-16 items-center justify-center rounded-full border border-kinetic-primary-container/20 bg-kinetic-surface-container-high">
-          <CheckCircle className="size-10 text-kinetic-primary-container" aria-hidden="true" />
+          <CheckCircle
+            className="size-10 text-kinetic-primary-container"
+            aria-hidden="true"
+          />
         </div>
         <h1 className="text-center font-display text-[2rem] font-extrabold text-kinetic-on-surface">
           You&apos;re In
         </h1>
+      </div>
+
+      <div role="status" aria-live="polite" className="sr-only">
+        Registration confirmed for {registration.registration_id}.
       </div>
 
       <div
@@ -312,7 +345,7 @@ export function SuccessCard() {
 
       <div
         data-success-animate
-        className="relative z-10 mt-6 flex w-full max-w-sm gap-4"
+        className="relative z-10 mt-6 flex w-full max-w-sm flex-col gap-3 sm:flex-row sm:gap-4"
       >
         <Button
           type="button"

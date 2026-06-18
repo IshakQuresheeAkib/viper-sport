@@ -68,7 +68,7 @@ export function AdminLoginForm() {
         />
 
         {errors.root ? (
-          <p className="text-sm font-semibold text-kinetic-error">
+          <p role="alert" className="text-sm font-semibold text-kinetic-error">
             {errors.root.message}
           </p>
         ) : null}
@@ -78,7 +78,7 @@ export function AdminLoginForm() {
             type="submit"
             fullWidth
             loading={isSubmitting}
-            variant="coral"
+            variant="lime"
             className="group relative justify-between overflow-hidden py-4 text-lg"
           >
             <span className="relative z-10 tracking-wide">

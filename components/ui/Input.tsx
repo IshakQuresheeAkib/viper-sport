@@ -3,6 +3,7 @@
 import {
   forwardRef,
   useEffect,
+  useId,
   useRef,
   useState,
   type InputHTMLAttributes,
@@ -29,12 +30,16 @@ export const KineticInput = forwardRef<HTMLInputElement, KineticInputProps>(
       className,
       type = "text",
       id,
+      "aria-describedby": ariaDescribedBy,
       ...props
     },
     ref,
   ) {
     const [showPassword, setShowPassword] = useState(false);
     const wrapperRef = useRef<HTMLDivElement>(null);
+    const generatedId = useId();
+    const inputId = id ?? generatedId;
+    const errorId = error ? `${inputId}-error` : undefined;
     const isPassword = type === "password";
     const resolvedType = isPassword
       ? showPassword
@@ -59,14 +64,19 @@ export const KineticInput = forwardRef<HTMLInputElement, KineticInputProps>(
       >
         {label ? (
           <label
-            htmlFor={id}
+            htmlFor={inputId}
             className="text-[11px] font-bold uppercase tracking-wider text-kinetic-outline"
           >
             {label}
           </label>
         ) : null}
 
-        <div className="group glass-input flex h-12 items-center rounded-lg px-3 md:h-14 md:px-4">
+        <div
+          className={cn(
+            "group glass-input flex h-12 items-center rounded-lg px-3 md:h-14 md:px-4",
+            error && "border-kinetic-error/60",
+          )}
+        >
           {icon ? (
             <span
               className="mr-3 shrink-0 text-kinetic-outline-variant transition-colors duration-200 group-focus-within:text-kinetic-primary-container"
@@ -78,8 +88,12 @@ export const KineticInput = forwardRef<HTMLInputElement, KineticInputProps>(
 
           <input
             ref={ref}
-            id={id}
+            id={inputId}
             type={resolvedType}
+            aria-invalid={error ? true : undefined}
+            aria-describedby={
+              [errorId, ariaDescribedBy].filter(Boolean).join(" ") || undefined
+            }
             className={cn(
               "w-full border-none bg-transparent p-0 text-base text-kinetic-on-surface outline-none placeholder:text-kinetic-secondary/50 focus:ring-0",
               className,
@@ -104,7 +118,13 @@ export const KineticInput = forwardRef<HTMLInputElement, KineticInputProps>(
         </div>
 
         {error ? (
-          <p className="text-sm font-semibold text-kinetic-error">{error}</p>
+          <p
+            id={errorId}
+            role="alert"
+            className="text-sm font-semibold text-kinetic-error"
+          >
+            {error}
+          </p>
         ) : null}
       </div>
     );

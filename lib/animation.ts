@@ -15,7 +15,19 @@ const SLOW_CONNECTION_TYPES: ReadonlySet<NetworkEffectiveType> = new Set([
   "3g",
 ]);
 
+export function prefersReducedMotion(): boolean {
+  if (typeof window === "undefined") {
+    return false;
+  }
+
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
 export function shouldSkipAnimation(): boolean {
+  if (typeof window !== "undefined" && prefersReducedMotion()) {
+    return true;
+  }
+
   if (typeof navigator === "undefined") {
     return false;
   }

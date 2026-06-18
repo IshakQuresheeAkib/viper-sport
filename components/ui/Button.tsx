@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
-import type { ButtonHTMLAttributes, ReactNode } from "react";
+import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 export type ButtonVariant = "lime" | "coral" | "neutral";
@@ -29,55 +29,70 @@ function getVariantClasses(variant: ButtonVariant, active: boolean): string {
   }
 }
 
-export function Button({
-  variant = "coral",
-  fullWidth = false,
-  loading = false,
-  active = false,
-  href,
-  className,
-  children,
-  disabled,
-  type = "button",
-  ...props
-}: ButtonProps) {
-  const isDisabled = disabled || loading;
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  function Button(
+    {
+      variant = "lime",
+      fullWidth = false,
+      loading = false,
+      active = false,
+      href,
+      className,
+      children,
+      disabled,
+      type = "button",
+      ...props
+    },
+    ref,
+  ) {
+    const isDisabled = disabled || loading;
 
-  const sharedClassName = cn(
-    "retro-btn inline-flex cursor-pointer items-center justify-center gap-2 rounded-sm px-5 py-3 font-display text-base font-bold uppercase transition-all duration-200",
-    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-kinetic-primary-container",
-    "disabled:cursor-not-allowed disabled:opacity-60",
-    "active:scale-[0.98]",
-    getVariantClasses(variant, active),
-    fullWidth && "w-full",
-    className
-  );
+    const sharedClassName = cn(
+      "retro-btn inline-flex cursor-pointer items-center justify-center gap-2 rounded-sm px-5 py-3 font-display text-base font-bold uppercase transition-all duration-200",
+      "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-kinetic-primary-container",
+      "disabled:cursor-not-allowed disabled:opacity-60",
+      "active:scale-[0.98]",
+      getVariantClasses(variant, active),
+      fullWidth && "w-full",
+      className,
+    );
 
-  const content = loading ? (
-    <>
-      <Loader2 className="size-5 shrink-0 animate-spin" aria-hidden="true" />
-      {children}
-    </>
-  ) : (
-    children
-  );
+    const content = loading ? (
+      <>
+        <Loader2 className="size-5 shrink-0 animate-spin" aria-hidden="true" />
+        {children}
+      </>
+    ) : (
+      children
+    );
 
-  if (href) {
+    if (href) {
+      return (
+        <Link
+          href={href}
+          className={cn(
+            sharedClassName,
+            isDisabled && "pointer-events-none opacity-60",
+          )}
+          aria-disabled={isDisabled || undefined}
+          tabIndex={isDisabled ? -1 : undefined}
+        >
+          {content}
+        </Link>
+      );
+    }
+
     return (
-      <Link
-        href={href}
-        className={cn(sharedClassName, isDisabled && "pointer-events-none opacity-60")}
-        aria-disabled={isDisabled || undefined}
-        tabIndex={isDisabled ? -1 : undefined}
+      <button
+        ref={ref}
+        className={sharedClassName}
+        disabled={isDisabled}
+        type={type}
+        aria-busy={loading || undefined}
+        {...props}
       >
         {content}
-      </Link>
+      </button>
     );
-  }
-
-  return (
-    <button className={sharedClassName} disabled={isDisabled} type={type} {...props}>
-      {content}
-    </button>
-  );
-}
+  },
+);

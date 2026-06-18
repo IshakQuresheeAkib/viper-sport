@@ -3,7 +3,6 @@ import { CollabSection } from "@/components/home/CollabSection";
 import { ContactSection } from "@/components/home/ContactSection";
 import { FooterSection } from "@/components/home/FooterSection";
 import { EventBanner } from "@/components/home/EventBanner";
-import { GallerySection } from "@/components/home/GallerySection";
 import { HeroScrollHint, HeroSection } from "@/components/home/HeroSection";
 import { DesktopNavbar } from "@/components/home/DesktopNavbar";
 import { MobileBottomNav } from "@/components/home/MobileBottomNav";
@@ -19,7 +18,6 @@ export default function HomePage() {
       <HeroScrollHint />
       <AboutSection />
       <CollabSection />
-      <GallerySection />
       <ContactSection />
       <FooterSection />
       <MobileBottomNav />

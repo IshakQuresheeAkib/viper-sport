@@ -7,7 +7,7 @@ import { shouldSkipAnimation } from "@/lib/animation";
 const stats = [
   { value: 500, suffix: "M+", label: "Views", glow: true },
   { value: 1.4, suffix: "M+", label: "Followers", glow: false },
-  { value: 5, suffix: "+", label: "Years Exp", glow: false }
+  { value: 5, suffix: "+", label: "Years Exp", glow: false },
 ] as const;
 
 export function StatsSection() {
@@ -30,7 +30,7 @@ export function StatsSection() {
         y: 0,
         duration: 0.8,
         ease: "power4.inOut",
-        stagger: 0.3
+        stagger: 0.3,
       });
 
       counters.forEach((counter) => {
@@ -45,7 +45,7 @@ export function StatsSection() {
               target % 1 === 0
                 ? Math.round(data.value).toString()
                 : data.value.toFixed(1);
-          }
+          },
         });
       });
     }, section);
@@ -55,19 +55,23 @@ export function StatsSection() {
 
   return (
     <section
-      id="stats"
       ref={sectionRef}
       className="relative z-10 -mt-10 w-full bg-kinetic-surface py-12 text-kinetic-on-surface lg:mt-10"
+      aria-labelledby="stats-heading"
     >
+      <h2 id="stats-heading" className="sr-only">
+        Performance statistics
+      </h2>
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-3 px-4 md:grid-cols-3 lg:gap-6 lg:px-8">
         {stats.map((stat) => (
           <div
             key={stat.label}
             data-stat-card
-            className='glass-card flex flex-col items-center justify-center rounded-xl p-6 lg:p-12 glow-border'
+            className="glass-card flex flex-col items-center justify-center rounded-xl p-6 lg:p-12 glow-border"
           >
             <p
-              className='font-display text-[2rem] font-extrabold lg:text-5xl text-kinetic-primary-container'
+              className="font-display text-[2rem] font-extrabold text-kinetic-primary-container lg:text-5xl"
+              aria-live="polite"
             >
               <span data-count={stat.value}>{stat.value}</span>
               {stat.suffix}

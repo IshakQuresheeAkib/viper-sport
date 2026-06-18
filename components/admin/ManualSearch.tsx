@@ -4,6 +4,7 @@ import { CheckCircle2, Search } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { KineticInput } from "@/components/ui/Input";
+import { matchesPhoneSearch } from "@/lib/phone";
 import type { CheckInResponse, Registration } from "@/types";
 
 function getInitials(registration: Registration) {
@@ -33,7 +34,7 @@ export function ManualSearch({
           `${registration.first_name} ${registration.last_name}`.toLowerCase();
         return (
           name.includes(normalized) ||
-          registration.phone.includes(normalized) ||
+          matchesPhoneSearch(registration.phone, normalized) ||
           registration.registration_id.toLowerCase().includes(normalized)
         );
       })
@@ -41,7 +42,8 @@ export function ManualSearch({
   }, [query, localRegistrations]);
 
   const selected =
-    matches.find((registration) => registration.id === selectedId) ?? null;
+    matches.find((registration) => registration.id === selectedId) ??
+    (matches.length === 1 ? matches[0] : null);
 
   async function checkIn(registrationId: string) {
     const response = await fetch("/api/admin/checkin", {
@@ -79,6 +81,8 @@ export function ManualSearch({
   return (
     <section className="mx-auto flex w-full max-w-md flex-col gap-6">
       <KineticInput
+        id="manual-search"
+        label="Search registrations"
         icon={<Search className="size-5" />}
         onChange={(event) => {
           setQuery(event.target.value);
@@ -90,11 +94,13 @@ export function ManualSearch({
         value={query}
       />
 
-      {message ? (
-        <p className="text-center text-sm font-semibold text-kinetic-primary-container">
-          {message}
-        </p>
-      ) : null}
+      <div aria-live="polite" aria-atomic="true" className="min-h-5">
+        {message ? (
+          <p className="text-center text-sm font-semibold text-kinetic-primary-container">
+            {message}
+          </p>
+        ) : null}
+      </div>
 
       {query.trim() ? (
         <div className="flex flex-col gap-2">
@@ -107,6 +113,7 @@ export function ManualSearch({
               <button
                 key={registration.id}
                 type="button"
+                aria-pressed={selected?.id === registration.id}
                 onClick={() => setSelectedId(registration.id)}
                 className={`flex w-full cursor-pointer items-center justify-start gap-3 rounded-xl border px-4 py-3 text-left transition-colors ${
                   selected?.id === registration.id

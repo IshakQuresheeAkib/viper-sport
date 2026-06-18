@@ -24,9 +24,9 @@ export default function RegisterPage() {
         <div className="absolute inset-0 bg-linear-to-b from-kinetic-charcoal/60 via-kinetic-charcoal/90 to-kinetic-charcoal" />
       </div>
 
-      <header className="mb-8 mt-4 w-full max-w-6xl text-center">
+      <header className="mb-6 mt-2 w-full max-w-6xl text-center lg:mb-8 lg:mt-4">
         <Link href="/">
-          <h1 className="font-display text-5xl font-extrabold tracking-tighter text-kinetic-primary drop-shadow-lg md:text-7xl lg:text-8xl">
+          <h1 className="font-display text-4xl font-extrabold tracking-tighter text-kinetic-primary drop-shadow-lg md:text-6xl lg:text-7xl">
             Viper sport
           </h1>
         </Link>
@@ -36,12 +36,14 @@ export default function RegisterPage() {
       </header>
 
       <div className="flex w-full max-w-6xl flex-col gap-8 pb-12 lg:flex-row lg:items-start lg:gap-12">
-        <div className="w-full lg:w-[60%]">
+        <div className="order-2 w-full lg:order-1 lg:w-[60%]">
           <RegisterEventDetails />
         </div>
-        <div className="flex w-full flex-col gap-6 lg:sticky lg:top-8 lg:w-[40%]">
-          <ViperSportProfile />
+        <div className="order-1 flex w-full flex-col gap-6 lg:sticky lg:top-8 lg:order-2 lg:w-[40%]">
           <RegisterForm />
+          <div className="lg:order-2">
+            <ViperSportProfile />
+          </div>
         </div>
       </div>
     </main>
