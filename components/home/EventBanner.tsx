@@ -23,7 +23,7 @@ export function EventBanner() {
             </h2>
             <p className="mt-2 flex items-center gap-2 text-base text-kinetic-secondary lg:text-lg">
               <Calendar className="size-4 lg:size-5" aria-hidden="true" />
-              22 June 2026 | Sylhet, Bangladesh
+              22 June 2026 | Kobi Nazrul Auditorium, Rikabibazar, Sylhet.
             </p>
           </div>
           <div className="relative z-10 mt-4 w-full md:mt-0 md:w-auto">

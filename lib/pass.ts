@@ -23,7 +23,7 @@ function fitText(
   text: string,
   maxWidth: number,
   maxSize: number,
-  fontSuffix: string
+  fontSuffix: string,
 ): void {
   let size = maxSize;
   ctx.font = `bold ${size}px ${fontSuffix}`;
@@ -39,7 +39,7 @@ function roundRect(
   y: number,
   w: number,
   h: number,
-  r: number
+  r: number,
 ) {
   ctx.beginPath();
   ctx.moveTo(x + r, y);
@@ -108,7 +108,11 @@ export async function buildPassImage(input: PassInput): Promise<string> {
 
   ctx.fillStyle = "#990011";
   ctx.font = "bold 11px 'Courier New', monospace";
-  ctx.fillText("●  VALID ENTRY", W - 40 - ctx.measureText("●  VALID ENTRY").width, 58);
+  ctx.fillText(
+    "●  VALID ENTRY",
+    W - 40 - ctx.measureText("●  VALID ENTRY").width,
+    58,
+  );
 
   // Divider line
   ctx.strokeStyle = "rgba(255,255,255,0.06)";
@@ -136,7 +140,7 @@ export async function buildPassImage(input: PassInput): Promise<string> {
 
   ctx.fillStyle = "rgba(255,255,255,0.5)";
   ctx.font = "12px sans-serif";
-  ctx.fillText("Shahi Eidgah Maidan, TV Gate, Sylhet", 40, 180);
+  ctx.fillText("Kobi Nazrul Auditorium, Rikabibazar, Sylhet", 40, 180);
 
   // Dashed separator
   ctx.setLineDash([6, 4]);
@@ -158,7 +162,13 @@ export async function buildPassImage(input: PassInput): Promise<string> {
   ctx.letterSpacing = "0px";
 
   ctx.fillStyle = "#ffffff";
-  fitText(ctx, `${input.firstName} ${input.lastName}`, nameMaxWidth, 20, "sans-serif");
+  fitText(
+    ctx,
+    `${input.firstName} ${input.lastName}`,
+    nameMaxWidth,
+    20,
+    "sans-serif",
+  );
   ctx.fillText(`${input.firstName} ${input.lastName}`, 40, 244);
 
   // --- Reg ID (stacked below holder, full-width) ---
@@ -198,7 +208,11 @@ export async function buildPassImage(input: PassInput): Promise<string> {
   ctx.fillStyle = "rgba(255,255,255,0.3)";
   ctx.font = "11px sans-serif";
   ctx.textAlign = "center";
-  ctx.fillText("Present this pass at the gate for entry", W / 2, qrY + QR_SIZE + 36);
+  ctx.fillText(
+    "Present this pass at the gate for entry",
+    W / 2,
+    qrY + QR_SIZE + 36,
+  );
 
   ctx.fillStyle = "rgba(255,255,255,0.12)";
   ctx.font = "10px 'Courier New', monospace";

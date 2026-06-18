@@ -71,7 +71,7 @@ The live UI uses the **Kinetic Dark** system defined in `Design.md` and `app/glo
 
 - **Event Name:** Argentina vs Austria: World Cup Live Match Show & Fan Engagement Event
 - **Date:** 22 June 2026, 9:00 PM – 1:00 AM
-- **Venue:** Shahi Eidgah Maidan, TV Gate, Sylhet, Bangladesh
+- **Venue:** Kobi Nazrul Auditorium, Rikabibazar, Sylhet, Bangladesh
 - **Ticket Type:** General (free, no payment)
 - **Capacity:** 500+ expected registrations
 - **Featuring:** Fahmidul Islam, Topu Barman, Md. Saad Uddin
@@ -158,7 +158,7 @@ Name: {first_name} {last_name}
 ID: {registration_id}
 Event: Argentina vs Austria Live Show
 Date: 22 June 2026, 9PM
-Venue: Shahi Eidgah Maidan, TV Gate, Sylhet
+Venue: Kobi Nazrul Auditorium, Rikabibazar, Sylhet
 Show this SMS or your QR code at the gate.
 ```
 

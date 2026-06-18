@@ -51,7 +51,7 @@ ViperSport is a **mobile-first Next.js MVP** built for the Bangladesh market. It
 | ------------ | ------------------------------------------------------- |
 | **Event**    | Argentina vs Austria — Live Match Show & Fan Engagement |
 | **Date**     | 22 June 2026 · 9:00 PM – 1:00 AM                        |
-| **Venue**    | Shahi Eidgah Maidan, TV Gate, Sylhet, Bangladesh        |
+| **Venue**    | Kobi Nazrul Auditorium, Rikabibazar, Sylhet, Bangladesh |
 | **Capacity** | 500+ registrations (free, no payment)                   |
 
 ---
@@ -298,7 +298,7 @@ viper-sport/
 | --------------- | ------------------------------------------- |
 | **Match**       | Argentina vs Austria                        |
 | **Date & Time** | 22 June 2026 · 9:00 PM                      |
-| **Venue**       | Shahi Eidgah Maidan, TV Gate, Sylhet        |
+| **Venue**       | Kobi Nazrul Auditorium, Rikabibazar, Sylhet |
 | **Ticket**      | Free (general admission)                    |
 | **Featuring**   | Fahmidul Islam, Topu Barman, Md. Saad Uddin |
 

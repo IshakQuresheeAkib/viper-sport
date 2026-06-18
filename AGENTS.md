@@ -80,7 +80,7 @@ Required runtime variables are documented in `.env.example` and `project.md`.
 
 ## Working Notes
 
-- The expected event is on 22 June 2026 at Shahi Eidgah Maidan, TV Gate, Sylhet.
+- The expected event is on 22 June 2026 at Kobi Nazrul Auditorium, Rikabibazar, Sylhet.
 - Registration is free and expected capacity is 500+.
 - SMS failures must not block registration success.
 - QR generation happens client-side on the success screen; downloadable pass via `lib/pass.ts`.
