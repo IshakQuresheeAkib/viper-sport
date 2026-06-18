@@ -8,8 +8,7 @@ import {
   Home,
   LayoutDashboard,
   LogOut,
-  QrCode,
-  User
+  QrCode
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
@@ -159,10 +158,11 @@ export function AdminShell({ children, title, eyebrow = "Live Event Admin", acti
             <button
               type="button"
               onClick={() => void signOut()}
+              aria-label="Sign out"
               className="flex cursor-pointer flex-col text-kinetic-secondary-fixed-dim opacity-60 transition-transform hover:text-kinetic-primary active:scale-90"
             >
-              <User className="mb-1 size-5" aria-hidden="true" />
-              <span className="text-[10px] font-bold uppercase">Profile</span>
+              <LogOut className="mb-1 size-5" aria-hidden="true" />
+              <span className="text-[10px] font-bold uppercase">Sign out</span>
             </button>
           </div>
         </nav>

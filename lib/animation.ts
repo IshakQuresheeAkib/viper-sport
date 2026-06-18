@@ -2,6 +2,7 @@ type NetworkEffectiveType = "slow-2g" | "2g" | "3g" | "4g";
 
 interface NetworkInformation {
   effectiveType?: NetworkEffectiveType;
+  saveData?: boolean;
 }
 
 type NavigatorWithConnection = Navigator & {
@@ -11,11 +12,25 @@ type NavigatorWithConnection = Navigator & {
 const SLOW_CONNECTION_TYPES: ReadonlySet<NetworkEffectiveType> = new Set([
   "slow-2g",
   "2g",
-  "3g"
+  "3g",
 ]);
 
 export function shouldSkipAnimation(): boolean {
-  const effectiveType = (navigator as NavigatorWithConnection).connection?.effectiveType;
+  if (typeof navigator === "undefined") {
+    return false;
+  }
+
+  const connection = (navigator as NavigatorWithConnection).connection;
+
+  if (!connection) {
+    return false;
+  }
+
+  if (connection.saveData === true) {
+    return true;
+  }
+
+  const effectiveType = connection.effectiveType;
 
   if (!effectiveType) {
     return false;

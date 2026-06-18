@@ -1,25 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { ArrowRight, Bell, ChevronDown, Circle } from "lucide-react";
+import { ArrowRight, ChevronDown, Circle } from "lucide-react";
+import { SocialLinks } from "@/components/shared/SocialLinks";
 import { Button } from "@/components/ui/Button";
 import { shouldSkipAnimation } from "@/lib/animation";
-
-const navLinks = [
-  { href: "#", label: "Home", active: true },
-  { href: "#stats", label: "Stats", active: false },
-  { href: "#events", label: "Events", active: false },
-  { href: "#about", label: "Profile", active: false },
-] as const;
-
-const socialLinks = [
-  { href: "https://www.tiktok.com/", label: "TT", ariaLabel: "TikTok" },
-  { href: "https://www.instagram.com/", label: "IG", ariaLabel: "Instagram" },
-  { href: "https://www.youtube.com/", label: "YT", ariaLabel: "YouTube" },
-] as const;
 
 export function HeroSection() {
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -45,8 +32,9 @@ export function HeroSection() {
 
   return (
     <section
+      id="hero"
       ref={sectionRef}
-      className="relative flex min-h-[85vh] flex-col overflow-hidden bg-black text-white"
+      className="relative flex h-dvh max-h-dvh min-h-dvh flex-col overflow-hidden bg-black text-white"
     >
       {/* ── Background: left solid black panel ── */}
       <div
@@ -54,54 +42,23 @@ export function HeroSection() {
         aria-hidden="true"
       />
 
-      {/* ── Background: right photo panel ── */}
-      <div className="absolute inset-0 z-0 lg:left-1/2 lg:w-1/2">
+      {/* ── Background: right photo panel — fills full viewport height ── */}
+      <div className="absolute inset-0 z-0 lg:inset-y-0 lg:left-1/2 lg:w-1/2">
         <Image
-          src="/images/home/fuad-hero.jpg"
+          src="/images/home/profile.webp"
           alt="Fuad Abdul-Aziz holding a microphone in a stadium"
           fill
           priority
           sizes="(max-width: 1024px) 100vw, 50vw"
-          className="object-cover object-top lg:object-center"
+          className="hero-photo"
         />
         {/* Mobile: bottom-to-top scrim so text is readable */}
         <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black via-black/55 to-transparent lg:hidden" />
         {/* Desktop: subtle left edge bleed into black */}
         <div className="pointer-events-none absolute inset-y-0 left-0 hidden w-20 bg-linear-to-r from-black to-transparent lg:block" />
+        {/* Desktop: bottom anchor so subject stays grounded on short viewports */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 hidden h-24 bg-linear-to-t from-black/40 to-transparent lg:block" />
       </div>
-
-      {/* ── Desktop nav — in flex flow (left half only), never overlaps content ── */}
-      <header
-        data-hero-animate
-        className="relative z-20 hidden w-1/2 items-center justify-between px-8 pb-2 pt-8 lg:flex"
-      >
-        <div className="flex items-center gap-3">
-          <Circle className="size-5 fill-white text-white" aria-hidden="true" />
-          <span className="font-display text-2xl font-bold tracking-tighter text-white">
-            ViperSport
-          </span>
-        </div>
-        <nav className="flex gap-10">
-          {navLinks.map((link) => (
-            <Link
-              key={link.label}
-              href={link.href}
-              className={`text-xs font-bold uppercase tracking-wider transition-opacity ${
-                link.active ? "text-white" : "text-white/55 hover:text-white"
-              }`}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
-        <button
-          type="button"
-          aria-label="Notifications"
-          className="glass-card cursor-pointer rounded-full p-2 transition-opacity hover:opacity-80"
-        >
-          <Bell className="size-4 text-white" />
-        </button>
-      </header>
 
       {/* ── Mobile nav — absolute, sits above photo ── */}
       <header className="absolute inset-x-0 top-0 z-40 flex items-center px-4 py-4 lg:hidden">
@@ -113,17 +70,13 @@ export function HeroSection() {
         </div>
       </header>
 
-      {/* ── Main content — flex-1 centers card in the remaining height ── */}
-      <div className="relative z-10 flex flex-1 flex-col justify-end px-4 pb-14 pt-24 lg:justify-center lg:px-0 lg:pb-0 lg:pt-0">
-        {/*
-          On desktop: ml-[calc(50%-210px)] centers the 420 px card exactly at the
-          left/right boundary so it overlaps into the photo (as in the reference).
-        */}
-        <div className="flex w-full flex-col gap-5 lg:ml-[calc(50%-210px)] lg:w-[420px]">
+      {/* ── Main content — vertically centered within remaining viewport ── */}
+      <div className="relative z-10 flex min-h-0 flex-1 flex-col justify-center px-4 pb-14 pt-24 lg:justify-center lg:px-0 lg:pb-8 lg:pt-20">
+        <div className="flex w-full flex-col lg:ml-[calc(50%-210px)] lg:w-[420px]">
           {/* Glass name card */}
           <div
             data-hero-animate
-            className="glass-card rounded-3xl border border-white/10 p-7 shadow-2xl backdrop-blur-xl lg:p-9"
+            className="hero-name-card glass-card rounded-3xl border border-white/10 p-7 shadow-2xl backdrop-blur-xl lg:p-9"
           >
             <h1 className="font-display text-[2.75rem] font-extrabold uppercase leading-[0.88] tracking-tighter text-white lg:text-[4rem]">
               Fuad
@@ -138,17 +91,8 @@ export function HeroSection() {
           </div>
 
           {/* Social links */}
-          <div data-hero-animate className="flex gap-3">
-            {socialLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                aria-label={link.ariaLabel}
-                className="glass-card flex size-11 items-center justify-center rounded-full text-xs font-bold uppercase text-white transition-colors hover:bg-kinetic-primary-container hover:text-black"
-              >
-                {link.label}
-              </a>
-            ))}
+          <div data-hero-animate>
+            <SocialLinks variant="hero" />
           </div>
 
           {/* CTA */}

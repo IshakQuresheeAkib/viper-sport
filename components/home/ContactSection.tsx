@@ -2,7 +2,7 @@
 
 import { Send } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
+import { KineticInput } from "@/components/ui/Input";
 
 export function ContactSection() {
   return (
@@ -31,18 +31,16 @@ export function ContactSection() {
             window.location.href = `mailto:partnerships@vipersport.com?subject=${subject}&body=${body}`;
           }}
         >
-          <Input
+          <KineticInput
             name="name"
             placeholder="Name"
             required
-            className="border-white/10 bg-kinetic-surface-container/50 text-kinetic-on-surface placeholder:text-kinetic-on-surface-variant"
           />
-          <Input
+          <KineticInput
             name="email"
             placeholder="Email"
             type="email"
             required
-            className="border-white/10 bg-kinetic-surface-container/50 text-kinetic-on-surface placeholder:text-kinetic-on-surface-variant"
           />
           <textarea
             name="message"

@@ -12,13 +12,14 @@ export function AboutSection() {
         </div>
         <div className="space-y-5 text-lg leading-8 text-kinetic-on-surface-variant">
           <p>
-            Fuad Abdul-Aziz built ViperSport into a football media presence
-            known for match reactions, fan culture, and high-energy creator-led
-            coverage across platforms.
+          Fuad Abdul-Aziz is UK based football personality, born in Bangladesh who is the founder of ViperSport. A social media platform with over 1.4M+ followers.
+<br />
+Viper Sport has collaborated with the likes of Real Madrid, Apple, FIFA, Adidas and many more household names and generated over 500 million views.
+
+
           </p>
           <p>
-            The Sylhet live match show brings that audience together for a free
-            fan engagement event with simple mobile registration and QR check-in.
+          Fuad has recently also gained a huge traction in Bangladesh with his coverage and relationship with the Bangladesh Football Scene. He is a prominent figure within the hype of Bangladesh Football.
           </p>
         </div>
       </div>

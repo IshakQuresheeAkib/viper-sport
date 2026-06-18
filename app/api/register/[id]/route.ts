@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
-import type { PublicRegistration } from "@/types";
+import type { RegistrationLookup } from "@/types";
 
 type RouteContext = {
   params: Promise<{
@@ -13,9 +13,9 @@ export async function GET(_request: NextRequest, context: RouteContext) {
   const supabase = createSupabaseAdminClient();
   const registration = await supabase
     .from("registrations")
-    .select("registration_id, first_name, last_name, phone, created_at, checked_in")
+    .select("id, registration_id, first_name, last_name, phone, created_at, checked_in")
     .eq("registration_id", id)
-    .maybeSingle<PublicRegistration>();
+    .maybeSingle<RegistrationLookup>();
 
   if (registration.error) {
     return NextResponse.json({ error: "Could not load registration." }, { status: 500 });

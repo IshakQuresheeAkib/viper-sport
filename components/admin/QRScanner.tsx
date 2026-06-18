@@ -4,7 +4,11 @@ import { Html5Qrcode } from "html5-qrcode";
 import { CheckCircle2, Focus, Loader2, QrCode } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
-import type { CheckInResponse, PublicRegistration, Registration } from "@/types";
+import type {
+  CheckInResponse,
+  Registration,
+  RegistrationLookup,
+} from "@/types";
 
 type ScanState = "idle" | "scanning" | "submitting";
 
@@ -12,13 +16,15 @@ interface QRScannerProps {
   registrations: Registration[];
 }
 
-function getInitials(registration: Pick<Registration, "first_name" | "last_name">) {
+function getInitials(
+  registration: Pick<Registration, "first_name" | "last_name">,
+) {
   return `${registration.first_name[0] ?? ""}${registration.last_name[0] ?? ""}`.toUpperCase();
 }
 
-function toRegistration(payload: PublicRegistration): Registration {
+function toRegistration(payload: RegistrationLookup): Registration {
   return {
-    id: payload.registration_id,
+    id: payload.id,
     registration_id: payload.registration_id,
     first_name: payload.first_name,
     last_name: payload.last_name,
@@ -27,7 +33,7 @@ function toRegistration(payload: PublicRegistration): Registration {
     sms_sent: false,
     checked_in: payload.checked_in,
     checked_in_at: null,
-    created_at: payload.created_at
+    created_at: payload.created_at,
   };
 }
 
@@ -43,20 +49,47 @@ export function QRScanner({ registrations }: QRScannerProps) {
     };
   }, []);
 
-  async function fetchRegistration(registrationId: string): Promise<Registration | null> {
-    const response = await fetch(`/api/register/${encodeURIComponent(registrationId)}`);
+  async function fetchRegistration(
+    registrationId: string,
+  ): Promise<Registration | null> {
+    const response = await fetch(
+      `/api/register/${encodeURIComponent(registrationId)}`,
+    );
 
     if (!response.ok) {
       return null;
     }
 
-    const payload = (await response.json()) as PublicRegistration;
+    const payload = (await response.json()) as RegistrationLookup;
     return toRegistration(payload);
   }
 
-  async function resolveRegistration(registrationId: string): Promise<Registration | null> {
-    const normalized = registrationId.trim();
-    const localMatch = registrations.find((item) => item.registration_id === normalized);
+  /**
+   * Some Android camera apps inject a URL scheme (e.g. "http://…" or
+   * "https://…") in front of raw text QR codes. Strip it so we always
+   * match against the bare registration_id.
+   */
+  function extractRegistrationId(raw: string): string {
+    const trimmed = raw.trim();
+    try {
+      const url = new URL(trimmed);
+      // If it parsed as a URL, take the last non-empty path segment or the
+      // hostname — whatever looks like a REG-XXXXXXXX token.
+      const parts = url.pathname.split("/").filter(Boolean);
+      const candidate = parts.at(-1) ?? url.hostname;
+      return candidate.toUpperCase().startsWith("REG-") ? candidate : trimmed;
+    } catch {
+      return trimmed;
+    }
+  }
+
+  async function resolveRegistration(
+    registrationId: string,
+  ): Promise<Registration | null> {
+    const normalized = extractRegistrationId(registrationId);
+    const localMatch = registrations.find(
+      (item) => item.registration_id === normalized,
+    );
 
     if (localMatch) {
       return localMatch;
@@ -86,9 +119,9 @@ export function QRScanner({ registrations }: QRScannerProps) {
     const response = await fetch("/api/admin/checkin", {
       method: "PATCH",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ registration_id: registrationId })
+      body: JSON.stringify({ registration_id: registrationId }),
     });
 
     if (!response.ok) {
@@ -98,11 +131,15 @@ export function QRScanner({ registrations }: QRScannerProps) {
     }
 
     const payload = (await response.json()) as CheckInResponse;
-    setMessage(payload.already_checked_in ? "Already checked in." : "Check-in confirmed.");
+    setMessage(
+      payload.already_checked_in
+        ? "Already checked in."
+        : "Check-in confirmed.",
+    );
     setResult((current) =>
       current && current.registration_id === registrationId
         ? { ...current, checked_in: true, checked_in_at: payload.checked_in_at }
-        : current
+        : current,
     );
     setState("idle");
   }
@@ -121,7 +158,7 @@ export function QRScanner({ registrations }: QRScannerProps) {
         (decodedText) => {
           void scanner.stop().finally(() => handleScan(decodedText));
         },
-        undefined
+        undefined,
       );
     } catch {
       setMessage("Could not access the camera.");
@@ -132,11 +169,17 @@ export function QRScanner({ registrations }: QRScannerProps) {
   return (
     <section className="flex flex-col items-center">
       <div className="relative size-72 overflow-hidden rounded-xl border border-kinetic-primary-container/30 admin-glass-card admin-glow-active md:size-96">
-        <div id="qr-reader" className="absolute inset-0 z-0 [&>video]:size-full [&>video]:object-cover" />
+        <div
+          id="qr-reader"
+          className="absolute inset-0 z-0 [&>video]:size-full [&>video]:object-cover"
+        />
 
         {state === "idle" ? (
           <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-kinetic-surface-container/80 p-6 text-center">
-            <QrCode className="mb-4 size-12 text-kinetic-primary-container" aria-hidden="true" />
+            <QrCode
+              className="mb-4 size-12 text-kinetic-primary-container"
+              aria-hidden="true"
+            />
             <p className="text-sm text-kinetic-on-surface-variant">
               Start the camera to scan attendee QR codes at the gate.
             </p>
@@ -165,20 +208,30 @@ export function QRScanner({ registrations }: QRScannerProps) {
 
         {state === "submitting" ? (
           <div className="absolute inset-0 z-30 flex items-center justify-center bg-kinetic-surface/70">
-            <Loader2 className="size-10 animate-spin text-kinetic-primary-container" aria-hidden="true" />
+            <Loader2
+              className="size-10 animate-spin text-kinetic-primary-container"
+              aria-hidden="true"
+            />
           </div>
         ) : null}
       </div>
 
       <div className="mt-6 flex items-center gap-2 rounded-full border border-white/5 bg-kinetic-surface-variant/80 px-4 py-2">
-        <Focus className="size-4 animate-pulse text-kinetic-primary-container" aria-hidden="true" />
+        <Focus
+          className="size-4 animate-pulse text-kinetic-primary-container"
+          aria-hidden="true"
+        />
         <span className="text-xs font-bold uppercase text-kinetic-on-surface">
-          {state === "scanning" ? "Align QR code within frame" : "Ready to scan"}
+          {state === "scanning"
+            ? "Align QR code within frame"
+            : "Ready to scan"}
         </span>
       </div>
 
       {message ? (
-        <p className="mt-4 text-sm font-semibold text-kinetic-primary-container">{message}</p>
+        <p className="mt-4 text-sm font-semibold text-kinetic-primary-container">
+          {message}
+        </p>
       ) : null}
 
       {result ? (
