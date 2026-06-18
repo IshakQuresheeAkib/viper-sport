@@ -6,9 +6,9 @@ ViperSport is a Next.js 16 App Router MVP for Fuad Abdul-Aziz's portfolio and th
 
 Read these files before making non-trivial changes:
 
-- `context/project.md` for product scope, business rules, event details, routes, schema, and environment variables.
-- `context/architecture.md` for rendering strategy, component ownership, API contracts, Supabase client usage, and data flow.
-- `context/rules.md` for coding standards and repo-specific constraints.
+- [`project.md`](./project.md) — product scope, business rules, event details, routes, schema, API, and environment variables
+- [`Design.md`](./Design.md) — Kinetic Dark design tokens, typography, and component guidelines
+- [`.cursorrules`](./.cursorrules) — strict coding constraints for AI-assisted development
 
 ## Common Commands
 
@@ -39,27 +39,40 @@ Run lint and typecheck after code changes when feasible. Run build for larger ch
 - Route handlers live under `app/api`.
 - Shared UI primitives live under `components/ui`.
 - Feature components are grouped by domain under `components/home`, `components/register`, and `components/admin`.
-- Supabase helpers live in `lib/supabase`.
+- Shared components live under `components/shared`.
+- Hooks live under `hooks/` (e.g. `useActiveSection` for home scroll spy).
+- Supabase helpers live in `lib/supabase` (`client.ts`, `server.ts`, `admin.ts`).
 - Shared types live in `types/index.ts`.
+- Home navigation anchors are centralized in `lib/home-nav.ts`.
 
-## Supabase Rules
+## Rendering & Data Flow
 
-- Server Components, Route Handlers, and `proxy.ts` must use the server Supabase helper from `lib/supabase/server.ts`.
-- Client Components must use the browser Supabase helper from `lib/supabase/client.ts`.
-- Never import the server client into a Client Component.
-- Never expose `SUPABASE_SERVICE_ROLE_KEY` or other secret keys to browser code.
-- Keep RLS and policy changes in migrations under `supabase/migrations`.
-- Prefer current Supabase docs or the local Supabase skill before changing auth, RLS, migrations, or client setup.
-
-## Caching And Rendering
+| Surface         | Strategy                                                                      |
+| --------------- | ----------------------------------------------------------------------------- |
+| Portfolio (`/`) | Server page; client sections with GSAP; scroll-spy nav                        |
+| Register        | Server page shell; client form via React Hook Form                            |
+| Success         | Client `SuccessCard` — fetches `/api/register/[id]`, generates QR client-side |
+| Admin dashboard | Server fetch or client table; filter ≤500 rows client-side                    |
+| Admin check-in  | Client QR scanner (`html5-qrcode`) + manual search                            |
+| API routes      | Server-only; Supabase admin client for writes                                 |
 
 - Use `use cache` only for static portfolio/media data.
 - Do not use `use cache` for admin pages, registration flows, success pages, auth/session work, API handlers, or request-time data.
 - Do not use deprecated `fetch()` cache options for Next.js 16 patterns.
 
+## Supabase Rules
+
+- Server Components, Route Handlers, and `proxy.ts` must use the server Supabase helper from `lib/supabase/server.ts`.
+- Client Components must use the browser Supabase helper from `lib/supabase/client.ts`.
+- Admin API routes use `lib/supabase/admin.ts` (service role).
+- Never import the server or admin client into a Client Component.
+- Never expose `SUPABASE_SERVICE_ROLE_KEY` or other secret keys to browser code.
+- Keep RLS and policy changes in migrations under `supabase/migrations`.
+- Prefer current Supabase docs or the local Supabase skill before changing auth, RLS, migrations, or client setup.
+
 ## Environment
 
-Required runtime variables are documented in `.env.example` and `context/project.md`.
+Required runtime variables are documented in `.env.example` and `project.md`.
 
 - Public browser-safe values must be prefixed with `NEXT_PUBLIC_`.
 - Secrets must remain server-only.
@@ -70,12 +83,14 @@ Required runtime variables are documented in `.env.example` and `context/project
 - The expected event is on 22 June 2026 at Shahi Eidgah Maidan, TV Gate, Sylhet.
 - Registration is free and expected capacity is 500+.
 - SMS failures must not block registration success.
-- QR generation happens client-side on the success screen.
+- QR generation happens client-side on the success screen; downloadable pass via `lib/pass.ts`.
 - Admin check-in must support QR scanning and manual search.
+- Phone numbers are canonicalized before storage (`lib/phone.ts`).
 
 ## Brand & UI Tokens
 
 - The live digital UI uses the **Kinetic Dark** system in `Design.md` and `app/globals.css`.
 - Primary interactive accent: electric lime (`kinetic-primary-container`, `#d3ed86`).
-- Coral (`kinetic-error`, `#ffb4ab`) is reserved for live/urgent status accents.
+- Coral (`kinetic-error`, `#ffb4ab`) is reserved for live/urgent status accents (e.g. event banner).
 - Legacy `#990011` in `.cursorrules` is the original print/brand red; prefer kinetic lime tokens for in-app CTAs and focus states.
+- Display typography: **Anybody**. Body: **Plus Jakarta Sans**.

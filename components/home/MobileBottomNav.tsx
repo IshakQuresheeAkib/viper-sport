@@ -34,7 +34,7 @@ export function MobileBottomNav() {
             href={tab.href}
             aria-current={isActive ? "page" : undefined}
             className={cn(
-              "flex min-w-0 flex-1 flex-col items-center justify-center transition-transform active:scale-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-kinetic-primary-container",
+              "flex min-w-0 flex-1 flex-col items-center justify-center transition-transform active:scale-90 focus-visible:outline  focus-visible:outline-offset-2 focus-visible:outline-kinetic-primary-container",
               isActive
                 ? "rounded-full bg-kinetic-primary-container/10 px-2 py-1 text-kinetic-primary shadow-[0_0_15px_rgba(227,254,149,0.3)]"
                 : "text-kinetic-secondary-fixed-dim opacity-60 hover:text-kinetic-primary",

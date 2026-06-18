@@ -47,12 +47,12 @@
 
 ViperSport is a **mobile-first Next.js MVP** built for the Bangladesh market. It combines a high-impact **Kinetic Dark** portfolio for Fuad Abdul-Aziz with a complete **free event registration** flow for the Argentina vs Austria World Cup live match show in Sylhet — including SMS confirmation, QR passes, and a protected admin check-in portal.
 
-| | |
-|---|---|
-| **Event** | Argentina vs Austria — Live Match Show & Fan Engagement |
-| **Date** | 22 June 2026 · 9:00 PM – 1:00 AM |
-| **Venue** | Shahi Eidgah Maidan, TV Gate, Sylhet, Bangladesh |
-| **Capacity** | 500+ registrations (free, no payment) |
+|              |                                                         |
+| ------------ | ------------------------------------------------------- |
+| **Event**    | Argentina vs Austria — Live Match Show & Fan Engagement |
+| **Date**     | 22 June 2026 · 9:00 PM – 1:00 AM                        |
+| **Venue**    | Shahi Eidgah Maidan, TV Gate, Sylhet, Bangladesh        |
+| **Capacity** | 500+ registrations (free, no payment)                   |
 
 ---
 
@@ -114,24 +114,24 @@ ViperSport is a **mobile-first Next.js MVP** built for the Bangladesh market. It
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|------------|
-| **Framework** | Next.js 16 (App Router) |
-| **UI** | React 19, Tailwind CSS v4, shadcn/ui primitives |
-| **Animation** | GSAP |
-| **Forms & State** | React Hook Form + Zod, Zustand |
-| **Database & Auth** | Supabase (PostgreSQL) |
-| **Media** | Cloudinary, `next/image` |
-| **SMS** | sms.net.bd REST API |
-| **QR** | `qrcode` (client generate), `html5-qrcode` (admin scan) |
-| **Deploy** | Vercel |
+| Layer               | Technology                                              |
+| ------------------- | ------------------------------------------------------- |
+| **Framework**       | Next.js 16 (App Router)                                 |
+| **UI**              | React 19, Tailwind CSS v4, shadcn/ui primitives         |
+| **Animation**       | GSAP                                                    |
+| **Forms & State**   | React Hook Form + Zod, Zustand                          |
+| **Database & Auth** | Supabase (PostgreSQL)                                   |
+| **Media**           | Cloudinary, `next/image`                                |
+| **SMS**             | sms.net.bd REST API                                     |
+| **QR**              | `qrcode` (client generate), `html5-qrcode` (admin scan) |
+| **Deploy**          | Vercel                                                  |
 
 ---
 
 ## Screenshots
 
-| Home Hero | Event Banner | Registration |
-|:---:|:---:|:---:|
+|            Home Hero             |            Event Banner             |           Registration            |
+| :------------------------------: | :---------------------------------: | :-------------------------------: |
 | Portfolio hero with split layout | Live event CTA with register button | Event details + registration form |
 
 > Add captures to `docs/assets/` (`home.png`, `register.png`, `admin.png`, `demo.gif`) for richer README previews.
@@ -227,46 +227,46 @@ CLOUDINARY_API_KEY=
 CLOUDINARY_API_SECRET=
 ```
 
-| Variable | Scope | Purpose |
-|----------|-------|---------|
-| `NEXT_PUBLIC_SUPABASE_*` | Browser + server | Supabase client |
-| `SUPABASE_SERVICE_ROLE_KEY` | Server only | Admin API routes |
-| `SMS_NET_BD_API_KEY` | Server only | Registration SMS |
-| `CLOUDINARY_*` | Mixed | Image CDN & transforms |
+| Variable                    | Scope            | Purpose                |
+| --------------------------- | ---------------- | ---------------------- |
+| `NEXT_PUBLIC_SUPABASE_*`    | Browser + server | Supabase client        |
+| `SUPABASE_SERVICE_ROLE_KEY` | Server only      | Admin API routes       |
+| `SMS_NET_BD_API_KEY`        | Server only      | Registration SMS       |
+| `CLOUDINARY_*`              | Mixed            | Image CDN & transforms |
 
 ---
 
 ## Scripts
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Production build |
-| `npm run start` | Serve production build |
-| `npm run lint` | ESLint |
-| `npm run typecheck` | TypeScript `--noEmit` |
+| Command             | Description              |
+| ------------------- | ------------------------ |
+| `npm run dev`       | Start development server |
+| `npm run build`     | Production build         |
+| `npm run start`     | Serve production build   |
+| `npm run lint`      | ESLint                   |
+| `npm run typecheck` | TypeScript `--noEmit`    |
 
 ---
 
 ## Routes
 
-| Route | Access | Description |
-|-------|--------|-------------|
-| `/` | Public | Portfolio homepage |
-| `/register` | Public | Event registration form |
-| `/register/success` | Public | QR pass & confirmation |
-| `/admin` | Public | Admin login |
-| `/admin/dashboard` | Auth | Stats + registrations table |
-| `/admin/checkin` | Auth | QR scanner + manual search |
+| Route               | Access | Description                 |
+| ------------------- | ------ | --------------------------- |
+| `/`                 | Public | Portfolio homepage          |
+| `/register`         | Public | Event registration form     |
+| `/register/success` | Public | QR pass & confirmation      |
+| `/admin`            | Public | Admin login                 |
+| `/admin/dashboard`  | Auth   | Stats + registrations table |
+| `/admin/checkin`    | Auth   | QR scanner + manual search  |
 
 ### API
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `POST` | `/api/register` | Create registration, trigger SMS |
-| `GET` | `/api/register/[id]` | Fetch registration for success page |
-| `GET` | `/api/admin/registrations` | List all registrations (auth) |
-| `PATCH` | `/api/admin/checkin` | Mark attendee checked in (auth) |
+| Method  | Endpoint                   | Description                         |
+| ------- | -------------------------- | ----------------------------------- |
+| `POST`  | `/api/register`            | Create registration, trigger SMS    |
+| `GET`   | `/api/register/[id]`       | Fetch registration for success page |
+| `GET`   | `/api/admin/registrations` | List all registrations (auth)       |
+| `PATCH` | `/api/admin/checkin`       | Mark attendee checked in (auth)     |
 
 ---
 
@@ -294,23 +294,23 @@ viper-sport/
 
 ## Event Details
 
-| Field | Value |
-|-------|-------|
-| **Match** | Argentina vs Austria |
-| **Date & Time** | 22 June 2026 · 9:00 PM |
-| **Venue** | Shahi Eidgah Maidan, TV Gate, Sylhet |
-| **Ticket** | Free (general admission) |
-| **Featuring** | Fahmidul Islam, Topu Barman, Md. Saad Uddin |
+| Field           | Value                                       |
+| --------------- | ------------------------------------------- |
+| **Match**       | Argentina vs Austria                        |
+| **Date & Time** | 22 June 2026 · 9:00 PM                      |
+| **Venue**       | Shahi Eidgah Maidan, TV Gate, Sylhet        |
+| **Ticket**      | Free (general admission)                    |
+| **Featuring**   | Fahmidul Islam, Topu Barman, Md. Saad Uddin |
 
 ---
 
 ## Documentation
 
-| File | Contents |
-|------|----------|
+| File                         | Contents                                       |
+| ---------------------------- | ---------------------------------------------- |
 | [`project.md`](./project.md) | Product scope, routes, schema, API, resilience |
-| [`Design.md`](./Design.md) | Kinetic Dark design tokens & guidelines |
-| [`AGENTS.md`](./AGENTS.md) | AI / contributor coding conventions |
+| [`Design.md`](./Design.md)   | Kinetic Dark design tokens & guidelines        |
+| [`AGENTS.md`](./AGENTS.md)   | AI / contributor coding conventions            |
 
 ---
 

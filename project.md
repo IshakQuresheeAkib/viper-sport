@@ -74,6 +74,7 @@ The live UI uses the **Kinetic Dark** system defined in `Design.md` and `app/glo
 - **Venue:** Shahi Eidgah Maidan, TV Gate, Sylhet, Bangladesh
 - **Ticket Type:** General (free, no payment)
 - **Capacity:** 500+ expected registrations
+- **Featuring:** Fahmidul Islam, Topu Barman, Md. Saad Uddin
 
 ---
 
@@ -94,28 +95,28 @@ The live UI uses the **Kinetic Dark** system defined in `Design.md` and `app/glo
 
 Ordered as they appear on `app/(public)/page.tsx`:
 
-| # | Section | Component | Notes |
-| - | ------- | --------- | ----- |
-| — | **Navigation** | `DesktopNavbar`, `MobileBottomNav` | Scroll-spy via `useActiveSection` + `lib/home-nav.ts` |
-| 1 | **Hero** | `HeroSection` | Full-viewport split layout, profile image, social links, GSAP entrance |
-| 2 | **Stats** | `StatsSection` | 500M+ views, 1.4M+ followers, 5+ years — GSAP counter animation |
-| 3 | **Event Banner** | `EventBanner` | `id="events"` — coral live accent, Register CTA → `/register` |
-| 4 | **Scroll hint** | `HeroScrollHint` | Desktop scroll affordance below hero |
-| 5 | **About** | `AboutSection` | `id="about"` — bio, Bangladesh/UK, ViperSport founder |
-| 6 | **Collaborations** | `CollabSection` | Real Madrid, Apple, FIFA, Adidas, ViperSport |
-| 7 | **Contact** | `ContactSection` | `id="contact"` — sponsorship form → `partnerships@vipersport.com` |
-| 8 | **Footer** | `FooterSection` | Copyright, social links |
+| #   | Section            | Component                          | Notes                                                                  |
+| --- | ------------------ | ---------------------------------- | ---------------------------------------------------------------------- |
+| —   | **Navigation**     | `DesktopNavbar`, `MobileBottomNav` | Scroll-spy via `useActiveSection` + `lib/home-nav.ts`                  |
+| 1   | **Hero**           | `HeroSection`                      | Full-viewport split layout, profile image, social links, GSAP entrance |
+| 2   | **Stats**          | `StatsSection`                     | 500M+ views, 1.4M+ followers, 5+ years — GSAP counter animation        |
+| 3   | **Event Banner**   | `EventBanner`                      | `id="events"` — coral live accent, Register CTA → `/register`          |
+| 4   | **Scroll hint**    | `HeroScrollHint`                   | Desktop scroll affordance below hero                                   |
+| 5   | **About**          | `AboutSection`                     | `id="about"` — bio, Bangladesh/UK, ViperSport founder                  |
+| 6   | **Collaborations** | `CollabSection`                    | Real Madrid, Apple, FIFA, Adidas, ViperSport                           |
+| 7   | **Contact**        | `ContactSection`                   | `id="contact"` — sponsorship form → `partnerships@vipersport.com`      |
+| 8   | **Footer**         | `FooterSection`                    | Copyright, social links                                                |
 
 ### Home navigation anchors
 
 Defined in `lib/home-nav.ts`:
 
-| Label | Anchor | Section ID |
-| ----- | ------ | ---------- |
-| Home | `#hero` | `hero` |
-| Events | `#events` | `events` |
-| Profile | `#about` | `about` |
-| Contact | `#contact` | `contact` |
+| Label   | Anchor     | Section ID |
+| ------- | ---------- | ---------- |
+| Home    | `#hero`    | `hero`     |
+| Events  | `#events`  | `events`   |
+| Profile | `#about`   | `about`    |
+| Contact | `#contact` | `contact`  |
 
 ---
 
@@ -135,7 +136,7 @@ The register page uses a two-column layout: **RegisterEventDetails** (match, dat
 
 - Validated client-side with Zod (BD phone regex: `/^(\+?880|0)1[3-9]\d{8}$/`).
 - On submit → POST `/api/register`.
-- API route: deduplicates by phone (returns existing registration if already registered), inserts to Supabase, generates `registration_id` (UUID), fires SMS via sms.net.bd, returns registration data.
+- API route: deduplicates by phone (returns existing registration if already registered), inserts to Supabase, assigns `registration_id` (`REG-` prefix), fires SMS via sms.net.bd, returns registration data.
 - Redirects to `/register/success?id={registration_id}`.
 - Rate limited by IP in the route handler (5 requests / minute per IP).
 - Phone numbers normalized via `lib/phone.ts` before insert/lookup.
@@ -170,8 +171,9 @@ Show this SMS or your QR code at the gate.
 ### Auth
 
 - Supabase Auth (email/password). Single admin user.
-- Protected via Next.js middleware checking Supabase session cookie.
+- Protected via `proxy.ts` at repo root (not `middleware.ts`) — redirects unauthenticated users from `/admin/dashboard` and `/admin/checkin` to `/admin`.
 - No public sign-up. Admin created manually in Supabase dashboard.
+- **AdminShell** provides sidebar (desktop) and bottom nav (mobile) across admin pages.
 
 ### Dashboard (`/admin/dashboard`)
 
@@ -268,65 +270,54 @@ create policy "allow_admin_read" on admin_users
 ## Folder Architecture
 
 ```
-vipersport-event/
+viper-sport/
 ├── app/
 │   ├── (public)/
 │   │   ├── page.tsx                        # Home / Portfolio
 │   │   ├── register/
-│   │   │   ├── page.tsx                    # Registration form
-│   │   │   └── success/
-│   │   │       └── page.tsx                # Success + QR screen
-│   ├── (admin)/
-│   │   ├── admin/
-│   │   │   ├── page.tsx                    # Admin login
-│   │   │   ├── dashboard/
-│   │   │   │   └── page.tsx
-│   │   │   └── checkin/
-│   │   │       └── page.tsx
+│   │   │   ├── page.tsx                    # Registration + event details
+│   │   │   └── success/page.tsx            # Success + QR + pass
+│   ├── (admin)/admin/
+│   │   ├── page.tsx                        # Admin login
+│   │   ├── dashboard/page.tsx
+│   │   └── checkin/page.tsx
 │   ├── api/
-│   │   ├── register/
-│   │   │   ├── route.ts                    # POST registration
-│   │   │   └── [id]/
-│   │   │       └── route.ts                # GET by ID
+│   │   ├── register/route.ts               # POST registration
+│   │   ├── register/[id]/route.ts          # GET by ID
 │   │   └── admin/
-│   │       ├── registrations/
-│   │       │   └── route.ts                # GET all
-│   │       └── checkin/
-│   │           └── route.ts                # PATCH check-in
-│   ├── globals.css
-│   └── layout.tsx
+│   │       ├── registrations/route.ts      # GET all
+│   │       └── checkin/route.ts            # PATCH check-in
+│   ├── globals.css                         # Kinetic Dark tokens
+│   └── layout.tsx                          # Fonts, Speed Insights, Toaster
 ├── components/
 │   ├── home/
-│   │   ├── HeroSection.tsx
-│   │   ├── AboutSection.tsx
-│   │   ├── StatsSection.tsx
-│   │   ├── CollabSection.tsx
-│   │   ├── EventBanner.tsx
-│   │   └── ContactSection.tsx
+│   │   ├── HeroSection.tsx, HeroScrollHint
+│   │   ├── StatsSection.tsx, EventBanner.tsx
+│   │   ├── AboutSection.tsx, CollabSection.tsx
+│   │   ├── ContactSection.tsx, FooterSection.tsx
+│   │   ├── DesktopNavbar.tsx, MobileBottomNav.tsx
 │   ├── register/
-│   │   ├── RegisterForm.tsx
+│   │   ├── RegisterForm.tsx, RegisterEventDetails.tsx
 │   │   └── SuccessCard.tsx
 │   ├── admin/
-│   │   ├── StatsCards.tsx
-│   │   ├── RegistrationsTable.tsx
-│   │   ├── QRScanner.tsx
-│   │   └── ManualSearch.tsx
-│   └── ui/                                 # shadcn/ui components
+│   │   ├── AdminShell.tsx, AdminLoginForm.tsx
+│   │   ├── StatsCards.tsx, RegistrationsTable.tsx
+│   │   ├── CheckInExperience.tsx, QRScanner.tsx, ManualSearch.tsx
+│   ├── shared/                             # SocialLinks, ViperSportProfile
+│   └── ui/                                 # Button, Input, Badge, Toaster
+├── hooks/
+│   └── useActiveSection.ts                 # IntersectionObserver scroll spy
 ├── lib/
-│   ├── supabase/
-│   │   ├── client.ts                       # Browser client
-│   │   └── server.ts                       # Server client (Route Handlers, Server Components)
-│   ├── sms.ts                              # sms.net.bd helper
-│   ├── qr.ts                               # QR generation helper
-│   └── validations/
-│       └── register.schema.ts              # Zod schema
-├── proxy.ts                           # Admin route protection
-├── types/
-│   └── index.ts                            # Shared TypeScript types
-├── public/
-│   └── images/
-├── .env.local
-└── next.config.ts
+│   ├── supabase/                           # client, server, admin
+│   ├── sms.ts, qr.ts, pass.ts, phone.ts
+│   ├── cloudinary.ts, home-nav.ts, animation.ts, social.ts
+│   └── validations/                        # register.schema, admin.schema
+├── supabase/migrations/                    # Schema, RLS, phone canonicalization
+├── proxy.ts                                  # Admin route protection
+├── types/index.ts
+├── public/images/home/profile.webp
+├── Design.md                                 # Kinetic Dark design tokens
+└── next.config.ts                            # React Compiler, image domains
 ```
 
 ---
@@ -336,6 +327,7 @@ vipersport-event/
 ```env
 # Supabase
 NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=
 
@@ -347,6 +339,8 @@ NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=
 CLOUDINARY_API_KEY=
 CLOUDINARY_API_SECRET=
 ```
+
+`lib/cloudinary.ts` exposes `getCloudinaryImageUrl(publicId, options)` for optimized CDN URLs (`f_auto`, quality, width).
 
 ---
 
@@ -402,7 +396,7 @@ Export CSV of all registrations the night before the event and save it offline o
 
 - Mobile-first. Target sub-3s load on 3G/4G (Sylhet).
 - Cloudinary CDN + `next/image` with blur placeholders for all portfolio images.
-- GSAP animations only on elements with `will-change: transform`. No animation on 3G-detected connections (use `navigator.connection` hint).
+- GSAP animations only on elements with `will-change: transform`. Skip animations on slow connections via `lib/animation.ts` (`shouldSkipAnimation()` using `navigator.connection`).
 - Registration success page: QR generated client-side — no server round-trip.
 - Admin dashboard: fetch all ≤500 rows once, filter client-side. No pagination overhead.
 
