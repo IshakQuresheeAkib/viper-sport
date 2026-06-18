@@ -45,7 +45,7 @@ export function QRScanner({ registrations }: QRScannerProps) {
 
   useEffect(() => {
     return () => {
-      void scannerRef.current?.stop().catch(() => undefined);
+      void releaseScanner();
     };
   }, []);
 
@@ -144,21 +144,37 @@ export function QRScanner({ registrations }: QRScannerProps) {
     setState("idle");
   }
 
-  async function stopScanner() {
-    if (scannerRef.current) {
-      try {
-        await scannerRef.current.stop();
-      } catch {
-        // Scanner may already be stopped.
-      }
-      scannerRef.current = null;
+  async function releaseScanner() {
+    const scanner = scannerRef.current;
+    if (!scanner) {
+      return;
     }
+
+    scannerRef.current = null;
+
+    try {
+      await scanner.stop();
+    } catch {
+      // Scanner may already be stopped.
+    }
+
+    try {
+      scanner.clear();
+    } catch {
+      // Container may already be cleared.
+    }
+  }
+
+  async function stopScanner() {
+    await releaseScanner();
     setState("idle");
   }
 
   async function startScanner() {
     setMessage(null);
     setResult(null);
+    await releaseScanner();
+
     const scanner = new Html5Qrcode("qr-reader");
     scannerRef.current = scanner;
     setState("scanning");
@@ -168,11 +184,12 @@ export function QRScanner({ registrations }: QRScannerProps) {
         { facingMode: "environment" },
         { fps: 10, qrbox: { width: 240, height: 240 } },
         (decodedText) => {
-          void scanner.stop().finally(() => handleScan(decodedText));
+          void releaseScanner().finally(() => handleScan(decodedText));
         },
         undefined,
       );
     } catch {
+      await releaseScanner();
       setMessage("Could not access the camera.");
       setState("idle");
     }
