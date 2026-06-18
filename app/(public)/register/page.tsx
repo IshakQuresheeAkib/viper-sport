@@ -4,12 +4,22 @@ import Link from "next/link";
 import { ViperSportProfile } from "@/components/shared/ViperSportProfile";
 import { RegisterEventDetails } from "@/components/register/RegisterEventDetails";
 import { RegisterForm } from "@/components/register/RegisterForm";
+import { RegistrationClosed } from "@/components/register/RegistrationClosed";
+import { isAuthenticatedAdmin } from "@/lib/auth/admin";
+import { isRegistrationClosed } from "@/lib/registration";
 
 export const metadata: Metadata = {
   title: "Register",
 };
 
-export default function RegisterPage() {
+export default async function RegisterPage() {
+  const closed = isRegistrationClosed();
+  const isAdmin = closed ? await isAuthenticatedAdmin() : false;
+
+  if (closed && !isAdmin) {
+    return <RegistrationClosed />;
+  }
+
   return (
     <main className="relative flex min-h-svh flex-col items-center overflow-x-hidden bg-kinetic-charcoal px-4 py-12 font-body text-kinetic-on-surface md:px-8 lg:px-12">
       <div className="pointer-events-none fixed inset-0 -z-10">
@@ -34,6 +44,12 @@ export default function RegisterPage() {
           Live Broadcast Experience
         </p>
       </header>
+
+      {closed && isAdmin ? (
+        <div className="mb-6 w-full max-w-6xl rounded-lg border border-kinetic-primary-container/30 bg-kinetic-primary-container/10 px-4 py-3 text-center text-sm text-kinetic-primary-container">
+          Admin access — registration is closed to the public.
+        </div>
+      ) : null}
 
       <div className="flex w-full max-w-6xl flex-col gap-8 pb-12 lg:flex-row lg:items-start lg:gap-12">
         <div className="order-2 w-full lg:order-1 lg:w-[60%]">
