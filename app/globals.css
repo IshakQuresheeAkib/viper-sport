@@ -66,9 +66,40 @@ html {
 
 body {
   margin: 0;
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--color-kinetic-surface);
+  color: var(--color-kinetic-on-surface);
   font-family: var(--font-geist-sans), Arial, sans-serif;
+}
+
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+[data-hero-animate],
+[data-stat-card],
+[data-nav-animate],
+[data-success-animate] {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .glow-pulse,
+  .scanner-line {
+    animation: none !important;
+  }
+
+  [data-hero-animate],
+  [data-stat-card],
+  [data-nav-animate],
+  [data-success-animate] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
 
 a {

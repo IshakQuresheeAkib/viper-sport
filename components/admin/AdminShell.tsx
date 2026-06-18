@@ -2,16 +2,10 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import {
-  ArrowLeft,
-  Bell,
-  Home,
-  LayoutDashboard,
-  LogOut,
-  QrCode
-} from "lucide-react";
+import { ArrowLeft, Home, LayoutDashboard, LogOut, QrCode } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { cn } from "@/lib/utils";
 
 interface AdminShellProps {
   children: React.ReactNode;
@@ -22,15 +16,20 @@ interface AdminShellProps {
 
 const sidebarLinks = [
   { href: "/admin/dashboard", label: "Stats & Desk", icon: LayoutDashboard },
-  { href: "/admin/checkin", label: "Check-In", icon: QrCode }
+  { href: "/admin/checkin", label: "Check-In", icon: QrCode },
 ] as const;
 
 const mobileLinks = [
   { href: "/admin/dashboard", label: "Stats", icon: LayoutDashboard },
-  { href: "/admin/checkin", label: "Check-In", icon: QrCode }
+  { href: "/admin/checkin", label: "Check-In", icon: QrCode },
 ] as const;
 
-export function AdminShell({ children, title, eyebrow = "Live Event Admin", action }: AdminShellProps) {
+export function AdminShell({
+  children,
+  title,
+  eyebrow = "Live Event Admin",
+  action,
+}: AdminShellProps) {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -39,6 +38,12 @@ export function AdminShell({ children, title, eyebrow = "Live Event Admin", acti
     await supabase.auth.signOut();
     router.replace("/admin");
     router.refresh();
+  }
+
+  function handleSignOut() {
+    if (window.confirm("Sign out of the admin portal?")) {
+      void signOut();
+    }
   }
 
   return (
@@ -53,7 +58,10 @@ export function AdminShell({ children, title, eyebrow = "Live Event Admin", acti
           </h1>
         </div>
 
-        <nav className="flex flex-1 flex-col gap-2 px-3">
+        <nav
+          className="flex flex-1 flex-col gap-2 px-3"
+          aria-label="Admin sidebar"
+        >
           {sidebarLinks.map((link) => {
             const Icon = link.icon;
             const active = pathname === link.href;
@@ -62,14 +70,18 @@ export function AdminShell({ children, title, eyebrow = "Live Event Admin", acti
               <Link
                 key={link.href}
                 href={link.href}
-                className={`flex items-center gap-3 rounded-xl px-4 py-3 transition-colors ${
+                aria-current={active ? "page" : undefined}
+                className={cn(
+                  "flex items-center gap-3 rounded-xl px-4 py-3 transition-colors",
                   active
                     ? "border border-kinetic-primary-container/20 bg-kinetic-primary-container/10 text-kinetic-primary"
-                    : "text-kinetic-secondary-fixed-dim hover:bg-kinetic-surface-container-highest hover:text-kinetic-primary"
-                }`}
+                    : "text-kinetic-secondary-fixed-dim hover:bg-kinetic-surface-container-highest hover:text-kinetic-primary",
+                )}
               >
                 <Icon className="size-5" aria-hidden="true" />
-                <span className="text-xs font-bold uppercase">{link.label}</span>
+                <span className="text-xs font-bold uppercase">
+                  {link.label}
+                </span>
               </Link>
             );
           })}
@@ -78,7 +90,7 @@ export function AdminShell({ children, title, eyebrow = "Live Event Admin", acti
         <div className="border-t border-kinetic-outline/30 p-4">
           <button
             type="button"
-            onClick={() => void signOut()}
+            onClick={handleSignOut}
             className="flex w-full cursor-pointer items-center justify-start gap-3 rounded-xl px-4 py-3 text-xs font-bold uppercase text-kinetic-secondary-fixed-dim transition-colors hover:bg-kinetic-surface-container-highest hover:text-kinetic-primary"
           >
             <LogOut className="size-5" aria-hidden="true" />
@@ -93,20 +105,14 @@ export function AdminShell({ children, title, eyebrow = "Live Event Admin", acti
             <Link
               href="/admin/dashboard"
               className="flex items-center justify-center rounded-full p-2 text-kinetic-primary transition-opacity hover:opacity-80"
+              aria-label="Admin dashboard"
             >
               <LayoutDashboard className="size-5" aria-hidden="true" />
             </Link>
             <p className="font-display text-lg font-bold uppercase tracking-tighter text-kinetic-primary">
               Viper sport
             </p>
-            <button
-              type="button"
-              aria-label="Notifications"
-              className="relative cursor-pointer rounded-full p-2 text-kinetic-primary transition-opacity hover:opacity-80"
-            >
-              <Bell className="size-5" aria-hidden="true" />
-              <span className="absolute right-1 top-1 size-2 rounded-full border border-kinetic-surface bg-kinetic-error" />
-            </button>
+            <div className="size-9" aria-hidden="true" />
           </div>
         </header>
 
@@ -121,13 +127,18 @@ export function AdminShell({ children, title, eyebrow = "Live Event Admin", acti
                   {title}
                 </h2>
               </div>
-              {action ? <div className="flex items-center gap-3">{action}</div> : null}
+              {action ? (
+                <div className="flex items-center gap-3">{action}</div>
+              ) : null}
             </div>
             {children}
           </div>
         </main>
 
-        <nav className="fixed inset-x-0 bottom-0 z-50 rounded-t-full border-t border-white/5 bg-kinetic-surface/90 px-4 pb-safe backdrop-blur-xl shadow-[0_-4px_20px_rgba(0,0,0,0.5)] lg:hidden">
+        <nav
+          aria-label="Admin mobile navigation"
+          className="fixed inset-x-0 bottom-0 z-50 rounded-t-full border-t border-white/5 bg-kinetic-surface/90 px-4 pb-safe backdrop-blur-xl shadow-[0_-4px_20px_rgba(0,0,0,0.5)] lg:hidden"
+        >
           <div className="flex h-20 items-center justify-around">
             {mobileLinks.map((link) => {
               const Icon = link.icon;
@@ -137,14 +148,18 @@ export function AdminShell({ children, title, eyebrow = "Live Event Admin", acti
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`flex flex-col items-center justify-center transition-transform active:scale-90 ${
+                  aria-current={active ? "page" : undefined}
+                  className={cn(
+                    "flex flex-col items-center justify-center transition-transform active:scale-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-kinetic-primary-container",
                     active
                       ? "rounded-full bg-kinetic-primary-container/10 px-4 py-1 text-kinetic-primary shadow-[0_0_15px_rgba(227,254,149,0.3)]"
-                      : "text-kinetic-secondary-fixed-dim opacity-60 hover:text-kinetic-primary"
-                  }`}
+                      : "text-kinetic-secondary-fixed-dim opacity-60 hover:text-kinetic-primary",
+                  )}
                 >
                   <Icon className="mb-1 size-5" aria-hidden="true" />
-                  <span className="text-[10px] font-bold uppercase">{link.label}</span>
+                  <span className="text-[10px] font-bold uppercase">
+                    {link.label}
+                  </span>
                 </Link>
               );
             })}
@@ -157,7 +172,7 @@ export function AdminShell({ children, title, eyebrow = "Live Event Admin", acti
             </Link>
             <button
               type="button"
-              onClick={() => void signOut()}
+              onClick={handleSignOut}
               aria-label="Sign out"
               className="flex cursor-pointer flex-col text-kinetic-secondary-fixed-dim opacity-60 transition-transform hover:text-kinetic-primary active:scale-90"
             >
@@ -173,14 +188,22 @@ export function AdminShell({ children, title, eyebrow = "Live Event Admin", acti
 
 export function AdminScanQrLink() {
   return (
-    <Button href="/admin/checkin" variant="coral" className="w-full px-6 py-3 text-sm sm:w-auto lg:text-base">
+    <Button
+      href="/admin/checkin"
+      variant="lime"
+      className="w-full px-6 py-3 text-sm sm:w-auto lg:text-base"
+    >
       <QrCode className="size-5" aria-hidden="true" />
       Scan QR
     </Button>
   );
 }
 
-export function AdminBackLink({ href = "/admin/dashboard" }: { href?: string }) {
+export function AdminBackLink({
+  href = "/admin/dashboard",
+}: {
+  href?: string;
+}) {
   return (
     <Link
       href={href}

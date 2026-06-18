@@ -72,3 +72,10 @@ Required runtime variables are documented in `.env.example` and `context/project
 - SMS failures must not block registration success.
 - QR generation happens client-side on the success screen.
 - Admin check-in must support QR scanning and manual search.
+
+## Brand & UI Tokens
+
+- The live digital UI uses the **Kinetic Dark** system in `Design.md` and `app/globals.css`.
+- Primary interactive accent: electric lime (`kinetic-primary-container`, `#d3ed86`).
+- Coral (`kinetic-error`, `#ffb4ab`) is reserved for live/urgent status accents.
+- Legacy `#990011` in `.cursorrules` is the original print/brand red; prefer kinetic lime tokens for in-app CTAs and focus states.

@@ -3,30 +3,22 @@
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import { ArrowRight, Bell, Circle } from "lucide-react";
+import { ArrowRight, Circle } from "lucide-react";
+import { useActiveSection } from "@/hooks/useActiveSection";
+import { homeNavLinks, homeScrollSpySectionIds } from "@/lib/home-nav";
+import type { HomeSectionId } from "@/lib/home-nav";
 import { shouldSkipAnimation } from "@/lib/animation";
 import { cn } from "@/lib/utils";
-
-const navLinks = [
-  { href: "#", label: "Home", sectionId: "hero" },
-  { href: "#stats", label: "Stats", sectionId: "stats" },
-  { href: "#events", label: "Events", sectionId: "events" },
-  { href: "#about", label: "Profile", sectionId: "about" },
-] as const;
-
-type NavLinkId = (typeof navLinks)[number]["sectionId"];
-
-function prefersReducedMotion(): boolean {
-  if (typeof window === "undefined") return false;
-  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-}
 
 export function DesktopNavbar() {
   const navRef = useRef<HTMLElement | null>(null);
   const shellRef = useRef<HTMLDivElement | null>(null);
   const indicatorRef = useRef<HTMLSpanElement | null>(null);
-  const linkRefs = useRef<Map<NavLinkId, HTMLAnchorElement>>(new Map());
-  const [activeSection, setActiveSection] = useState<NavLinkId>("hero");
+  const linkRefs = useRef<Map<HomeSectionId, HTMLAnchorElement>>(new Map());
+  const activeSection = useActiveSection({
+    sectionIds: homeScrollSpySectionIds,
+    defaultSection: "hero",
+  });
   const [isCompact, setIsCompact] = useState(false);
 
   const repositionIndicator = useCallback(() => {
@@ -34,7 +26,7 @@ export function DesktopNavbar() {
     const activeLink = linkRefs.current.get(activeSection);
     if (!indicator || !activeLink) return;
 
-    const skipMotion = shouldSkipAnimation() || prefersReducedMotion();
+    const skipMotion = shouldSkipAnimation();
     const { offsetLeft, offsetWidth } = activeLink;
 
     if (skipMotion) {
@@ -56,7 +48,7 @@ export function DesktopNavbar() {
     const shell = shellRef.current;
     if (!nav || !shell) return;
 
-    const skipMotion = shouldSkipAnimation() || prefersReducedMotion();
+    const skipMotion = shouldSkipAnimation();
 
     if (!skipMotion) {
       const animatedItems = nav.querySelectorAll("[data-nav-animate]");
@@ -96,31 +88,6 @@ export function DesktopNavbar() {
   }, []);
 
   useEffect(() => {
-    const sectionIds: NavLinkId[] = ["hero", "stats", "events", "about"];
-    const sections = sectionIds
-      .map((id) => document.getElementById(id))
-      .filter((el): el is HTMLElement => el !== null);
-
-    if (sections.length === 0) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-
-        if (visible[0]?.target.id) {
-          setActiveSection(visible[0].target.id as NavLinkId);
-        }
-      },
-      { rootMargin: "-40% 0px -45% 0px", threshold: [0, 0.25, 0.5, 0.75, 1] },
-    );
-
-    sections.forEach((section) => observer.observe(section));
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
     const onScroll = () => setIsCompact(window.scrollY > 80);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -136,8 +103,8 @@ export function DesktopNavbar() {
     return () => window.removeEventListener("resize", repositionIndicator);
   }, [repositionIndicator]);
 
-  const handleLinkHover = (linkId: NavLinkId, entering: boolean) => {
-    if (shouldSkipAnimation() || prefersReducedMotion()) return;
+  const handleLinkHover = (linkId: HomeSectionId, entering: boolean) => {
+    if (shouldSkipAnimation()) return;
 
     const link = linkRefs.current.get(linkId);
     if (!link) return;
@@ -159,7 +126,7 @@ export function DesktopNavbar() {
         ref={shellRef}
         data-nav-animate
         className={cn(
-          "pointer-events-auto mx-auto flex max-w-5xl items-center justify-between gap-6 px-5 transition-[box-shadow,background-color,border-color,padding] duration-300",
+          "pointer-events-auto mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 transition-[box-shadow,background-color,border-color,padding] duration-300",
           "clip-retro-sm border border-white/10 bg-kinetic-surface-container/75 backdrop-blur-xl",
           isCompact ? "py-2.5" : "py-3.5",
           isCompact
@@ -168,9 +135,9 @@ export function DesktopNavbar() {
         )}
       >
         <Link
-          href="#"
+          href="#hero"
           data-nav-animate
-          className="group flex shrink-0 items-center gap-2.5 cursor-pointer"
+          className="group flex shrink-0 cursor-pointer items-center gap-2.5"
         >
           <span className="relative flex size-5 items-center justify-center">
             <Circle
@@ -187,7 +154,7 @@ export function DesktopNavbar() {
           </span>
         </Link>
 
-        <div data-nav-animate className="relative flex items-center gap-1">
+        <div data-nav-animate className="relative flex items-center gap-0.5">
           <span
             ref={indicatorRef}
             aria-hidden="true"
@@ -195,20 +162,21 @@ export function DesktopNavbar() {
             style={{ width: 0 }}
           />
 
-          {navLinks.map((link) => {
+          {homeNavLinks.map((link) => {
             const isActive = activeSection === link.sectionId;
 
             return (
               <Link
-                key={link.label}
+                key={link.sectionId}
                 ref={(node) => {
                   if (node) linkRefs.current.set(link.sectionId, node);
                 }}
                 href={link.href}
+                aria-current={isActive ? "page" : undefined}
                 onMouseEnter={() => handleLinkHover(link.sectionId, true)}
                 onMouseLeave={() => handleLinkHover(link.sectionId, false)}
                 className={cn(
-                  "relative cursor-pointer px-4 py-2 text-xs font-bold uppercase tracking-wider transition-colors duration-200",
+                  "relative cursor-pointer px-3 py-2 text-[11px] font-bold uppercase tracking-wider transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-kinetic-primary-container",
                   isActive
                     ? "text-kinetic-primary-container"
                     : "text-white/55 hover:text-white",
@@ -220,7 +188,7 @@ export function DesktopNavbar() {
           })}
         </div>
 
-        <div data-nav-animate className="flex shrink-0 items-center gap-3">
+        <div data-nav-animate className="flex shrink-0 items-center">
           <Link
             href="/register"
             className="retro-btn clip-retro-sm inline-flex cursor-pointer items-center gap-1.5 bg-kinetic-primary-container px-4 py-2 font-display text-xs font-bold uppercase text-kinetic-on-primary-container transition-all duration-200 hover:shadow-[0_0_18px_rgba(211,237,134,0.45)]"
@@ -228,14 +196,6 @@ export function DesktopNavbar() {
             Register
             <ArrowRight className="size-3.5" aria-hidden="true" />
           </Link>
-
-          <button
-            type="button"
-            aria-label="Notifications"
-            className="glass-card cursor-pointer rounded-full p-2 transition-all duration-200 hover:bg-white/10 hover:shadow-[0_0_14px_rgba(211,237,134,0.25)]"
-          >
-            <Bell className="size-4 text-white" />
-          </button>
         </div>
       </div>
     </nav>

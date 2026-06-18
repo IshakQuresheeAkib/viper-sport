@@ -144,6 +144,18 @@ export function QRScanner({ registrations }: QRScannerProps) {
     setState("idle");
   }
 
+  async function stopScanner() {
+    if (scannerRef.current) {
+      try {
+        await scannerRef.current.stop();
+      } catch {
+        // Scanner may already be stopped.
+      }
+      scannerRef.current = null;
+    }
+    setState("idle");
+  }
+
   async function startScanner() {
     setMessage(null);
     setResult(null);
@@ -206,6 +218,19 @@ export function QRScanner({ registrations }: QRScannerProps) {
           </>
         ) : null}
 
+        {state === "scanning" ? (
+          <div className="absolute inset-x-0 bottom-4 z-30 flex justify-center px-4">
+            <Button
+              type="button"
+              variant="neutral"
+              onClick={() => void stopScanner()}
+              className="rounded-full px-4 py-2 text-xs normal-case"
+            >
+              Stop camera
+            </Button>
+          </div>
+        ) : null}
+
         {state === "submitting" ? (
           <div className="absolute inset-0 z-30 flex items-center justify-center bg-kinetic-surface/70">
             <Loader2
@@ -228,11 +253,17 @@ export function QRScanner({ registrations }: QRScannerProps) {
         </span>
       </div>
 
-      {message ? (
-        <p className="mt-4 text-sm font-semibold text-kinetic-primary-container">
-          {message}
-        </p>
-      ) : null}
+      <div
+        aria-live="polite"
+        aria-atomic="true"
+        className="mt-4 min-h-5 text-center"
+      >
+        {message ? (
+          <p className="text-sm font-semibold text-kinetic-primary-container">
+            {message}
+          </p>
+        ) : null}
+      </div>
 
       {result ? (
         <div className="admin-glass-card admin-glow-active mt-8 w-full max-w-md overflow-hidden rounded-xl border-t-2 border-t-kinetic-primary-container">

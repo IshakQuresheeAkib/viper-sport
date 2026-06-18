@@ -3,13 +3,14 @@
 import { Download, Search } from "lucide-react";
 import { useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/Button";
+import { matchesPhoneSearch } from "@/lib/phone";
 import { useAdminStore } from "@/store/useAdminStore";
 import type { AdminStatusFilter, Registration } from "@/types";
 
 const statusOptions: { label: string; value: AdminStatusFilter }[] = [
   { label: "All", value: "all" },
   { label: "Pending", value: "pending" },
-  { label: "Checked-in", value: "checked_in" }
+  { label: "Checked-in", value: "checked_in" },
 ];
 
 function getInitials(registration: Registration) {
@@ -20,7 +21,7 @@ function formatDate(value: string) {
   return new Date(value).toLocaleDateString("en-GB", {
     day: "numeric",
     month: "short",
-    year: "numeric"
+    year: "numeric",
   });
 }
 
@@ -42,14 +43,18 @@ function StatusBadge({ checkedIn }: { checkedIn: boolean }) {
   );
 }
 
-export function RegistrationsTable({ registrations }: { registrations: Registration[] }) {
+export function RegistrationsTable({
+  registrations,
+}: {
+  registrations: Registration[];
+}) {
   const {
     registrations: storedRegistrations,
     searchTerm,
     statusFilter,
     setRegistrations,
     setSearchTerm,
-    setStatusFilter
+    setStatusFilter,
   } = useAdminStore();
 
   useEffect(() => {
@@ -62,8 +67,10 @@ export function RegistrationsTable({ registrations }: { registrations: Registrat
     return storedRegistrations.filter((registration) => {
       const matchesQuery =
         !query ||
-        `${registration.first_name} ${registration.last_name}`.toLowerCase().includes(query) ||
-        registration.phone.includes(query) ||
+        `${registration.first_name} ${registration.last_name}`
+          .toLowerCase()
+          .includes(query) ||
+        matchesPhoneSearch(registration.phone, query) ||
         registration.registration_id.toLowerCase().includes(query);
       const matchesStatus =
         statusFilter === "all" ||
@@ -81,7 +88,7 @@ export function RegistrationsTable({ registrations }: { registrations: Registrat
       "Registration ID",
       "Registered At",
       "Checked In",
-      "Checked In At"
+      "Checked In At",
     ];
     const rows = filtered.map((registration) => [
       `${registration.first_name} ${registration.last_name}`,
@@ -89,10 +96,12 @@ export function RegistrationsTable({ registrations }: { registrations: Registrat
       registration.registration_id,
       registration.created_at,
       registration.checked_in ? "Yes" : "No",
-      registration.checked_in_at ?? ""
+      registration.checked_in_at ?? "",
     ]);
     const csv = [headers, ...rows]
-      .map((row) => row.map((cell) => `"${cell.replaceAll('"', '""')}"`).join(","))
+      .map((row) =>
+        row.map((cell) => `"${cell.replaceAll('"', '""')}"`).join(","),
+      )
       .join("\n");
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
     const url = URL.createObjectURL(blob);
@@ -108,11 +117,16 @@ export function RegistrationsTable({ registrations }: { registrations: Registrat
       <div className="flex flex-col gap-3 border-b border-white/5 px-4 pb-4 lg:px-0">
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div className="relative w-full md:max-w-[400px]">
+            <label htmlFor="registrations-search" className="sr-only">
+              Search registrations
+            </label>
             <Search
               className="pointer-events-none absolute left-3 top-1/2 size-5 -translate-y-1/2 text-kinetic-on-surface-variant"
               aria-hidden="true"
             />
             <input
+              id="registrations-search"
+              aria-label="Search registrations by name, phone, or ID"
               className="w-full rounded-lg border border-kinetic-outline-variant bg-kinetic-surface-container-high py-2.5 pl-10 pr-4 text-kinetic-on-surface transition-colors placeholder:text-kinetic-on-surface-variant/50 focus:border-kinetic-primary-container focus:outline-none focus:ring-1 focus:ring-kinetic-primary-container"
               onChange={(event) => setSearchTerm(event.target.value)}
               placeholder="Search name or phone..."
@@ -170,7 +184,9 @@ export function RegistrationsTable({ registrations }: { registrations: Registrat
               <div className="col-span-1 flex items-center gap-3 md:col-span-5">
                 <div
                   className={`hidden sm:flex size-10 items-center justify-center rounded-full border border-kinetic-outline-variant bg-kinetic-surface-bright font-display text-sm font-bold ${
-                    registration.checked_in ? "text-kinetic-primary" : "text-kinetic-on-surface-variant"
+                    registration.checked_in
+                      ? "text-kinetic-primary"
+                      : "text-kinetic-on-surface-variant"
                   }`}
                 >
                   {getInitials(registration)}
@@ -179,13 +195,21 @@ export function RegistrationsTable({ registrations }: { registrations: Registrat
                   <h3 className="font-bold text-kinetic-on-surface">
                     {registration.first_name} {registration.last_name}
                   </h3>
-                  <p className="mt-0.5 font-mono text-xs text-kinetic-on-surface-variant md:hidden">
+                  <p className="mt-0.5 font-mono text-xs text-kinetic-on-surface-variant">
                     {registration.phone}
+                  </p>
+                  <p className="mt-1 font-mono text-xs text-kinetic-primary-container/90">
+                    {registration.registration_id}
+                  </p>
+                  <p className="mt-0.5 text-xs text-kinetic-on-surface-variant">
+                    {formatDate(registration.created_at)}
                   </p>
                 </div>
               </div>
               <div className="hidden md:col-span-4 md:block">
-                <p className="font-mono text-sm text-kinetic-on-surface-variant">{registration.phone}</p>
+                <p className="font-mono text-sm text-kinetic-on-surface-variant">
+                  {registration.phone}
+                </p>
               </div>
               <div className="absolute right-4 top-4 md:relative md:right-0 md:top-0 md:col-span-3 md:flex md:justify-end">
                 <StatusBadge checkedIn={registration.checked_in} />
@@ -219,7 +243,10 @@ export function RegistrationsTable({ registrations }: { registrations: Registrat
           <tbody className="divide-y divide-kinetic-surface-container-highest bg-kinetic-surface">
             {filtered.length === 0 ? (
               <tr>
-                <td colSpan={5} className="px-4 py-8 text-center text-sm text-kinetic-on-surface-variant">
+                <td
+                  colSpan={5}
+                  className="px-4 py-8 text-center text-sm text-kinetic-on-surface-variant"
+                >
                   No registrations match your filters.
                 </td>
               </tr>
@@ -273,7 +300,8 @@ export function RegistrationsTable({ registrations }: { registrations: Registrat
       {filtered.length > 0 ? (
         <div className="flex justify-center border-t border-kinetic-surface-bright py-4 lg:border-none">
           <p className="text-xs font-bold uppercase tracking-wider text-kinetic-on-surface-variant">
-            Showing {filtered.length} registration{filtered.length === 1 ? "" : "s"}
+            Showing {filtered.length} registration
+            {filtered.length === 1 ? "" : "s"}
           </p>
         </div>
       ) : null}
