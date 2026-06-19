@@ -141,16 +141,16 @@ export function DesktopNavbar() {
         >
           <span className="relative flex size-5 items-center justify-center">
             <Circle
-              className="size-5 fill-kinetic-primary-container text-kinetic-primary-container transition-transform duration-300 group-hover:scale-110"
+              className="size-5 fill-kinetic text-kinetic transition-transform duration-300 group-hover:scale-110"
               aria-hidden="true"
             />
             <span
-              className="absolute inset-0 rounded-full bg-kinetic-primary-container/40 blur-sm motion-safe:animate-pulse"
+              className="absolute inset-0 rounded-full bg-kinetic/40 blur-sm motion-safe:animate-pulse"
               aria-hidden="true"
             />
           </span>
           <span className=" text-xl font-bold  text-white">
-            Viper<span className="text-kinetic-primary-container">Sport</span>
+            Viper<span className="text-kinetic">Sport</span>
           </span>
         </Link>
 
@@ -158,7 +158,7 @@ export function DesktopNavbar() {
           <span
             ref={indicatorRef}
             aria-hidden="true"
-            className="pointer-events-none absolute bottom-0 h-0.5 rounded-full bg-kinetic-primary-container opacity-0 shadow-[0_0_12px_rgba(211,237,134,0.6)]"
+            className="pointer-events-none absolute bottom-0 h-0.5 rounded-full bg-kinetic opacity-0 shadow-[0_0_12px_rgba(211,237,134,0.6)]"
             style={{ width: 0 }}
           />
 
@@ -176,10 +176,8 @@ export function DesktopNavbar() {
                 onMouseEnter={() => handleLinkHover(link.sectionId, true)}
                 onMouseLeave={() => handleLinkHover(link.sectionId, false)}
                 className={cn(
-                  "relative cursor-pointer px-3 py-2 text-[11px] font-bold uppercase tracking-wider transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-kinetic-primary-container",
-                  isActive
-                    ? "text-kinetic-primary-container"
-                    : "text-white/55 hover:text-white",
+                  "relative cursor-pointer px-3 py-2 text-[11px] font-bold uppercase tracking-wider transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-kinetic",
+                  isActive ? "text-kinetic" : "text-white/55 hover:text-white",
                 )}
               >
                 {link.label}
@@ -191,7 +189,7 @@ export function DesktopNavbar() {
         <div data-nav-animate className="flex shrink-0 items-center">
           <Link
             href="/register"
-            className="retro-btn clip-retro-sm inline-flex cursor-pointer items-center gap-1.5 bg-kinetic-primary-container px-4 py-2  text-xs font-bold uppercase text-kinetic-on-primary-container transition-all duration-200 hover:shadow-[0_0_18px_rgba(211,237,134,0.45)]"
+            className="retro-btn clip-retro-sm inline-flex cursor-pointer items-center gap-1.5 bg-kinetic px-4 py-2  text-xs font-bold uppercase text-black/70 transition-all duration-200 hover:shadow-[0_0_18px_rgba(211,237,134,0.45)]"
           >
             Register
             <ArrowRight className="size-3.5" aria-hidden="true" />

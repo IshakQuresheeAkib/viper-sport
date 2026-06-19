@@ -15,7 +15,7 @@ export function ViperSportProfile() {
         />
         <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-kinetic-charcoal via-kinetic-charcoal/20 to-transparent" />
         <div className="absolute inset-x-0 bottom-0 p-5">
-          <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-kinetic-primary-container">
+          <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-kinetic">
             ViperSport
           </p>
           <h2 className="text-2xl uppercase text-kinetic-primary">

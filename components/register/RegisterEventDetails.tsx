@@ -11,7 +11,7 @@ export function RegisterEventDetails() {
         </h3>
         <div className="grid grid-cols-1 gap-6 rounded-xl border border-white/5 bg-black/20 p-6 md:grid-cols-3 lg:p-8">
           <div className="flex flex-row items-start gap-4 md:flex-col md:items-start">
-            <span className="rounded-full bg-kinetic-primary-fixed-dim/10 p-3 text-kinetic-primary-fixed-dim md:p-4">
+            <span className="rounded-full bg-kinetic-dark/10 p-3 text-kinetic-dark md:p-4">
               <Trophy className="size-5 md:size-6" aria-hidden="true" />
             </span>
             <div>
@@ -24,7 +24,7 @@ export function RegisterEventDetails() {
             </div>
           </div>
           <div className="flex flex-row items-start gap-4 md:flex-col md:items-start">
-            <span className="rounded-full bg-kinetic-primary-fixed-dim/10 p-3 text-kinetic-primary-fixed-dim md:p-4">
+            <span className="rounded-full bg-kinetic-dark/10 p-3 text-kinetic-dark md:p-4">
               <Calendar className="size-5 md:size-6" aria-hidden="true" />
             </span>
             <div>
@@ -37,7 +37,7 @@ export function RegisterEventDetails() {
             </div>
           </div>
           <div className="flex flex-row items-start gap-4 md:flex-col md:items-start">
-            <span className="rounded-full bg-kinetic-primary-fixed-dim/10 p-3 text-kinetic-primary-fixed-dim md:p-4">
+            <span className="rounded-full bg-kinetic-dark/10 p-3 text-kinetic-dark md:p-4">
               <Star className="size-5 md:size-6" aria-hidden="true" />
             </span>
             <div>

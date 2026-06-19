@@ -3,7 +3,7 @@ export function AboutSection() {
     <section id="about" className="py-20">
       <div className="container grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
         <div>
-          <p className="text-sm font-bold uppercase tracking-[0.2em] text-kinetic-primary-container">
+          <p className="text-sm font-bold uppercase tracking-[0.2em] text-kinetic">
             About
           </p>
           <h2 className="mt-3  text-3xl font-medium leading-tight text-kinetic-primary sm:text-4xl">

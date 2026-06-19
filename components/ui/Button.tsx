@@ -16,12 +16,12 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 function getVariantClasses(variant: ButtonVariant, active: boolean): string {
   if (active) {
-    return "border-kinetic-primary-container/40 bg-kinetic-primary-container text-kinetic-on-primary-container shadow-[0_0_15px_rgba(211,237,134,0.25)]";
+    return "border-kinetic/40 bg-kinetic text-black/70 shadow-[0_0_15px_rgba(211,237,134,0.25)]";
   }
 
   switch (variant) {
     case "lime":
-      return "border-transparent bg-kinetic-primary-container text-kinetic-on-primary-container hover:bg-kinetic-primary-fixed-dim hover:shadow-[0_0_15px_rgba(211,237,134,0.3)]";
+      return "border-transparent bg-kinetic text-black/70 hover:bg-kinetic-dark hover:shadow-[0_0_15px_rgba(211,237,134,0.3)]";
     case "coral":
       return "border-transparent bg-kinetic-coral text-kinetic-surface hover:brightness-95";
     case "neutral":
@@ -49,7 +49,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     const sharedClassName = cn(
       "retro-btn inline-flex cursor-pointer items-center justify-center gap-2 rounded-sm px-5 py-3 text-base font-bold uppercase transition-all duration-200",
-      "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-kinetic-primary-container",
+      "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-kinetic",
       "disabled:cursor-not-allowed disabled:opacity-60",
       "active:scale-[0.98]",
       getVariantClasses(variant, active),

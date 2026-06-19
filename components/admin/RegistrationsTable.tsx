@@ -28,8 +28,8 @@ function formatDate(value: string) {
 function StatusBadge({ checkedIn }: { checkedIn: boolean }) {
   if (checkedIn) {
     return (
-      <span className="inline-flex items-center gap-1.5 rounded-full border border-kinetic-primary-container/30 bg-kinetic-primary-container/10 px-2.5 py-1 text-xs font-bold uppercase text-kinetic-primary-container">
-        <span className="size-1.5 rounded-full bg-kinetic-primary-container" />
+      <span className="inline-flex items-center gap-1.5 rounded-full border border-kinetic/30 bg-kinetic/10 px-2.5 py-1 text-xs font-bold uppercase text-kinetic">
+        <span className="size-1.5 rounded-full bg-kinetic" />
         Checked-in
       </span>
     );
@@ -127,7 +127,7 @@ export function RegistrationsTable({
             <input
               id="registrations-search"
               aria-label="Search registrations by name, phone, or ID"
-              className="w-full rounded-lg border border-white/60 bg-kinetic-surface-container-high py-2.5 pl-10 pr-4 text-kinetic-on-surface transition-colors placeholder:text-kinetic-on-surface-variant/50 focus:border-kinetic-primary-container focus:outline-none focus:ring-1 focus:ring-kinetic-primary-container"
+              className="w-full rounded-lg border border-white/60 bg-white/10 py-2.5 pl-10 pr-4 text-kinetic-on-surface transition-colors placeholder:text-kinetic-on-surface-variant/50 focus:border-kinetic focus:outline-none focus:ring-1 focus:ring-kinetic"
               onChange={(event) => setSearchTerm(event.target.value)}
               placeholder="Search name or phone..."
               value={searchTerm}
@@ -145,7 +145,7 @@ export function RegistrationsTable({
                   onClick={() => setStatusFilter(option.value)}
                   className={`rounded-full px-4 py-2 text-xs normal-case whitespace-nowrap ${
                     statusFilter !== option.value
-                      ? "border-white/60 bg-kinetic-surface-container-high text-kinetic-on-surface-variant shadow-none hover:bg-kinetic-surface-bright"
+                      ? "border-white/60 bg-white/10 text-kinetic-on-surface-variant shadow-none hover:bg-kinetic-surface-bright"
                       : ""
                   }`}
                 >
@@ -157,7 +157,7 @@ export function RegistrationsTable({
               type="button"
               variant="neutral"
               onClick={exportCsv}
-              className="rounded-full border-white/60 bg-kinetic-surface-container-high px-4 py-2 text-sm normal-case text-kinetic-on-surface-variant hover:bg-kinetic-surface-bright"
+              className="rounded-full border-white/60 bg-white/10 px-4 py-2 text-sm normal-case text-kinetic-on-surface-variant hover:bg-kinetic-surface-bright"
             >
               <Download className="size-4" aria-hidden="true" />
               CSV
@@ -177,8 +177,8 @@ export function RegistrationsTable({
               key={registration.id}
               className={`relative grid grid-cols-1 items-center gap-1 px-1 sm:px-4 py-3 transition-colors md:grid-cols-12 md:gap-4 ${
                 registration.checked_in
-                  ? "admin-data-strip bg-kinetic-surface-container hover:bg-kinetic-surface-container-high"
-                  : "border-l-2 border-transparent bg-kinetic-surface-container hover:bg-kinetic-surface-container-high"
+                  ? "admin-data-strip bg-kinetic-surface-container hover:bg-white/10"
+                  : "border-l-2 border-transparent bg-kinetic-surface-container hover:bg-white/10"
               }`}
             >
               <div className="col-span-1 flex items-center gap-3 md:col-span-5">
@@ -198,7 +198,7 @@ export function RegistrationsTable({
                   <p className="mt-0.5  text-xs text-kinetic-on-surface-variant">
                     {registration.phone}
                   </p>
-                  <p className="mt-1  text-xs text-kinetic-primary-container/90">
+                  <p className="mt-1  text-xs text-kinetic/90">
                     {registration.registration_id}
                   </p>
                   <p className="mt-0.5 text-xs text-kinetic-on-surface-variant">
@@ -240,7 +240,7 @@ export function RegistrationsTable({
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-kinetic-surface-container-high bg-kinetic-surface">
+          <tbody className="divide-y divide-white/10 bg-kinetic-surface">
             {filtered.length === 0 ? (
               <tr>
                 <td
@@ -254,7 +254,7 @@ export function RegistrationsTable({
               filtered.map((registration) => (
                 <tr
                   key={registration.id}
-                  className={`transition-colors hover:bg-kinetic-surface-container-high ${
+                  className={`transition-colors hover:bg-white/10 ${
                     registration.checked_in ? "admin-data-strip" : ""
                   }`}
                 >

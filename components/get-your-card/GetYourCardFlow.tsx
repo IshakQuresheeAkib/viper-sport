@@ -225,11 +225,10 @@ export function GetYourCardFlow() {
   return (
     <div className="relative z-10 w-full max-w-lg">
       {step === "validate" ? (
-        <section className="glass-card glow-border rounded-2xl border-t-2 border-kinetic-primary-container/40 p-8 shadow-2xl md:p-10">
+        <section className="glass-card glow-border rounded-2xl border-t-2 border-kinetic/40 p-8 shadow-2xl md:p-10">
           <div className="mb-8 text-center">
             <h2 className=" text-3xl font-medium uppercase  text-kinetic-primary md:text-4xl">
-              Get Your{" "}
-              <span className="text-kinetic-primary-container">Card</span>
+              Get Your <span className="text-kinetic">Card</span>
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-kinetic-secondary md:text-base">
               Enter your registration ID to create a shareable Matchday card.
@@ -268,7 +267,7 @@ export function GetYourCardFlow() {
       ) : null}
 
       {step === "upload" && registration ? (
-        <section className="glass-card glow-border rounded-2xl border-t-2 border-kinetic-primary-container/40 p-8 shadow-2xl md:p-10">
+        <section className="glass-card glow-border rounded-2xl border-t-2 border-kinetic/40 p-8 shadow-2xl md:p-10">
           <div className="mb-6 text-center">
             <h2 className=" text-2xl font-medium uppercase  text-kinetic-primary md:text-3xl">
               Upload Your Photo
@@ -326,7 +325,7 @@ export function GetYourCardFlow() {
       {step === "generating" && registration && selfieUrl ? (
         <section className="glass-card glow-border rounded-2xl p-8 text-center shadow-2xl md:p-10">
           <Loader2
-            className="mx-auto size-10 animate-spin text-kinetic-primary-container"
+            className="mx-auto size-10 animate-spin text-kinetic"
             aria-hidden="true"
           />
           <p className="mt-4 font-semibold text-kinetic-on-surface">
@@ -336,7 +335,7 @@ export function GetYourCardFlow() {
       ) : null}
 
       {step === "done" && registration && cardDataUrl ? (
-        <section className="glass-card glow-border rounded-2xl border-t-2 border-kinetic-primary-container/40 p-8 shadow-2xl md:p-10">
+        <section className="glass-card glow-border rounded-2xl border-t-2 border-kinetic/40 p-8 shadow-2xl md:p-10">
           <div className="mb-6 text-center">
             <h2 className="font-plus-jakarta text-2xl font-medium uppercase  text-kinetic-primary md:text-3xl">
               Your Card Is Ready
@@ -376,7 +375,7 @@ export function GetYourCardFlow() {
             <button
               type="button"
               onClick={resetToUpload}
-              className="cursor-pointer text-sm font-semibold text-kinetic-primary-container underline-offset-4 hover:underline"
+              className="cursor-pointer text-sm font-semibold text-kinetic underline-offset-4 hover:underline"
             >
               Generate again with a different photo
             </button>
@@ -395,7 +394,7 @@ export function GetYourCardFlow() {
             </Button>
             <Link
               href="/register"
-              className="text-sm font-semibold text-kinetic-primary-container underline-offset-4 hover:underline"
+              className="text-sm font-semibold text-kinetic underline-offset-4 hover:underline"
             >
               Back to registration
             </Link>

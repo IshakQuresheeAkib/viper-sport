@@ -79,7 +79,7 @@ export const KineticInput = forwardRef<HTMLInputElement, KineticInputProps>(
         >
           {icon ? (
             <span
-              className="mr-3 shrink-0 text-white/60 transition-colors duration-200 group-focus-within:text-kinetic-primary-container"
+              className="mr-3 shrink-0 text-white/60 transition-colors duration-200 group-focus-within:text-kinetic"
               aria-hidden="true"
             >
               {icon}

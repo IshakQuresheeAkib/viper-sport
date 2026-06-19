@@ -83,7 +83,7 @@ export function HeroSection() {
                 Abdul-Aziz
               </span>
             </h1>
-            <p className="mt-3 text-xs font-bold uppercase tracking-[0.2em] text-kinetic-primary-container lg:text-sm">
+            <p className="mt-3 text-xs font-bold uppercase tracking-[0.2em] text-kinetic lg:text-sm">
               Founder of ViperSport
             </p>
           </div>

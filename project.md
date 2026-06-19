@@ -34,7 +34,7 @@
 The live UI uses the **Kinetic Dark** system defined in `Design.md` and `app/globals.css`.
 
 - **Surface:** `#13140d` (dark charcoal)
-- **Primary accent:** Electric lime `#d3ed86` (`kinetic-primary-container`) — CTAs, focus, glow borders
+- **Primary accent:** Electric lime `#d3ed86` (`kinetic`) — CTAs, focus, glow borders
 - **Live / urgent:** Coral `#ffb4ab` (`secondary`) — event banner, live indicators
 - **On-surface text:** `#e4e3d8` with secondary cream `#cec4c2`
 - **Display font:** Baloo Tamma 2 (500/600/700/800) — hero, headings, stats

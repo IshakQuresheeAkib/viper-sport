@@ -23,7 +23,7 @@ export function RegistrationClosed() {
         aria-hidden="true"
       >
         <div className="absolute -right-1/4 top-1/4 size-[420px] rounded-full bg-kinetic-coral/8 blur-[120px]" />
-        <div className="absolute -bottom-1/4 -left-1/4 size-[500px] rounded-full bg-kinetic-primary-container/5 blur-[100px]" />
+        <div className="absolute -bottom-1/4 -left-1/4 size-[500px] rounded-full bg-kinetic/5 blur-[100px]" />
       </div>
 
       <header className="relative z-10 mb-8 text-center">
@@ -57,8 +57,7 @@ export function RegistrationClosed() {
           id="registration-closed-title"
           className="relative  text-3xl font-medium uppercase leading-tight  text-kinetic-primary md:text-4xl"
         >
-          All Seats Are{" "}
-          <span className="text-kinetic-primary-container">Filled</span>
+          All Seats Are <span className="text-kinetic">Filled</span>
         </h2>
 
         <p
@@ -73,7 +72,7 @@ export function RegistrationClosed() {
         <div className="relative mt-8 space-y-3 rounded-xl border border-white/10 bg-black/25 p-4 text-left">
           <div className="flex items-start gap-3">
             <Users
-              className="mt-0.5 size-4 shrink-0 text-kinetic-primary-container"
+              className="mt-0.5 size-4 shrink-0 text-kinetic"
               aria-hidden="true"
             />
             <p className="text-sm text-kinetic-on-surface-variant">
@@ -83,7 +82,7 @@ export function RegistrationClosed() {
           </div>
           <div className="flex items-start gap-3">
             <Calendar
-              className="mt-0.5 size-4 shrink-0 text-kinetic-primary-container"
+              className="mt-0.5 size-4 shrink-0 text-kinetic"
               aria-hidden="true"
             />
             <p className="text-sm text-kinetic-on-surface-variant">

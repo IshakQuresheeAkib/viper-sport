@@ -50,7 +50,7 @@ export function AdminShell({
     <div className="flex min-h-svh bg-kinetic-surface  text-kinetic-on-surface antialiased">
       <aside className="relative z-50 hidden h-svh w-[280px] shrink-0 flex-col border-r border-kinetic-outline/30 bg-white/5 lg:flex">
         <div className="flex items-center gap-3 px-6 py-8">
-          <div className="flex items-center justify-center rounded-full bg-kinetic-primary-container/10 p-2 text-kinetic-primary">
+          <div className="flex items-center justify-center rounded-full bg-kinetic/10 p-2 text-kinetic-primary">
             <LayoutDashboard className="size-5" aria-hidden="true" />
           </div>
           <h1 className="font-display text-xl font-bold uppercase  text-kinetic-primary">
@@ -74,7 +74,7 @@ export function AdminShell({
                 className={cn(
                   "flex items-center gap-3 rounded-xl px-4 py-3 transition-colors",
                   active
-                    ? "border border-kinetic-primary-container/20 bg-kinetic-primary-container/10 text-kinetic-primary"
+                    ? "border border-kinetic/20 bg-kinetic/10 text-kinetic-primary"
                     : "text-kinetic-secondary hover:bg-white/60 hover:text-kinetic-primary",
                 )}
               >
@@ -91,7 +91,7 @@ export function AdminShell({
           <button
             type="button"
             onClick={handleSignOut}
-            className="flex w-full cursor-pointer items-center justify-start gap-3 rounded-xl px-4 py-3 text-xs font-bold uppercase text-kinetic-secondary transition-colors hover:bg-kinetic-surface-container-high hover:text-kinetic-primary"
+            className="flex w-full cursor-pointer items-center justify-start gap-3 rounded-xl px-4 py-3 text-xs font-bold uppercase text-kinetic-secondary transition-colors hover:bg-white/10 hover:text-kinetic-primary"
           >
             <LogOut className="size-5" aria-hidden="true" />
             Sign out
@@ -120,7 +120,7 @@ export function AdminShell({
           <div className="mx-auto flex max-w-7xl flex-col gap-6 lg:gap-8">
             <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
               <div>
-                <p className="mb-1 text-xs font-bold uppercase tracking-widest text-kinetic-primary-container">
+                <p className="mb-1 text-xs font-bold uppercase tracking-widest text-kinetic">
                   {eyebrow}
                 </p>
                 <h2 className=" text-3xl font-medium text-kinetic-primary lg:text-5xl">
@@ -150,9 +150,9 @@ export function AdminShell({
                   href={link.href}
                   aria-current={active ? "page" : undefined}
                   className={cn(
-                    "flex flex-col items-center justify-center transition-transform active:scale-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-kinetic-primary-container",
+                    "flex flex-col items-center justify-center transition-transform active:scale-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-kinetic",
                     active
-                      ? "rounded-full bg-kinetic-primary-container/10 px-4 py-1 text-kinetic-primary shadow-[0_0_15px_rgba(227,254,149,0.3)]"
+                      ? "rounded-full bg-kinetic/10 px-4 py-1 text-kinetic-primary shadow-[0_0_15px_rgba(227,254,149,0.3)]"
                       : "text-kinetic-secondary opacity-60 hover:text-kinetic-primary",
                   )}
                 >

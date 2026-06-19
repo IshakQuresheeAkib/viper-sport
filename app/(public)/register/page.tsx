@@ -40,13 +40,13 @@ export default async function RegisterPage() {
             ViperSport
           </h1>
         </Link>
-        <p className="mt-2 text-sm font-bold uppercase tracking-widest text-kinetic-primary-fixed-dim md:text-base">
+        <p className="mt-2 text-sm font-bold uppercase tracking-widest text-kinetic-dark md:text-base">
           Live Broadcast Experience
         </p>
       </header>
 
       {closed && isAdmin ? (
-        <div className="mb-6 w-full max-w-6xl rounded-lg border border-kinetic-primary-container/30 bg-kinetic-primary-container/10 px-4 py-3 text-center text-sm text-kinetic-primary-container">
+        <div className="mb-6 w-full max-w-6xl rounded-lg border border-kinetic/30 bg-kinetic/10 px-4 py-3 text-center text-sm text-kinetic">
           Admin access — registration is closed to the public.
         </div>
       ) : null}

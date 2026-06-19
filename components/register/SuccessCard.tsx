@@ -208,7 +208,7 @@ export function SuccessCard() {
         </p>
         <Link
           href="/register"
-          className="mt-6 inline-block font-bold text-kinetic-primary-container"
+          className="mt-6 inline-block font-bold text-kinetic"
         >
           Back to registration
         </Link>
@@ -223,7 +223,7 @@ export function SuccessCard() {
         <p className="mt-3 text-kinetic-on-surface-variant">{error}</p>
         <Link
           href="/register"
-          className="mt-6 inline-block font-bold text-kinetic-primary-container"
+          className="mt-6 inline-block font-bold text-kinetic"
         >
           Back to registration
         </Link>
@@ -254,11 +254,8 @@ export function SuccessCard() {
         data-success-animate
         className="relative z-10 mb-6 flex flex-col items-center"
       >
-        <div className="glow-pulse mb-3 flex size-16 items-center justify-center rounded-full border border-kinetic-primary-container/20 bg-kinetic-surface-container-high">
-          <CheckCircle
-            className="size-10 text-kinetic-primary-container"
-            aria-hidden="true"
-          />
+        <div className="glow-pulse mb-3 flex size-16 items-center justify-center rounded-full border border-kinetic/20 bg-white/10">
+          <CheckCircle className="size-10 text-kinetic" aria-hidden="true" />
         </div>
         <h1 className="text-center  text-[2rem] font-medium text-kinetic-on-surface">
           You&apos;re In
@@ -273,7 +270,7 @@ export function SuccessCard() {
         data-success-animate
         className="relative z-10 flex w-full max-w-sm flex-col overflow-hidden rounded-[24px] border border-white/5 bg-kinetic-surface-bright/30 shadow-[0_20px_40px_rgba(0,0,0,0.4)] backdrop-blur-xl"
       >
-        <div className="h-1 w-full bg-kinetic-primary-container" />
+        <div className="h-1 w-full bg-kinetic" />
 
         <div className="flex items-center justify-between bg-kinetic-surface-container/50 px-6 pb-4 pt-6">
           <span className="text-xs font-bold uppercase tracking-widest text-kinetic-on-surface-variant">
@@ -291,7 +288,7 @@ export function SuccessCard() {
             </h2>
           </div>
           <div className="flex flex-col gap-1">
-            <span className="text-sm font-semibold text-kinetic-primary-container">
+            <span className="text-sm font-semibold text-kinetic">
               22 June 2026 &middot; 9:00 PM
             </span>
             <span className="text-xs text-kinetic-on-surface-variant">
@@ -318,7 +315,7 @@ export function SuccessCard() {
               <span className="mb-1 text-xs font-bold text-kinetic-on-surface-variant">
                 Reg ID
               </span>
-              <span className=" text-xl font-bold text-kinetic-primary-container">
+              <span className=" text-xl font-bold text-kinetic">
                 {registration.registration_id}
               </span>
             </div>

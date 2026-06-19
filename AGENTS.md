@@ -90,7 +90,7 @@ Required runtime variables are documented in `.env.example` and `project.md`.
 ## Brand & UI Tokens
 
 - The live digital UI uses the **Kinetic Dark** system in `Design.md` and `app/globals.css`.
-- Primary interactive accent: electric lime (`kinetic-primary-container`, `#d3ed86`).
+- Primary interactive accent: electric lime (`kinetic`, `#d3ed86`).
 - Coral (`secondary`, `#ffb4ab`) is reserved for live/urgent status accents (e.g. event banner).
 - Legacy `#990011` in `.cursorrules` is the original print/brand red; prefer kinetic lime tokens for in-app CTAs and focus states.
 - Display typography: **Anybody**. Body: **Plus Jakarta Sans**.
