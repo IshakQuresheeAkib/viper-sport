@@ -102,6 +102,9 @@ export function RegistrationClosed() {
             <Home className="size-5" aria-hidden="true" />
             Back to Home
           </Button>
+          <Button fullWidth href="/get-your-card" variant="neutral">
+            Already Registered? Get Your Card
+          </Button>
           <p className="text-xs leading-relaxed text-kinetic-outline">
             Already registered? Open the confirmation link from your SMS to view
             your QR pass.

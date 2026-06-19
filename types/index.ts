@@ -37,3 +37,11 @@ export type CheckInResponse = {
 };
 
 export type AdminStatusFilter = "all" | "checked_in" | "pending";
+
+export type CardRegistration = {
+  registration_id: string;
+  first_name: string;
+  last_name: string;
+};
+
+export type CardStep = "validate" | "upload" | "generating" | "done" | "error";
