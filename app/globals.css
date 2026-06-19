@@ -1,16 +1,11 @@
 @import "tailwindcss";
 
 :root {
-  --foreground: #1d1a1a;
   --primary: #990011;
   --primary-foreground: #ffffff;
 }
 
 @theme inline {
-  --color-foreground: var(--foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-background: #decfcd;
   --color-secondary: #f86d6c;
   --color-kinetic-surface: #13140d;
   --color-kinetic-charcoal: #262324;
@@ -25,7 +20,6 @@
   --color-kinetic-surface-bright: #393a32;
   --color-kinetic-surface-container: #1f2019;
   --color-kinetic-surface-container-high: #292b23;
-  --font-body: var(--font-plus-jakarta);
   --font-display: var(--font-baloo-tamma-2);
 }
 
@@ -95,24 +89,10 @@ select {
   margin-inline: auto;
 }
 
-.surface {
-  background: color-mix(in srgb, var(--card) 92%, var(--background));
-  border: 1px solid var(--border);
-  box-shadow: 0 18px 55px rgb(74 20 24 / 10%);
-}
-
 .glass-card {
   background: rgb(255 255 255 / 5%);
   backdrop-filter: blur(12px);
   border: 1px solid rgb(255 255 255 / 10%);
-}
-
-.hero-mask {
-  mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
-}
-
-.hero-glow {
-  box-shadow: 0 0 20px rgb(153 0 17 / 40%);
 }
 
 .glow-border {
@@ -297,12 +277,6 @@ select {
   .hero-name-card p {
     margin-top: 0.5rem;
     font-size: 0.65rem;
-  }
-
-  .hero-social-link {
-    width: 2.25rem;
-    height: 2.25rem;
-    font-size: 0.625rem;
   }
 }
 
