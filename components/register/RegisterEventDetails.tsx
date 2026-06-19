@@ -3,16 +3,15 @@ import { Calendar, Globe, Star, Trophy } from "lucide-react";
 export function RegisterEventDetails() {
   return (
     <section className="kinetic-glass-card flex flex-col gap-8 rounded-xl p-6 sm:p-8 md:p-10">
-
       <div className="h-px w-full bg-linear-to-r from-transparent via-white/20 to-transparent" />
 
       <div className="flex flex-col gap-6">
-        <h3 className="font-display text-xl font-bold text-kinetic-primary md:text-2xl">
+        <h3 className=" text-xl font-bold text-kinetic-primary md:text-2xl">
           The Main Event
         </h3>
         <div className="grid grid-cols-1 gap-6 rounded-xl border border-white/5 bg-black/20 p-6 md:grid-cols-3 lg:p-8">
           <div className="flex flex-row items-start gap-4 md:flex-col md:items-start">
-            <span className="rounded-full bg-kinetic-surface-tint/10 p-3 text-kinetic-surface-tint md:p-4">
+            <span className="rounded-full bg-kinetic-dark/10 p-3 text-kinetic-dark md:p-4">
               <Trophy className="size-5 md:size-6" aria-hidden="true" />
             </span>
             <div>
@@ -25,7 +24,7 @@ export function RegisterEventDetails() {
             </div>
           </div>
           <div className="flex flex-row items-start gap-4 md:flex-col md:items-start">
-            <span className="rounded-full bg-kinetic-surface-tint/10 p-3 text-kinetic-surface-tint md:p-4">
+            <span className="rounded-full bg-kinetic-dark/10 p-3 text-kinetic-dark md:p-4">
               <Calendar className="size-5 md:size-6" aria-hidden="true" />
             </span>
             <div>
@@ -38,7 +37,7 @@ export function RegisterEventDetails() {
             </div>
           </div>
           <div className="flex flex-row items-start gap-4 md:flex-col md:items-start">
-            <span className="rounded-full bg-kinetic-surface-tint/10 p-3 text-kinetic-surface-tint md:p-4">
+            <span className="rounded-full bg-kinetic-dark/10 p-3 text-kinetic-dark md:p-4">
               <Star className="size-5 md:size-6" aria-hidden="true" />
             </span>
             <div>

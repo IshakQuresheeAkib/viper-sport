@@ -28,16 +28,16 @@ function formatDate(value: string) {
 function StatusBadge({ checkedIn }: { checkedIn: boolean }) {
   if (checkedIn) {
     return (
-      <span className="inline-flex items-center gap-1.5 rounded-full border border-kinetic-primary-container/30 bg-kinetic-primary-container/10 px-2.5 py-1 text-xs font-bold uppercase text-kinetic-primary-container">
-        <span className="size-1.5 rounded-full bg-kinetic-primary-container" />
+      <span className="inline-flex items-center gap-1.5 rounded-full border border-kinetic/30 bg-kinetic/10 px-2.5 py-1 text-xs font-bold uppercase text-kinetic">
+        <span className="size-1.5 rounded-full bg-kinetic" />
         Checked-in
       </span>
     );
   }
 
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full border border-kinetic-outline-variant bg-kinetic-surface-bright px-2.5 py-1 text-xs font-bold uppercase text-kinetic-on-surface-variant">
-      <span className="size-1.5 rounded-full bg-kinetic-outline-variant" />
+    <span className="inline-flex items-center gap-1.5 rounded-full border border-white/60 bg-kinetic-surface-bright px-2.5 py-1 text-xs font-bold uppercase text-kinetic-on-surface-variant">
+      <span className="size-1.5 rounded-full bg-white/60" />
       Pending
     </span>
   );
@@ -113,7 +113,7 @@ export function RegistrationsTable({
   }
 
   return (
-    <section className="mt-2 flex flex-col overflow-hidden rounded-2xl border border-white/5 bg-kinetic-surface-container-low lg:p-6">
+    <section className="mt-2 flex flex-col overflow-hidden rounded-2xl border border-white/5 bg-white/5 lg:p-6">
       <div className="flex flex-col gap-3 border-b border-white/5 px-4 pb-4 lg:px-0">
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div className="relative w-full md:max-w-[400px]">
@@ -127,7 +127,7 @@ export function RegistrationsTable({
             <input
               id="registrations-search"
               aria-label="Search registrations by name, phone, or ID"
-              className="w-full rounded-lg border border-kinetic-outline-variant bg-kinetic-surface-container-high py-2.5 pl-10 pr-4 text-kinetic-on-surface transition-colors placeholder:text-kinetic-on-surface-variant/50 focus:border-kinetic-primary-container focus:outline-none focus:ring-1 focus:ring-kinetic-primary-container"
+              className="w-full rounded-lg border border-white/60 bg-white/10 py-2.5 pl-10 pr-4 text-kinetic-on-surface transition-colors placeholder:text-kinetic-on-surface-variant/50 focus:border-kinetic focus:outline-none focus:ring-1 focus:ring-kinetic"
               onChange={(event) => setSearchTerm(event.target.value)}
               placeholder="Search name or phone..."
               value={searchTerm}
@@ -145,7 +145,7 @@ export function RegistrationsTable({
                   onClick={() => setStatusFilter(option.value)}
                   className={`rounded-full px-4 py-2 text-xs normal-case whitespace-nowrap ${
                     statusFilter !== option.value
-                      ? "border-kinetic-outline-variant bg-kinetic-surface-container-highest text-kinetic-on-surface-variant shadow-none hover:bg-kinetic-surface-bright"
+                      ? "border-white/60 bg-white/10 text-kinetic-on-surface-variant shadow-none hover:bg-kinetic-surface-bright"
                       : ""
                   }`}
                 >
@@ -157,7 +157,7 @@ export function RegistrationsTable({
               type="button"
               variant="neutral"
               onClick={exportCsv}
-              className="rounded-full border-kinetic-outline-variant bg-kinetic-surface-container-highest px-4 py-2 text-sm normal-case text-kinetic-on-surface-variant hover:bg-kinetic-surface-bright"
+              className="rounded-full border-white/60 bg-white/10 px-4 py-2 text-sm normal-case text-kinetic-on-surface-variant hover:bg-kinetic-surface-bright"
             >
               <Download className="size-4" aria-hidden="true" />
               CSV
@@ -177,13 +177,13 @@ export function RegistrationsTable({
               key={registration.id}
               className={`relative grid grid-cols-1 items-center gap-1 px-1 sm:px-4 py-3 transition-colors md:grid-cols-12 md:gap-4 ${
                 registration.checked_in
-                  ? "admin-data-strip bg-kinetic-surface-container hover:bg-kinetic-surface-container-highest"
-                  : "border-l-2 border-transparent bg-kinetic-surface-container hover:bg-kinetic-surface-container-highest"
+                  ? "admin-data-strip bg-kinetic-surface-container hover:bg-white/10"
+                  : "border-l-2 border-transparent bg-kinetic-surface-container hover:bg-white/10"
               }`}
             >
               <div className="col-span-1 flex items-center gap-3 md:col-span-5">
                 <div
-                  className={`hidden sm:flex size-10 items-center justify-center rounded-full border border-kinetic-outline-variant bg-kinetic-surface-bright font-display text-sm font-bold ${
+                  className={`hidden sm:flex size-10 items-center justify-center rounded-full border border-white/60 bg-kinetic-surface-bright  text-sm font-bold ${
                     registration.checked_in
                       ? "text-kinetic-primary"
                       : "text-kinetic-on-surface-variant"
@@ -195,10 +195,10 @@ export function RegistrationsTable({
                   <h3 className="font-bold text-kinetic-on-surface">
                     {registration.first_name} {registration.last_name}
                   </h3>
-                  <p className="mt-0.5 font-mono text-xs text-kinetic-on-surface-variant">
+                  <p className="mt-0.5  text-xs text-kinetic-on-surface-variant">
                     {registration.phone}
                   </p>
-                  <p className="mt-1 font-mono text-xs text-kinetic-primary-container/90">
+                  <p className="mt-1  text-xs text-kinetic/90">
                     {registration.registration_id}
                   </p>
                   <p className="mt-0.5 text-xs text-kinetic-on-surface-variant">
@@ -207,7 +207,7 @@ export function RegistrationsTable({
                 </div>
               </div>
               <div className="hidden md:col-span-4 md:block">
-                <p className="font-mono text-sm text-kinetic-on-surface-variant">
+                <p className=" text-sm text-kinetic-on-surface-variant">
                   {registration.phone}
                 </p>
               </div>
@@ -240,7 +240,7 @@ export function RegistrationsTable({
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-kinetic-surface-container-highest bg-kinetic-surface">
+          <tbody className="divide-y divide-white/10 bg-kinetic-surface">
             {filtered.length === 0 ? (
               <tr>
                 <td
@@ -254,14 +254,14 @@ export function RegistrationsTable({
               filtered.map((registration) => (
                 <tr
                   key={registration.id}
-                  className={`transition-colors hover:bg-kinetic-surface-container-highest ${
+                  className={`transition-colors hover:bg-white/10 ${
                     registration.checked_in ? "admin-data-strip" : ""
                   }`}
                 >
                   <td className="whitespace-nowrap px-4 py-4">
                     <div className="flex items-center gap-3">
                       <div
-                        className={`flex size-10 items-center justify-center rounded-full border border-kinetic-outline-variant bg-kinetic-surface-bright font-display text-sm font-bold ${
+                        className={`flex size-10 items-center justify-center rounded-full border border-white/60 bg-kinetic-surface-bright  text-sm font-bold ${
                           registration.checked_in
                             ? "text-kinetic-primary"
                             : "text-kinetic-on-surface-variant"
@@ -275,12 +275,12 @@ export function RegistrationsTable({
                     </div>
                   </td>
                   <td className="whitespace-nowrap px-4 py-4">
-                    <p className="font-mono text-sm text-kinetic-on-surface-variant">
+                    <p className=" text-sm text-kinetic-on-surface-variant">
                       {registration.phone}
                     </p>
                   </td>
                   <td className="whitespace-nowrap px-4 py-4">
-                    <span className="rounded bg-kinetic-surface-bright px-2 py-1 font-mono text-sm text-kinetic-on-surface">
+                    <span className="rounded bg-kinetic-surface-bright px-2 py-1  text-sm text-kinetic-on-surface">
                       {registration.registration_id}
                     </span>
                   </td>

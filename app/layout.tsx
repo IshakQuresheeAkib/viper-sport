@@ -1,34 +1,24 @@
 import type { Metadata } from "next";
 import {
-  Anybody,
-  Geist,
-  Geist_Mono,
   Plus_Jakarta_Sans,
+  Baloo_Tamma_2
+
 } from "next/font/google";
 import "./globals.css";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Toaster } from "@/components/ui/Toaster";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-const anybody = Anybody({
-  variable: "--font-anybody",
-  subsets: ["latin"],
-  weight: ["700", "800"],
-});
 
 const plusJakarta = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta",
   subsets: ["latin"],
-  weight: ["400", "700"],
+  weight: ["400", "500", "600", "700", "800"],
+});
+  
+const balooTamma2 = Baloo_Tamma_2({
+  variable: "--font-baloo-tamma-2",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -56,7 +46,7 @@ export default function RootLayout({
     <html data-scroll-behavior="smooth" lang="en">
       <SpeedInsights />
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${anybody.variable} ${plusJakarta.variable}`}
+        className={` ${plusJakarta.variable} ${balooTamma2.variable}`}
         suppressHydrationWarning
       >
         {children}

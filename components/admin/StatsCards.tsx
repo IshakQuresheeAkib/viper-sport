@@ -28,7 +28,7 @@ export function StatsCards({
       value: formatStatValue(total),
       icon: Users,
       progress: 100,
-      progressClass: "bg-kinetic-secondary-fixed-dim",
+      progressClass: "bg-kinetic-secondary",
       active: false,
     },
     {
@@ -38,7 +38,7 @@ export function StatsCards({
       icon: ClipboardCheck,
       progress: checkedInPercent,
       progressClass:
-        "bg-linear-to-r from-kinetic-primary-container to-kinetic-primary-fixed shadow-[0_0_10px_rgba(211,237,134,0.8)]",
+        "bg-linear-to-r from-kinetic to-kinetic shadow-[0_0_10px_rgba(211,237,134,0.8)]",
       active: true,
     },
     {
@@ -46,7 +46,7 @@ export function StatsCards({
       value: formatStatValue(remaining),
       icon: Clock3,
       progress: total > 0 ? Math.round((remaining / total) * 100) : 0,
-      progressClass: "bg-kinetic-secondary-fixed-dim",
+      progressClass: "bg-kinetic-secondary",
       active: false,
       footer: "Awaiting arrival",
     },
@@ -61,13 +61,11 @@ export function StatsCards({
           <div
             key={card.label}
             className={`admin-glass-card relative flex flex-col justify-between overflow-hidden rounded-xl p-4 md:p-6 ${
-              card.active
-                ? "admin-glow-active border-kinetic-primary-container/50"
-                : ""
+              card.active ? "admin-glow-active border-kinetic/50" : ""
             } ${card.label === "Remaining" ? "col-span-2 md:col-span-1" : "col-span-1"}`}
           >
             {card.active ? (
-              <div className="pointer-events-none absolute inset-0 z-0 bg-kinetic-primary-container/5" />
+              <div className="pointer-events-none absolute inset-0 z-0 bg-kinetic/5" />
             ) : null}
             <div className="absolute right-0 top-0 p-3 opacity-20">
               <Icon
@@ -79,21 +77,21 @@ export function StatsCards({
               <p
                 className={`mb-1 text-xs font-bold uppercase ${
                   card.active
-                    ? "flex items-center gap-2 text-kinetic-primary-container"
+                    ? "flex items-center gap-2 text-kinetic"
                     : "text-kinetic-on-surface-variant"
                 }`}
               >
                 {card.label}
                 {card.active ? (
-                  <span className="size-2 motion-safe:animate-pulse rounded-full bg-kinetic-primary-container" />
+                  <span className="size-2 motion-safe:animate-pulse rounded-full bg-kinetic" />
                 ) : null}
               </p>
               <div className="flex items-baseline gap-2">
-                <span className="font-display text-4xl font-extrabold tracking-tighter text-kinetic-primary md:text-6xl">
+                <span className=" text-4xl font-medium  text-kinetic-primary md:text-6xl">
                   {card.value}
                 </span>
                 {"suffix" in card && card.suffix ? (
-                  <span className="text-sm font-bold text-kinetic-primary-container/80">
+                  <span className="text-sm font-bold text-kinetic/80">
                     {card.suffix}
                   </span>
                 ) : null}

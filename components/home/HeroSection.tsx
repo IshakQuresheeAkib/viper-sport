@@ -64,9 +64,7 @@ export function HeroSection() {
       <header className="absolute inset-x-0 top-0 z-40 flex items-center px-4 py-4 lg:hidden">
         <div className="flex items-center gap-3">
           <Circle className="size-5 fill-white text-white" aria-hidden="true" />
-          <span className="font-display text-2xl font-bold tracking-tighter text-white">
-            ViperSport
-          </span>
+          <span className=" text-2xl font-bold  text-white">ViperSport</span>
         </div>
       </header>
 
@@ -78,14 +76,14 @@ export function HeroSection() {
             data-hero-animate
             className="hero-name-card glass-card rounded-3xl border border-white/10 p-7 shadow-2xl backdrop-blur-xl lg:p-9"
           >
-            <h1 className="font-display text-[2.75rem] font-extrabold uppercase leading-[0.88] tracking-tighter text-white lg:text-[4rem]">
+            <h1 className="text-[2.75rem] font-medium uppercase text-kinetic-primary lg:text-[4rem]">
               Fuad
               <br />
-              <span className="text-kinetic-primary-container">
-                Abdul&#8209;Aziz
+              <span className="font-extrabold text-kinetic-coral">
+                Abdul-Aziz
               </span>
             </h1>
-            <p className="mt-3 text-xs font-bold uppercase tracking-[0.2em] text-kinetic-primary-container lg:text-sm">
+            <p className="mt-3 text-xs font-bold uppercase tracking-[0.2em] text-kinetic lg:text-sm">
               Founder of ViperSport
             </p>
           </div>
@@ -97,7 +95,7 @@ export function HeroSection() {
 
           {/* CTA */}
           <div data-hero-animate>
-            <Button variant="lime" fullWidth href="/register">
+            <Button variant="coral" fullWidth href="/register">
               Register The Event
               <ArrowRight className="size-5" aria-hidden="true" />
             </Button>
@@ -115,9 +113,7 @@ export function HeroScrollHint() {
         className="mx-auto mb-4 size-10 text-kinetic-secondary"
         aria-hidden="true"
       />
-      <p className="font-body text-base text-kinetic-secondary">
-        Scroll for more
-      </p>
+      <p className=" text-base text-kinetic-secondary">Scroll for more</p>
     </section>
   );
 }

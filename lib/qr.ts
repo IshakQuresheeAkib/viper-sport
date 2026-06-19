@@ -1,3 +1,4 @@
+import { kineticColors } from "@/lib/kinetic-colors";
 import QRCode from "qrcode";
 
 export async function createQrDataUrl(data: string) {
@@ -6,8 +7,8 @@ export async function createQrDataUrl(data: string) {
     scale: 8,
     errorCorrectionLevel: "M",
     color: {
-      dark: "#990011",
-      light: "#ffffff"
-    }
+      dark: kineticColors.onPrimaryContainer,
+      light: kineticColors.primary,
+    },
   });
 }

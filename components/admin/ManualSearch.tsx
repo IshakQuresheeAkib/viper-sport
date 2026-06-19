@@ -96,7 +96,7 @@ export function ManualSearch({
 
       <div aria-live="polite" aria-atomic="true" className="min-h-5">
         {message ? (
-          <p className="text-center text-sm font-semibold text-kinetic-primary-container">
+          <p className="text-center text-sm font-semibold text-kinetic">
             {message}
           </p>
         ) : null}
@@ -117,18 +117,18 @@ export function ManualSearch({
                 onClick={() => setSelectedId(registration.id)}
                 className={`flex w-full cursor-pointer items-center justify-start gap-3 rounded-xl border px-4 py-3 text-left transition-colors ${
                   selected?.id === registration.id
-                    ? "admin-glow-active border-kinetic-primary-container/30 bg-kinetic-surface-container-high"
-                    : "border-white/5 bg-kinetic-surface-container hover:bg-kinetic-surface-container-high"
+                    ? "admin-glow-active border-kinetic/30 bg-white/10"
+                    : "border-white/5 bg-kinetic-surface-container hover:bg-white/10"
                 }`}
               >
-                <div className="flex size-10 items-center justify-center rounded-full border border-kinetic-outline-variant bg-kinetic-surface-bright font-display text-sm font-bold text-kinetic-primary">
+                <div className="flex size-10 items-center justify-center rounded-full border border-white/60 bg-kinetic-surface-bright  text-sm font-bold text-kinetic-primary">
                   {getInitials(registration)}
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-bold text-kinetic-on-surface">
                     {registration.first_name} {registration.last_name}
                   </p>
-                  <p className="truncate font-mono text-xs text-kinetic-on-surface-variant">
+                  <p className="truncate text-xs text-kinetic-on-surface-variant">
                     {registration.phone} · {registration.registration_id}
                   </p>
                 </div>
@@ -139,13 +139,13 @@ export function ManualSearch({
       ) : null}
 
       {selected ? (
-        <div className="admin-glass-card admin-glow-active overflow-hidden rounded-xl border-t-2 border-t-kinetic-primary-container">
+        <div className="admin-glass-card admin-glow-active overflow-hidden rounded-xl border-t-2 border-t-kinetic">
           <div className="flex items-center gap-4 border-b border-white/10 p-6">
-            <div className="flex size-16 items-center justify-center rounded-full border border-white/5 bg-kinetic-surface-variant font-display text-xl font-bold text-kinetic-primary">
+            <div className="flex size-16 items-center justify-center rounded-full border border-white/5 bg-kinetic-surface-variant  text-xl font-bold text-kinetic-primary">
               {getInitials(selected)}
             </div>
             <div className="flex-1">
-              <h3 className="font-display text-xl font-bold text-kinetic-primary">
+              <h3 className=" text-xl font-bold text-kinetic-primary">
                 {selected.first_name} {selected.last_name}
               </h3>
               <p className="mt-1 text-xs font-bold uppercase tracking-widest text-kinetic-on-surface-variant">
@@ -158,7 +158,7 @@ export function ManualSearch({
               <span className="mb-1 block text-xs font-bold uppercase text-kinetic-on-surface-variant">
                 Phone
               </span>
-              <span className="font-display text-lg font-bold text-kinetic-on-surface">
+              <span className=" text-lg font-bold text-kinetic-on-surface">
                 {selected.phone}
               </span>
             </div>
@@ -166,8 +166,8 @@ export function ManualSearch({
               <span className="mb-1 block text-xs font-bold uppercase text-kinetic-on-surface-variant">
                 Status
               </span>
-              <span className="inline-flex items-center gap-1 text-xs font-bold uppercase text-kinetic-primary-container">
-                <span className="size-2 rounded-full bg-kinetic-primary-container" />
+              <span className="inline-flex items-center gap-1 text-xs font-bold uppercase text-kinetic">
+                <span className="size-2 rounded-full bg-kinetic" />
                 {selected.checked_in ? "Checked in" : "Clear"}
               </span>
             </div>
@@ -175,7 +175,7 @@ export function ManualSearch({
           <div className="p-6">
             <Button
               type="button"
-              variant="lime"
+              variant="coral"
               fullWidth
               disabled={selected.checked_in}
               onClick={() => void checkIn(selected.registration_id)}

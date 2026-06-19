@@ -1,3 +1,5 @@
+import { kineticColors } from "@/lib/kinetic-colors";
+
 type PassInput = {
   registrationId: string;
   firstName: string;
@@ -68,7 +70,7 @@ export async function buildPassImage(input: PassInput): Promise<string> {
   const H = PASS_HEIGHT;
 
   // --- Background ---
-  ctx.fillStyle = "#0f0f0f";
+  ctx.fillStyle = kineticColors.surface;
   ctx.fillRect(0, 0, W, H);
 
   // Subtle noise texture overlay via repeating tiny rectangles
@@ -80,12 +82,12 @@ export async function buildPassImage(input: PassInput): Promise<string> {
   }
 
   // Top accent bar
-  ctx.fillStyle = "#990011";
+  ctx.fillStyle = kineticColors.primaryContainer;
   ctx.fillRect(0, 0, W, 6);
 
   // --- Card body ---
   roundRect(ctx, 20, 20, W - 40, H - 40, 20);
-  ctx.fillStyle = "#1a1a1a";
+  ctx.fillStyle = kineticColors.surfaceContainer;
   ctx.fill();
   ctx.strokeStyle = "rgba(255,255,255,0.06)";
   ctx.lineWidth = 1;
@@ -93,20 +95,20 @@ export async function buildPassImage(input: PassInput): Promise<string> {
 
   // Top accent stripe on card
   roundRect(ctx, 20, 20, W - 40, 6, 4);
-  ctx.fillStyle = "#990011";
+  ctx.fillStyle = kineticColors.primaryContainer;
   ctx.fill();
 
   // --- Header row ---
   ctx.fillStyle = "rgba(255,255,255,0.04)";
   ctx.fillRect(20, 26, W - 40, 56);
 
-  ctx.fillStyle = "#ffffff";
+  ctx.fillStyle = kineticColors.primary;
   ctx.font = "bold 11px 'Courier New', monospace";
   ctx.letterSpacing = "4px";
   ctx.fillText("VIPERSPORT PASS", 40, 58);
   ctx.letterSpacing = "0px";
 
-  ctx.fillStyle = "#990011";
+  ctx.fillStyle = kineticColors.primaryContainer;
   ctx.font = "bold 11px 'Courier New', monospace";
   ctx.fillText(
     "●  VALID ENTRY",
@@ -129,12 +131,12 @@ export async function buildPassImage(input: PassInput): Promise<string> {
   ctx.fillText("MATCH EVENT", 40, 108);
   ctx.letterSpacing = "0px";
 
-  ctx.fillStyle = "#ffffff";
+  ctx.fillStyle = kineticColors.primary;
   ctx.font = "bold 26px Georgia, serif";
   ctx.fillText("Argentina vs Austria", 40, 138);
 
   // --- Date / Venue row ---
-  ctx.fillStyle = "#990011";
+  ctx.fillStyle = kineticColors.primaryContainer;
   ctx.font = "bold 12px sans-serif";
   ctx.fillText("22 June 2026, 9:00 PM", 40, 162);
 
@@ -161,7 +163,7 @@ export async function buildPassImage(input: PassInput): Promise<string> {
   ctx.fillText("TICKET HOLDER", 40, 220);
   ctx.letterSpacing = "0px";
 
-  ctx.fillStyle = "#ffffff";
+  ctx.fillStyle = kineticColors.primary;
   fitText(
     ctx,
     `${input.firstName} ${input.lastName}`,
@@ -178,7 +180,7 @@ export async function buildPassImage(input: PassInput): Promise<string> {
   ctx.fillText("REG ID", 40, 270);
   ctx.letterSpacing = "0px";
 
-  ctx.fillStyle = "#990011";
+  ctx.fillStyle = kineticColors.primaryContainer;
   ctx.font = "bold 18px 'Courier New', monospace";
   ctx.fillText(input.registrationId, 40, 294);
 
@@ -198,7 +200,7 @@ export async function buildPassImage(input: PassInput): Promise<string> {
   const qrY = 328;
 
   roundRect(ctx, qrX - 12, qrY - 12, QR_SIZE + 24, QR_SIZE + 24, 12);
-  ctx.fillStyle = "#ffffff";
+  ctx.fillStyle = kineticColors.primary;
   ctx.fill();
 
   const qrImg = await loadImage(input.qrDataUrl);

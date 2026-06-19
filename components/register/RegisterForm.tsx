@@ -110,7 +110,7 @@ export function RegisterForm({ variant = "card" }: RegisterFormProps) {
       />
 
       {formError ? (
-        <p role="alert" className="text-sm font-semibold text-kinetic-error">
+        <p role="alert" className="text-sm font-semibold text-kinetic-coral">
           {formError}
         </p>
       ) : null}
@@ -138,7 +138,7 @@ export function RegisterForm({ variant = "card" }: RegisterFormProps) {
   return (
     <section className="kinetic-glass-card rounded-xl p-6 sm:p-8 md:p-10">
       <div className="mb-8 text-center lg:text-left">
-        <h2 className="font-display text-2xl font-bold text-kinetic-primary md:text-3xl">
+        <h2 className=" text-2xl font-bold text-kinetic-primary md:text-3xl">
           Secure Your Spot
         </h2>
         <p className="mt-2 text-sm text-kinetic-on-surface-variant md:text-base">

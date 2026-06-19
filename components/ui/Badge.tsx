@@ -8,13 +8,13 @@ type BadgeProps = HTMLAttributes<HTMLSpanElement> & {
 };
 
 const tones: Record<BadgeTone, string> = {
-  lime: "border border-kinetic-primary-container/30 bg-kinetic-primary-container/10 text-kinetic-primary-container",
+  lime: "border border-kinetic/30 bg-kinetic/10 text-kinetic",
   coral:
-    "border border-kinetic-error/30 bg-kinetic-error/10 text-kinetic-error",
+    "border border-kinetic-coral/30 bg-kinetic-coral/10 text-kinetic-coral",
   neutral:
-    "border border-kinetic-outline-variant bg-kinetic-surface-bright text-kinetic-on-surface-variant",
+    "border border-white/60 bg-kinetic-surface-bright text-kinetic-on-surface-variant",
   pending:
-    "border border-kinetic-outline-variant bg-kinetic-surface-container text-kinetic-on-surface-variant",
+    "border border-white/60 bg-kinetic-surface-container text-kinetic-on-surface-variant",
 };
 
 export function Badge({ className, tone = "neutral", ...props }: BadgeProps) {

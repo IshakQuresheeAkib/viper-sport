@@ -197,7 +197,7 @@ export function QRScanner({ registrations }: QRScannerProps) {
 
   return (
     <section className="flex flex-col items-center">
-      <div className="relative size-72 overflow-hidden rounded-xl border border-kinetic-primary-container/30 admin-glass-card admin-glow-active md:size-96">
+      <div className="relative size-72 overflow-hidden rounded-xl border border-kinetic/30 admin-glass-card admin-glow-active md:size-96">
         <div
           id="qr-reader"
           className="absolute inset-0 z-0 [&>video]:size-full [&>video]:object-cover"
@@ -205,16 +205,13 @@ export function QRScanner({ registrations }: QRScannerProps) {
 
         {state === "idle" ? (
           <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-kinetic-surface-container/80 p-6 text-center">
-            <QrCode
-              className="mb-4 size-12 text-kinetic-primary-container"
-              aria-hidden="true"
-            />
+            <QrCode className="mb-4 size-12 text-kinetic" aria-hidden="true" />
             <p className="text-sm text-kinetic-on-surface-variant">
               Start the camera to scan attendee QR codes at the gate.
             </p>
             <Button
               type="button"
-              variant="lime"
+              variant="coral"
               onClick={() => void startScanner()}
               className="mt-6 px-4 py-2 text-sm normal-case"
             >
@@ -226,12 +223,12 @@ export function QRScanner({ registrations }: QRScannerProps) {
         {state !== "idle" ? (
           <>
             <div className="pointer-events-none absolute inset-4 z-20">
-              <div className="absolute left-0 top-0 size-8 rounded-tl-lg border-l-2 border-t-2 border-kinetic-primary-container" />
-              <div className="absolute right-0 top-0 size-8 rounded-tr-lg border-r-2 border-t-2 border-kinetic-primary-container" />
-              <div className="absolute bottom-0 left-0 size-8 rounded-bl-lg border-b-2 border-l-2 border-kinetic-primary-container" />
-              <div className="absolute bottom-0 right-0 size-8 rounded-br-lg border-b-2 border-r-2 border-kinetic-primary-container" />
+              <div className="absolute left-0 top-0 size-8 rounded-tl-lg border-l-2 border-t-2 border-kinetic" />
+              <div className="absolute right-0 top-0 size-8 rounded-tr-lg border-r-2 border-t-2 border-kinetic" />
+              <div className="absolute bottom-0 left-0 size-8 rounded-bl-lg border-b-2 border-l-2 border-kinetic" />
+              <div className="absolute bottom-0 right-0 size-8 rounded-br-lg border-b-2 border-r-2 border-kinetic" />
             </div>
-            <div className="scanner-line pointer-events-none absolute inset-x-0 z-20 h-1 bg-kinetic-primary-container shadow-[0_0_15px_rgba(227,254,149,0.8)]" />
+            <div className="scanner-line pointer-events-none absolute inset-x-0 z-20 h-1 bg-kinetic shadow-[0_0_15px_rgba(227,254,149,0.8)]" />
           </>
         ) : null}
 
@@ -251,7 +248,7 @@ export function QRScanner({ registrations }: QRScannerProps) {
         {state === "submitting" ? (
           <div className="absolute inset-0 z-30 flex items-center justify-center bg-kinetic-surface/70">
             <Loader2
-              className="size-10 animate-spin text-kinetic-primary-container"
+              className="size-10 animate-spin text-kinetic"
               aria-hidden="true"
             />
           </div>
@@ -260,7 +257,7 @@ export function QRScanner({ registrations }: QRScannerProps) {
 
       <div className="mt-6 flex items-center gap-2 rounded-full border border-white/5 bg-kinetic-surface-variant/80 px-4 py-2">
         <Focus
-          className="size-4 animate-pulse text-kinetic-primary-container"
+          className="size-4 animate-pulse text-kinetic"
           aria-hidden="true"
         />
         <span className="text-xs font-bold uppercase text-kinetic-on-surface">
@@ -276,20 +273,18 @@ export function QRScanner({ registrations }: QRScannerProps) {
         className="mt-4 min-h-5 text-center"
       >
         {message ? (
-          <p className="text-sm font-semibold text-kinetic-primary-container">
-            {message}
-          </p>
+          <p className="text-sm font-semibold text-kinetic">{message}</p>
         ) : null}
       </div>
 
       {result ? (
-        <div className="admin-glass-card admin-glow-active mt-8 w-full max-w-md overflow-hidden rounded-xl border-t-2 border-t-kinetic-primary-container">
+        <div className="admin-glass-card admin-glow-active mt-8 w-full max-w-md overflow-hidden rounded-xl border-t-2 border-t-kinetic">
           <div className="flex items-center gap-4 border-b border-white/10 p-6">
-            <div className="flex size-16 items-center justify-center overflow-hidden rounded-full border border-white/5 bg-kinetic-surface-variant font-display text-xl font-bold text-kinetic-primary">
+            <div className="flex size-16 items-center justify-center overflow-hidden rounded-full border border-white/5 bg-kinetic-surface-variant  text-xl font-bold text-kinetic-primary">
               {getInitials(result)}
             </div>
             <div className="flex-1">
-              <h3 className="font-display text-xl font-bold text-kinetic-primary">
+              <h3 className=" text-xl font-bold text-kinetic-primary">
                 {result.first_name} {result.last_name}
               </h3>
               <p className="mt-1 text-xs font-bold uppercase tracking-widest text-kinetic-on-surface-variant">
@@ -302,7 +297,7 @@ export function QRScanner({ registrations }: QRScannerProps) {
               <span className="mb-1 block text-xs font-bold uppercase text-kinetic-on-surface-variant">
                 Phone
               </span>
-              <span className="font-display text-lg font-bold text-kinetic-on-surface">
+              <span className=" text-lg font-bold text-kinetic-on-surface">
                 {result.phone}
               </span>
             </div>
@@ -310,8 +305,8 @@ export function QRScanner({ registrations }: QRScannerProps) {
               <span className="mb-1 block text-xs font-bold uppercase text-kinetic-on-surface-variant">
                 Status
               </span>
-              <span className="inline-flex items-center gap-1 text-xs font-bold uppercase text-kinetic-primary-container">
-                <span className="size-2 rounded-full bg-kinetic-primary-container" />
+              <span className="inline-flex items-center gap-1 text-xs font-bold uppercase text-kinetic">
+                <span className="size-2 rounded-full bg-kinetic" />
                 {result.checked_in ? "Checked in" : "Clear"}
               </span>
             </div>
@@ -319,7 +314,7 @@ export function QRScanner({ registrations }: QRScannerProps) {
           <div className="p-6">
             <Button
               type="button"
-              variant="lime"
+              variant="coral"
               fullWidth
               disabled={result.checked_in}
               onClick={() => void submitCheckIn(result.registration_id)}

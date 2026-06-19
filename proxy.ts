@@ -1,9 +1,20 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 
+const ADMIN_PROTECTED_PREFIXES = [
+  "/admin/dashboard",
+  "/admin/checkin",
+] as const;
+
+function isAdminProtectedPath(pathname: string): boolean {
+  return ADMIN_PROTECTED_PREFIXES.some(
+    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
+  );
+}
+
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({
-    request
+    request,
   });
 
   const supabase = createServerClient(
@@ -15,19 +26,21 @@ export async function proxy(request: NextRequest) {
           return request.cookies.getAll();
         },
         setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
+          cookiesToSet.forEach(({ name, value }) =>
+            request.cookies.set(name, value),
+          );
           response = NextResponse.next({ request });
           cookiesToSet.forEach(({ name, value, options }) => {
             response.cookies.set(name, value, options);
           });
-        }
-      }
-    }
+        },
+      },
+    },
   );
 
   const user = await supabase.auth.getUser();
 
-  if (!user.data.user) {
+  if (isAdminProtectedPath(request.nextUrl.pathname) && !user.data.user) {
     const url = request.nextUrl.clone();
     url.pathname = "/admin";
     return NextResponse.redirect(url);
@@ -37,5 +50,11 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/dashboard", "/admin/dashboard/:path*", "/admin/checkin", "/admin/checkin/:path*"]
+  matcher: [
+    "/register",
+    "/admin/dashboard",
+    "/admin/dashboard/:path*",
+    "/admin/checkin",
+    "/admin/checkin/:path*",
+  ],
 };

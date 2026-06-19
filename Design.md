@@ -34,7 +34,7 @@ colors:
   error-container: "#93000a"
   on-error-container: "#ffdad6"
   primary-fixed: "#d3ed86"
-  primary-fixed-dim: "#b7d16d"
+  dark: "#b7d16d"
   on-primary-fixed: "#161f00"
   on-primary-fixed-variant: "#3c4d00"
   secondary-fixed: "#ebe0dd"
@@ -172,7 +172,7 @@ Larger containers and cards may use **rounded-lg (0.5rem)** to differentiate the
 
 ## Implementation Reference
 
-Token names map to Tailwind utilities in `app/globals.css` (e.g. `bg-kinetic-surface`, `text-kinetic-primary-container`, `glass-card`, `glow-border`, `kinetic-glass-card`).
+Token names map to Tailwind utilities in `app/globals.css` (e.g. `bg-kinetic-surface`, `text-kinetic`, `glass-card`, `glow-border`, `kinetic-glass-card`).
 
 ### Home page components
 

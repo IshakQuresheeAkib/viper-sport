@@ -21,7 +21,7 @@ export default async function RegisterPage() {
   }
 
   return (
-    <main className="relative flex min-h-svh flex-col items-center overflow-x-hidden bg-kinetic-charcoal px-4 py-12 font-body text-kinetic-on-surface md:px-8 lg:px-12">
+    <main className="relative flex min-h-svh flex-col items-center overflow-x-hidden bg-kinetic-charcoal px-4 py-12  text-kinetic-on-surface md:px-8 lg:px-12">
       <div className="pointer-events-none fixed inset-0 -z-10">
         <Image
           src="/images/home/profile.webp"
@@ -36,17 +36,17 @@ export default async function RegisterPage() {
 
       <header className="mb-6 mt-2 w-full max-w-6xl text-center lg:mb-8 lg:mt-4">
         <Link href="/">
-          <h1 className="font-display text-4xl font-extrabold tracking-tighter text-kinetic-primary drop-shadow-lg md:text-6xl lg:text-7xl">
-            Viper sport
+          <h1 className="font-display text-4xl font-medium  text-kinetic-primary drop-shadow-lg md:text-6xl lg:text-7xl">
+            ViperSport
           </h1>
         </Link>
-        <p className="mt-2 text-sm font-bold uppercase tracking-widest text-kinetic-primary-fixed-dim md:text-base">
+        <p className="mt-2 text-sm font-bold uppercase tracking-widest text-kinetic-dark md:text-base">
           Live Broadcast Experience
         </p>
       </header>
 
       {closed && isAdmin ? (
-        <div className="mb-6 w-full max-w-6xl rounded-lg border border-kinetic-primary-container/30 bg-kinetic-primary-container/10 px-4 py-3 text-center text-sm text-kinetic-primary-container">
+        <div className="mb-6 w-full max-w-6xl rounded-lg border border-kinetic/30 bg-kinetic/10 px-4 py-3 text-center text-sm text-kinetic">
           Admin access — registration is closed to the public.
         </div>
       ) : null}

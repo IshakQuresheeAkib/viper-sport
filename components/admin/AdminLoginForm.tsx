@@ -42,7 +42,7 @@ export function AdminLoginForm() {
 
   return (
     <div className="relative border border-white/5 bg-kinetic-surface-container/80 p-6 shadow-2xl backdrop-blur-md">
-      <div className="absolute inset-x-0 top-0 h-0.5 bg-linear-to-r from-transparent via-kinetic-outline-variant to-transparent" />
+      <div className="absolute inset-x-0 top-0 h-0.5 bg-linear-to-r from-transparent via-white/60 to-transparent" />
 
       <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
         <KineticInput
@@ -68,7 +68,7 @@ export function AdminLoginForm() {
         />
 
         {errors.root ? (
-          <p role="alert" className="text-sm font-semibold text-kinetic-error">
+          <p role="alert" className="text-sm font-semibold text-kinetic-coral">
             {errors.root.message}
           </p>
         ) : null}
@@ -78,7 +78,7 @@ export function AdminLoginForm() {
             type="submit"
             fullWidth
             loading={isSubmitting}
-            variant="lime"
+            variant="coral"
             className="group relative justify-between overflow-hidden py-4 text-lg"
           >
             <span className="relative z-10 tracking-wide">

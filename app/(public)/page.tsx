@@ -10,7 +10,7 @@ import { StatsSection } from "@/components/home/StatsSection";
 
 export default function HomePage() {
   return (
-    <main className="bg-kinetic-surface pb-24 font-body text-kinetic-on-surface md:pb-0">
+    <main className="bg-kinetic-surface pb-24 text-kinetic-on-surface md:pb-0">
       <DesktopNavbar />
       <HeroSection />
       <StatsSection />
