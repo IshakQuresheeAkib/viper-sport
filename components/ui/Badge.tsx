@@ -9,7 +9,8 @@ type BadgeProps = HTMLAttributes<HTMLSpanElement> & {
 
 const tones: Record<BadgeTone, string> = {
   lime: "border border-kinetic-primary-container/30 bg-kinetic-primary-container/10 text-kinetic-primary-container",
-  coral: "border border-secondary/30 bg-secondary/10 text-secondary",
+  coral:
+    "border border-kinetic-coral/30 bg-kinetic-coral/10 text-kinetic-coral",
   neutral:
     "border border-white/60 bg-kinetic-surface-bright text-kinetic-on-surface-variant",
   pending:

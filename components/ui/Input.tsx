@@ -74,7 +74,7 @@ export const KineticInput = forwardRef<HTMLInputElement, KineticInputProps>(
         <div
           className={cn(
             "group glass-input flex h-12 items-center rounded-lg px-3 md:h-14 md:px-4",
-            error && "border-secondary/60",
+            error && "border-kinetic-coral/60",
           )}
         >
           {icon ? (
@@ -121,7 +121,7 @@ export const KineticInput = forwardRef<HTMLInputElement, KineticInputProps>(
           <p
             id={errorId}
             role="alert"
-            className="text-sm font-semibold text-secondary"
+            className="text-sm font-semibold text-kinetic-coral"
           >
             {error}
           </p>

@@ -12,7 +12,7 @@ export function Toaster() {
             "kinetic-glass-card border border-white/10 bg-kinetic-surface-container text-kinetic-on-surface  shadow-lg",
           title: "font-semibold text-kinetic-primary",
           description: "text-kinetic-on-surface-variant",
-          error: "border-secondary/40",
+          error: "border-kinetic-coral/40",
         },
       }}
     />

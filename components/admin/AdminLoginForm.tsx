@@ -68,7 +68,7 @@ export function AdminLoginForm() {
         />
 
         {errors.root ? (
-          <p role="alert" className="text-sm font-semibold text-secondary">
+          <p role="alert" className="text-sm font-semibold text-kinetic-coral">
             {errors.root.message}
           </p>
         ) : null}

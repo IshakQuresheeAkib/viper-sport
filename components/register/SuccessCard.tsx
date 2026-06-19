@@ -11,9 +11,14 @@ import { Button } from "@/components/ui/Button";
 import { createQrDataUrl } from "@/lib/qr";
 import { buildPassImage } from "@/lib/pass";
 import { shouldSkipAnimation } from "@/lib/animation";
+import { kineticColors } from "@/lib/kinetic-colors";
 import type { PublicRegistration } from "@/types";
 
-const CONFETTI_COLORS = ["#d3ed86", "#ffffff", "#c6c8b5"] as const;
+const CONFETTI_COLORS = [
+  kineticColors.primaryContainer,
+  kineticColors.primary,
+  kineticColors.onSurfaceVariant,
+] as const;
 
 interface ConfettiParticle {
   x: number;
@@ -36,7 +41,7 @@ function createParticle(canvas: HTMLCanvasElement): ConfettiParticle {
     size: Math.random() * 4 + 2,
     color:
       CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)] ??
-      "#d3ed86",
+      kineticColors.primaryContainer,
     alpha: 1,
     gravity: 0.3,
     drag: 0.96,

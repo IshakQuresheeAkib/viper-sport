@@ -23,7 +23,7 @@ function getVariantClasses(variant: ButtonVariant, active: boolean): string {
     case "lime":
       return "border-transparent bg-kinetic-primary-container text-kinetic-on-primary-container hover:bg-kinetic-primary-fixed-dim hover:shadow-[0_0_15px_rgba(211,237,134,0.3)]";
     case "coral":
-      return "border-transparent bg-secondary text-[#13140d] hover:brightness-95";
+      return "border-transparent bg-kinetic-coral text-kinetic-surface hover:brightness-95";
     case "neutral":
       return "border-kinetic-outline/20 bg-kinetic-charcoal text-kinetic-on-surface hover:bg-kinetic-surface-bright";
   }

@@ -22,7 +22,7 @@ export function RegistrationClosed() {
         className="pointer-events-none absolute inset-0 overflow-hidden"
         aria-hidden="true"
       >
-        <div className="absolute -right-1/4 top-1/4 size-[420px] rounded-full bg-secondary/8 blur-[120px]" />
+        <div className="absolute -right-1/4 top-1/4 size-[420px] rounded-full bg-kinetic-coral/8 blur-[120px]" />
         <div className="absolute -bottom-1/4 -left-1/4 size-[500px] rounded-full bg-kinetic-primary-container/5 blur-[100px]" />
       </div>
 
@@ -35,20 +35,20 @@ export function RegistrationClosed() {
       </header>
 
       <div
-        className="glass-card glow-border relative z-10 w-full max-w-lg overflow-hidden rounded-2xl border-t-2 border-secondary p-8 text-center shadow-2xl md:p-10"
+        className="glass-card glow-border relative z-10 w-full max-w-lg overflow-hidden rounded-2xl border-t-2 border-kinetic-coral p-8 text-center shadow-2xl md:p-10"
         role="alertdialog"
         aria-labelledby="registration-closed-title"
         aria-describedby="registration-closed-desc"
       >
-        <div className="pointer-events-none absolute top-0 right-0 size-28 rounded-bl-full bg-secondary/10 blur-2xl" />
+        <div className="pointer-events-none absolute top-0 right-0 size-28 rounded-bl-full bg-kinetic-coral/10 blur-2xl" />
 
-        <div className="relative mx-auto mb-6 flex size-16 items-center justify-center rounded-full border border-secondary/30 bg-secondary/10">
-          <TicketX className="size-8 text-secondary" aria-hidden="true" />
+        <div className="relative mx-auto mb-6 flex size-16 items-center justify-center rounded-full border border-kinetic-coral/30 bg-kinetic-coral/10">
+          <TicketX className="size-8 text-kinetic-coral" aria-hidden="true" />
         </div>
 
         <div className="relative mb-4 flex items-center justify-center gap-2">
-          <span className="size-2 animate-pulse rounded-full bg-secondary" />
-          <span className="text-xs font-bold uppercase tracking-[0.2em] text-secondary">
+          <span className="size-2 animate-pulse rounded-full bg-kinetic-coral" />
+          <span className="text-xs font-bold uppercase tracking-[0.2em] text-kinetic-coral">
             Registration Closed
           </span>
         </div>

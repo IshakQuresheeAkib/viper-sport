@@ -251,7 +251,10 @@ export function GetYourCardFlow() {
             />
 
             {formError ? (
-              <p role="alert" className="text-sm font-semibold text-secondary">
+              <p
+                role="alert"
+                className="text-sm font-semibold text-kinetic-coral"
+              >
                 {formError}
               </p>
             ) : null}
@@ -296,7 +299,7 @@ export function GetYourCardFlow() {
           {formError ? (
             <p
               role="alert"
-              className="mt-4 text-sm font-semibold text-secondary"
+              className="mt-4 text-sm font-semibold text-kinetic-coral"
             >
               {formError}
             </p>
@@ -383,7 +386,7 @@ export function GetYourCardFlow() {
 
       {step === "error" ? (
         <section className="glass-card glow-border rounded-2xl p-8 text-center shadow-2xl md:p-10">
-          <p role="alert" className="text-sm font-semibold text-secondary">
+          <p role="alert" className="text-sm font-semibold text-kinetic-coral">
             {error ?? "Something went wrong."}
           </p>
           <div className="mt-6 flex flex-col gap-3">

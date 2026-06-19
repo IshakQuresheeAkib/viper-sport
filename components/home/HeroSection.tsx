@@ -79,7 +79,9 @@ export function HeroSection() {
             <h1 className="text-[2.75rem] font-medium uppercase text-kinetic-primary lg:text-[4rem]">
               Fuad
               <br />
-              <span className="font-extrabold text-secondary">Abdul-Aziz</span>
+              <span className="font-extrabold text-kinetic-coral">
+                Abdul-Aziz
+              </span>
             </h1>
             <p className="mt-3 text-xs font-bold uppercase tracking-[0.2em] text-kinetic-primary-container lg:text-sm">
               Founder of ViperSport

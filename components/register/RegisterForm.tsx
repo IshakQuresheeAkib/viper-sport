@@ -110,7 +110,7 @@ export function RegisterForm({ variant = "card" }: RegisterFormProps) {
       />
 
       {formError ? (
-        <p role="alert" className="text-sm font-semibold text-secondary">
+        <p role="alert" className="text-sm font-semibold text-kinetic-coral">
           {formError}
         </p>
       ) : null}

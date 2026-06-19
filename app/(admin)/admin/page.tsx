@@ -15,7 +15,7 @@ export default function AdminLoginPage() {
         aria-hidden="true"
       >
         <div className="absolute -right-1/4 -top-1/4 size-[500px] rounded-full bg-kinetic-primary-container/5 blur-[100px]" />
-        <div className="absolute -bottom-1/4 -left-1/4 size-[600px] rounded-full bg-secondary/5 blur-[120px]" />
+        <div className="absolute -bottom-1/4 -left-1/4 size-[600px] rounded-full bg-kinetic-coral/5 blur-[120px]" />
       </div>
 
       <div className="relative z-10 w-full max-w-md">
@@ -40,7 +40,7 @@ export default function AdminLoginPage() {
 
         <div className="mt-8 flex flex-col items-center space-y-4">
           <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white/60">
-            <span className="size-2 animate-pulse rounded-full bg-secondary" />
+            <span className="size-2 animate-pulse rounded-full bg-kinetic-coral" />
             Secure Connection
           </p>
         </div>
