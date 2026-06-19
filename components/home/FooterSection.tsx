@@ -5,19 +5,20 @@ export function FooterSection() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative border-t border-white/5 bg-kinetic-surface-container-low pb-28 pt-16 md:pb-12">
+    <footer className="relative border-t border-white/5 bg-white/5 pb-28 pt-16 md:pb-12">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-kinetic-primary-container/30 to-transparent" />
 
       <div className="container flex flex-col items-center gap-10 text-center">
         <div className="space-y-3">
           <Link
             href="/"
-            className="font-display text-3xl font-extrabold uppercase tracking-tighter text-kinetic-primary transition-opacity duration-200 hover:opacity-80"
+            className=" text-3xl font-medium uppercase  text-kinetic-primary transition-opacity duration-200 hover:opacity-80"
           >
             ViperSport
           </Link>
           <p className="mx-auto max-w-md text-sm leading-relaxed text-kinetic-on-surface-variant">
-            Argentina vs Austria Live Show · 22 June 2026 · Kobi Nazrul Auditorium, Rikabibazar, Sylhet.
+            Argentina vs Austria Live Show · 22 June 2026 · Kobi Nazrul
+            Auditorium, Rikabibazar, Sylhet.
           </p>
         </div>
 

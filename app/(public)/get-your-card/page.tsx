@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function GetYourCardPage() {
   return (
-    <main className="relative flex min-h-svh flex-col items-center justify-center overflow-x-hidden bg-kinetic-charcoal px-4 py-12 font-body text-kinetic-on-surface md:px-8">
+    <main className="relative flex min-h-svh flex-col items-center justify-center overflow-x-hidden bg-kinetic-charcoal px-4 py-12  text-kinetic-on-surface md:px-8">
       <div className="pointer-events-none fixed inset-0 -z-10">
         <Image
           src="/images/home/profile.webp"
@@ -24,8 +24,8 @@ export default function GetYourCardPage() {
 
       <header className="relative z-10 mb-8 text-center">
         <Link href="/">
-          <h1 className="font-display text-3xl font-extrabold tracking-tighter text-kinetic-primary drop-shadow-lg md:text-5xl">
-            Viper sport
+          <h1 className="font-display text-3xl text-kinetic-primary drop-shadow-lg md:text-5xl">
+            Viper<span className="font-medium">Sport</span>
           </h1>
         </Link>
       </header>

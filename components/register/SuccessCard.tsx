@@ -197,9 +197,7 @@ export function SuccessCard() {
   if (!registrationId) {
     return (
       <div className="kinetic-glass-card max-w-md rounded-xl p-6 text-center">
-        <h1 className="font-display text-3xl font-bold">
-          Registration unavailable
-        </h1>
+        <h1 className=" text-3xl font-bold">Registration unavailable</h1>
         <p className="mt-3 text-kinetic-on-surface-variant">
           Missing registration ID.
         </p>
@@ -216,9 +214,7 @@ export function SuccessCard() {
   if (error) {
     return (
       <div className="kinetic-glass-card max-w-md rounded-xl p-6 text-center">
-        <h1 className="font-display text-3xl font-bold">
-          Registration unavailable
-        </h1>
+        <h1 className=" text-3xl font-bold">Registration unavailable</h1>
         <p className="mt-3 text-kinetic-on-surface-variant">{error}</p>
         <Link
           href="/register"
@@ -259,7 +255,7 @@ export function SuccessCard() {
             aria-hidden="true"
           />
         </div>
-        <h1 className="text-center font-display text-[2rem] font-extrabold text-kinetic-on-surface">
+        <h1 className="text-center  text-[2rem] font-medium text-kinetic-on-surface">
           You&apos;re In
         </h1>
       </div>
@@ -285,12 +281,12 @@ export function SuccessCard() {
             <span className="mb-1 block text-xs font-bold text-kinetic-on-surface-variant">
               Event
             </span>
-            <h2 className="font-display text-2xl font-bold text-kinetic-on-surface">
+            <h2 className=" text-2xl font-bold text-kinetic-on-surface">
               Argentina vs Austria
             </h2>
           </div>
           <div className="flex flex-col gap-1">
-            <span className="text-sm font-semibold text-kinetic-primary-fixed">
+            <span className="text-sm font-semibold text-kinetic-primary-container">
               22 June 2026 &middot; 9:00 PM
             </span>
             <span className="text-xs text-kinetic-on-surface-variant">
@@ -303,7 +299,7 @@ export function SuccessCard() {
           <div className="dash-divider mx-6 w-full" />
         </div>
 
-        <div className="flex flex-col items-center bg-kinetic-surface-container-low/50 px-6 pb-6">
+        <div className="flex flex-col items-center bg-white/5/50 px-6 pb-6">
           <div className="mb-6 flex w-full justify-between pt-3">
             <div className="flex flex-col">
               <span className="mb-1 text-xs font-bold text-kinetic-on-surface-variant">
@@ -317,7 +313,7 @@ export function SuccessCard() {
               <span className="mb-1 text-xs font-bold text-kinetic-on-surface-variant">
                 Reg ID
               </span>
-              <span className="font-display text-xl font-bold text-kinetic-primary-fixed">
+              <span className=" text-xl font-bold text-kinetic-primary-container">
                 {registration.registration_id}
               </span>
             </div>
@@ -349,7 +345,7 @@ export function SuccessCard() {
       >
         <Button
           type="button"
-          variant="lime"
+          variant="coral"
           onClick={() => void handleDownloadPass()}
           className="flex-1 rounded-full normal-case"
         >

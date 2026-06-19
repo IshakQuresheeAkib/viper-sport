@@ -65,7 +65,7 @@ export const KineticInput = forwardRef<HTMLInputElement, KineticInputProps>(
         {label ? (
           <label
             htmlFor={inputId}
-            className="text-[11px] font-bold uppercase tracking-wider text-kinetic-outline"
+            className="text-[11px] font-bold uppercase text-seconday tracking-wider"
           >
             {label}
           </label>
@@ -74,12 +74,12 @@ export const KineticInput = forwardRef<HTMLInputElement, KineticInputProps>(
         <div
           className={cn(
             "group glass-input flex h-12 items-center rounded-lg px-3 md:h-14 md:px-4",
-            error && "border-kinetic-error/60",
+            error && "border-secondary/60",
           )}
         >
           {icon ? (
             <span
-              className="mr-3 shrink-0 text-kinetic-outline-variant transition-colors duration-200 group-focus-within:text-kinetic-primary-container"
+              className="mr-3 shrink-0 text-white/60 transition-colors duration-200 group-focus-within:text-kinetic-primary-container"
               aria-hidden="true"
             >
               {icon}
@@ -105,7 +105,7 @@ export const KineticInput = forwardRef<HTMLInputElement, KineticInputProps>(
             <button
               type="button"
               onClick={() => setShowPassword((v) => !v)}
-              className="ml-2 shrink-0 cursor-pointer text-kinetic-outline transition-colors duration-200 hover:text-kinetic-on-surface"
+              className="ml-2 shrink-0 cursor-pointer text-white/50 transition-colors duration-200 hover:text-kinetic-on-surface"
               aria-label={showPassword ? "Hide password" : "Show password"}
             >
               {showPassword ? (
@@ -121,7 +121,7 @@ export const KineticInput = forwardRef<HTMLInputElement, KineticInputProps>(
           <p
             id={errorId}
             role="alert"
-            className="text-sm font-semibold text-kinetic-error"
+            className="text-sm font-semibold text-secondary"
           >
             {error}
           </p>

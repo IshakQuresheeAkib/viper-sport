@@ -15,7 +15,7 @@ const variantStyles: Record<
 > = {
   hero: {
     list: "flex gap-3 my-[4vh]",
-    link: "glass-card flex size-11 items-center justify-center rounded-full text-kinetic-on-surface text-kinetic-on-surface-variant transition-[background-color,box-shadow,color] duration-200 hover:border-kinetic-primary-container hover:bg-kinetic-primary-container hover:text-kinetic-on-primary-fixed hover:shadow-[0_0_12px_rgba(211,237,134,0.2)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kinetic-primary-container focus-visible:ring-offset-2 focus-visible:ring-offset-kinetic-charcoal hover:text-kinetic-primary-container",
+    link: "glass-card flex size-11 items-center justify-center rounded-full text-kinetic-on-surface text-kinetic-on-surface-variant transition-[background-color,box-shadow,color] duration-200 hover:border-kinetic-primary-container hover:bg-kinetic-primary-container hover:text-kinetic-on-primary-container hover:shadow-[0_0_12px_rgba(211,237,134,0.2)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kinetic-primary-container focus-visible:ring-offset-2 focus-visible:ring-offset-kinetic-charcoal hover:text-kinetic-primary-container",
     icon: "size-[18px]",
   },
   footer: {
@@ -25,7 +25,7 @@ const variantStyles: Record<
   },
   profile: {
     list: "flex flex-wrap gap-2.5",
-    link: "flex size-10 items-center justify-center rounded-full border border-white/10 bg-black/30 text-kinetic-on-surface transition-[background-color,border-color,box-shadow,color] duration-200 hover:border-kinetic-primary-container hover:bg-kinetic-primary-container hover:text-kinetic-on-primary-fixed hover:shadow-[0_0_14px_rgba(211,237,134,0.3)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kinetic-primary-container focus-visible:ring-offset-2 focus-visible:ring-offset-kinetic-charcoal",
+    link: "flex size-10 items-center justify-center rounded-full border border-white/10 bg-black/30 text-kinetic-on-surface transition-[background-color,border-color,box-shadow,color] duration-200 hover:border-kinetic-primary-container hover:bg-kinetic-primary-container hover:text-kinetic-on-primary-container hover:shadow-[0_0_14px_rgba(211,237,134,0.3)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kinetic-primary-container focus-visible:ring-offset-2 focus-visible:ring-offset-kinetic-charcoal",
     icon: "size-4",
   },
 };

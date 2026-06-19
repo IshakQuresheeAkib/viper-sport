@@ -12,7 +12,7 @@ export function ContactSection() {
           <p className="text-sm font-bold uppercase tracking-[0.2em] text-kinetic-primary-container">
             Contact
           </p>
-          <h2 className="mt-3 font-display text-3xl font-extrabold text-kinetic-primary sm:text-4xl">
+          <h2 className="mt-3  text-3xl font-medium text-kinetic-primary sm:text-4xl">
             Brand partnerships and event sponsorships.
           </h2>
         </div>
@@ -67,7 +67,7 @@ export function ContactSection() {
           </div>
           <Button
             type="submit"
-            variant="lime"
+            variant="coral"
             className="w-fit px-4 py-2 text-sm"
           >
             <Send size={17} /> Send inquiry

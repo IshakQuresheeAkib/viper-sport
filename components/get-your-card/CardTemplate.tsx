@@ -1,12 +1,5 @@
 import { forwardRef } from "react";
-import { Anton } from "next/font/google";
 import { CARD_HEIGHT, CARD_WIDTH } from "@/lib/card-constants";
-
-const anton = Anton({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-anton",
-});
 
 export interface CardTemplateProps {
   firstName: string;
@@ -27,7 +20,7 @@ function Pill({ icon, label }: { icon: React.ReactNode; label: string }) {
     >
       {icon}
       <span
-        className={`${anton.className} uppercase text-white`}
+        className={` uppercase text-white`}
         style={{ fontSize: 12, letterSpacing: "0.02em" }}
       >
         {label}
@@ -44,7 +37,7 @@ export const CardTemplate = forwardRef<HTMLDivElement, CardTemplateProps>(
       <div
         ref={ref}
         aria-hidden="true"
-        className={`pointer-events-none fixed left-0 overflow-hidden ${anton.variable}`}
+        className={`pointer-events-none fixed left-0 overflow-hidden`}
         style={{
           width: CARD_WIDTH,
           height: CARD_HEIGHT,
@@ -106,13 +99,13 @@ export const CardTemplate = forwardRef<HTMLDivElement, CardTemplateProps>(
           {/* ---- HEADLINE BLOCK, overlaid on lower photo ---- */}
           <div className="absolute inset-x-0 bottom-12 px-8">
             <p
-              className={`${anton.className} uppercase text-white`}
+              className={`font-display uppercase text-white`}
               style={{ fontSize: 64, letterSpacing: "0.01em" }}
             >
               MATCHDAY
             </p>
             <p
-              className={`${anton.className} uppercase`}
+              className={`font-display uppercase`}
               style={{ fontSize: 64, color: "#facc15", letterSpacing: "0.01em" }}
             >
               LIVE:
@@ -120,19 +113,19 @@ export const CardTemplate = forwardRef<HTMLDivElement, CardTemplateProps>(
 
             <div className="mt-3 flex flex-wrap items-center gap-2">
               <span
-                className={`${anton.className} inline-block -skew-x-6 px-4 py-1 uppercase text-white`}
+                className={` inline-block -skew-x-6 px-4 py-1 uppercase text-white`}
                 style={{ fontSize: 30, backgroundColor: ARG_BLUE }}
               >
                 ARGENTINA
               </span>
               <span
-                className={`${anton.className} uppercase`}
+                className={` uppercase`}
                 style={{ fontSize: 30, color: "#facc15" }}
               >
                 VS
               </span>
               <span
-                className={`${anton.className} inline-block -skew-x-6 px-4 py-1 uppercase text-white`}
+                className={` inline-block -skew-x-6 px-4 py-1 uppercase text-white`}
                 style={{ fontSize: 30, backgroundColor: AUT_RED }}
               >
                 AUSTRIA
@@ -140,10 +133,10 @@ export const CardTemplate = forwardRef<HTMLDivElement, CardTemplateProps>(
             </div>
 
             <p
-              className={`${anton.className} mt-1 uppercase`}
+              className={` mt-1 uppercase`}
               style={{ fontSize: 38, color: "#facc15" }}
             >
-              IN SYLHET
+              IN <span className="font-display">SYLHET</span>
             </p>
           </div>
         </div>

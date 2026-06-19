@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/Button";
 
 export function RegistrationClosed() {
   return (
-    <main className="relative flex min-h-svh flex-col items-center justify-center overflow-x-hidden bg-kinetic-charcoal px-4 py-12 font-body text-kinetic-on-surface md:px-8">
+    <main className="relative flex min-h-svh flex-col items-center justify-center overflow-x-hidden bg-kinetic-charcoal px-4 py-12  text-kinetic-on-surface md:px-8">
       <div className="pointer-events-none fixed inset-0 -z-10">
         <Image
           src="/images/home/profile.webp"
@@ -22,40 +22,40 @@ export function RegistrationClosed() {
         className="pointer-events-none absolute inset-0 overflow-hidden"
         aria-hidden="true"
       >
-        <div className="absolute -right-1/4 top-1/4 size-[420px] rounded-full bg-kinetic-error/8 blur-[120px]" />
+        <div className="absolute -right-1/4 top-1/4 size-[420px] rounded-full bg-secondary/8 blur-[120px]" />
         <div className="absolute -bottom-1/4 -left-1/4 size-[500px] rounded-full bg-kinetic-primary-container/5 blur-[100px]" />
       </div>
 
       <header className="relative z-10 mb-8 text-center">
         <Link href="/">
-          <h1 className="font-display text-3xl font-extrabold tracking-tighter text-kinetic-primary drop-shadow-lg md:text-5xl">
-            Viper sport
+          <h1 className="font-display text-3xl font-medium  text-kinetic-primary drop-shadow-lg md:text-5xl">
+            ViperSport
           </h1>
         </Link>
       </header>
 
       <div
-        className="glass-card glow-border relative z-10 w-full max-w-lg overflow-hidden rounded-2xl border-t-2 border-kinetic-error p-8 text-center shadow-2xl md:p-10"
+        className="glass-card glow-border relative z-10 w-full max-w-lg overflow-hidden rounded-2xl border-t-2 border-secondary p-8 text-center shadow-2xl md:p-10"
         role="alertdialog"
         aria-labelledby="registration-closed-title"
         aria-describedby="registration-closed-desc"
       >
-        <div className="pointer-events-none absolute top-0 right-0 size-28 rounded-bl-full bg-kinetic-error/10 blur-2xl" />
+        <div className="pointer-events-none absolute top-0 right-0 size-28 rounded-bl-full bg-secondary/10 blur-2xl" />
 
-        <div className="relative mx-auto mb-6 flex size-16 items-center justify-center rounded-full border border-kinetic-error/30 bg-kinetic-error/10">
-          <TicketX className="size-8 text-kinetic-error" aria-hidden="true" />
+        <div className="relative mx-auto mb-6 flex size-16 items-center justify-center rounded-full border border-secondary/30 bg-secondary/10">
+          <TicketX className="size-8 text-secondary" aria-hidden="true" />
         </div>
 
         <div className="relative mb-4 flex items-center justify-center gap-2">
-          <span className="size-2 animate-pulse rounded-full bg-kinetic-error" />
-          <span className="text-xs font-bold uppercase tracking-[0.2em] text-kinetic-error">
+          <span className="size-2 animate-pulse rounded-full bg-secondary" />
+          <span className="text-xs font-bold uppercase tracking-[0.2em] text-secondary">
             Registration Closed
           </span>
         </div>
 
         <h2
           id="registration-closed-title"
-          className="relative font-display text-3xl font-extrabold uppercase leading-tight tracking-tighter text-kinetic-primary md:text-4xl"
+          className="relative  text-3xl font-medium uppercase leading-tight  text-kinetic-primary md:text-4xl"
         >
           All Seats Are{" "}
           <span className="text-kinetic-primary-container">Filled</span>
@@ -98,7 +98,7 @@ export function RegistrationClosed() {
         </div>
 
         <div className="relative mt-8 flex flex-col gap-3">
-          <Button fullWidth href="/" variant="lime">
+          <Button fullWidth href="/" variant="coral">
             <Home className="size-5" aria-hidden="true" />
             Back to Home
           </Button>

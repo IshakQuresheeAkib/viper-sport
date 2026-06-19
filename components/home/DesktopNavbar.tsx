@@ -149,7 +149,7 @@ export function DesktopNavbar() {
               aria-hidden="true"
             />
           </span>
-          <span className="font-display text-xl font-bold tracking-tighter text-white">
+          <span className=" text-xl font-bold  text-white">
             Viper<span className="text-kinetic-primary-container">Sport</span>
           </span>
         </Link>
@@ -191,7 +191,7 @@ export function DesktopNavbar() {
         <div data-nav-animate className="flex shrink-0 items-center">
           <Link
             href="/register"
-            className="retro-btn clip-retro-sm inline-flex cursor-pointer items-center gap-1.5 bg-kinetic-primary-container px-4 py-2 font-display text-xs font-bold uppercase text-kinetic-on-primary-container transition-all duration-200 hover:shadow-[0_0_18px_rgba(211,237,134,0.45)]"
+            className="retro-btn clip-retro-sm inline-flex cursor-pointer items-center gap-1.5 bg-kinetic-primary-container px-4 py-2  text-xs font-bold uppercase text-kinetic-on-primary-container transition-all duration-200 hover:shadow-[0_0_18px_rgba(211,237,134,0.45)]"
           >
             Register
             <ArrowRight className="size-3.5" aria-hidden="true" />

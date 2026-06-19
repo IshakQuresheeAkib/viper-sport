@@ -70,7 +70,7 @@ export function StatsSection() {
             className="glass-card flex flex-col items-center justify-center rounded-xl p-6 lg:p-12 glow-border"
           >
             <p
-              className="font-display text-[2rem] font-extrabold text-kinetic-primary-container lg:text-5xl"
+              className=" text-[2rem] font-medium text-kinetic-primary-container lg:text-5xl"
               aria-live="polite"
             >
               <span data-count={stat.value}>{stat.value}</span>

@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function RegistrationSuccessPage() {
   return (
-    <main className="relative flex min-h-svh items-center justify-center overflow-hidden bg-kinetic-charcoal px-4 py-12 font-body text-kinetic-on-surface">
+    <main className="relative flex min-h-svh items-center justify-center overflow-hidden bg-kinetic-charcoal px-4 py-12  text-kinetic-on-surface">
       <div className="container flex justify-center">
         <Suspense
           fallback={

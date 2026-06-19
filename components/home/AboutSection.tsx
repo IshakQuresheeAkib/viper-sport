@@ -6,7 +6,7 @@ export function AboutSection() {
           <p className="text-sm font-bold uppercase tracking-[0.2em] text-kinetic-primary-container">
             About
           </p>
-          <h2 className="mt-3 font-display text-3xl font-extrabold leading-tight text-kinetic-primary sm:text-4xl">
+          <h2 className="mt-3  text-3xl font-medium leading-tight text-kinetic-primary sm:text-4xl">
             Bangladesh-born football voice with global reach.
           </h2>
         </div>

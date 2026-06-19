@@ -28,7 +28,7 @@ export function StatsCards({
       value: formatStatValue(total),
       icon: Users,
       progress: 100,
-      progressClass: "bg-kinetic-secondary-fixed-dim",
+      progressClass: "bg-kinetic-secondary",
       active: false,
     },
     {
@@ -38,7 +38,7 @@ export function StatsCards({
       icon: ClipboardCheck,
       progress: checkedInPercent,
       progressClass:
-        "bg-linear-to-r from-kinetic-primary-container to-kinetic-primary-fixed shadow-[0_0_10px_rgba(211,237,134,0.8)]",
+        "bg-linear-to-r from-kinetic-primary-container to-kinetic-primary-container shadow-[0_0_10px_rgba(211,237,134,0.8)]",
       active: true,
     },
     {
@@ -46,7 +46,7 @@ export function StatsCards({
       value: formatStatValue(remaining),
       icon: Clock3,
       progress: total > 0 ? Math.round((remaining / total) * 100) : 0,
-      progressClass: "bg-kinetic-secondary-fixed-dim",
+      progressClass: "bg-kinetic-secondary",
       active: false,
       footer: "Awaiting arrival",
     },
@@ -89,7 +89,7 @@ export function StatsCards({
                 ) : null}
               </p>
               <div className="flex items-baseline gap-2">
-                <span className="font-display text-4xl font-extrabold tracking-tighter text-kinetic-primary md:text-6xl">
+                <span className=" text-4xl font-medium  text-kinetic-primary md:text-6xl">
                   {card.value}
                 </span>
                 {"suffix" in card && card.suffix ? (

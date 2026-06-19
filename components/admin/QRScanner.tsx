@@ -214,7 +214,7 @@ export function QRScanner({ registrations }: QRScannerProps) {
             </p>
             <Button
               type="button"
-              variant="lime"
+              variant="coral"
               onClick={() => void startScanner()}
               className="mt-6 px-4 py-2 text-sm normal-case"
             >
@@ -285,11 +285,11 @@ export function QRScanner({ registrations }: QRScannerProps) {
       {result ? (
         <div className="admin-glass-card admin-glow-active mt-8 w-full max-w-md overflow-hidden rounded-xl border-t-2 border-t-kinetic-primary-container">
           <div className="flex items-center gap-4 border-b border-white/10 p-6">
-            <div className="flex size-16 items-center justify-center overflow-hidden rounded-full border border-white/5 bg-kinetic-surface-variant font-display text-xl font-bold text-kinetic-primary">
+            <div className="flex size-16 items-center justify-center overflow-hidden rounded-full border border-white/5 bg-kinetic-surface-variant  text-xl font-bold text-kinetic-primary">
               {getInitials(result)}
             </div>
             <div className="flex-1">
-              <h3 className="font-display text-xl font-bold text-kinetic-primary">
+              <h3 className=" text-xl font-bold text-kinetic-primary">
                 {result.first_name} {result.last_name}
               </h3>
               <p className="mt-1 text-xs font-bold uppercase tracking-widest text-kinetic-on-surface-variant">
@@ -302,7 +302,7 @@ export function QRScanner({ registrations }: QRScannerProps) {
               <span className="mb-1 block text-xs font-bold uppercase text-kinetic-on-surface-variant">
                 Phone
               </span>
-              <span className="font-display text-lg font-bold text-kinetic-on-surface">
+              <span className=" text-lg font-bold text-kinetic-on-surface">
                 {result.phone}
               </span>
             </div>
@@ -319,7 +319,7 @@ export function QRScanner({ registrations }: QRScannerProps) {
           <div className="p-6">
             <Button
               type="button"
-              variant="lime"
+              variant="coral"
               fullWidth
               disabled={result.checked_in}
               onClick={() => void submitCheckIn(result.registration_id)}

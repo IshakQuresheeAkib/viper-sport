@@ -47,14 +47,14 @@ export function AdminShell({
   }
 
   return (
-    <div className="flex min-h-svh bg-kinetic-surface font-body text-kinetic-on-surface antialiased">
-      <aside className="relative z-50 hidden h-svh w-[280px] shrink-0 flex-col border-r border-kinetic-outline/30 bg-kinetic-surface-container-low lg:flex">
+    <div className="flex min-h-svh bg-kinetic-surface  text-kinetic-on-surface antialiased">
+      <aside className="relative z-50 hidden h-svh w-[280px] shrink-0 flex-col border-r border-kinetic-outline/30 bg-white/5 lg:flex">
         <div className="flex items-center gap-3 px-6 py-8">
           <div className="flex items-center justify-center rounded-full bg-kinetic-primary-container/10 p-2 text-kinetic-primary">
             <LayoutDashboard className="size-5" aria-hidden="true" />
           </div>
-          <h1 className="font-display text-xl font-bold uppercase tracking-tighter text-kinetic-primary">
-            Viper sport
+          <h1 className="font-display text-xl font-bold uppercase  text-kinetic-primary">
+            ViperSport
           </h1>
         </div>
 
@@ -75,7 +75,7 @@ export function AdminShell({
                   "flex items-center gap-3 rounded-xl px-4 py-3 transition-colors",
                   active
                     ? "border border-kinetic-primary-container/20 bg-kinetic-primary-container/10 text-kinetic-primary"
-                    : "text-kinetic-secondary-fixed-dim hover:bg-kinetic-surface-container-highest hover:text-kinetic-primary",
+                    : "text-kinetic-secondary hover:bg-white/60 hover:text-kinetic-primary",
                 )}
               >
                 <Icon className="size-5" aria-hidden="true" />
@@ -91,7 +91,7 @@ export function AdminShell({
           <button
             type="button"
             onClick={handleSignOut}
-            className="flex w-full cursor-pointer items-center justify-start gap-3 rounded-xl px-4 py-3 text-xs font-bold uppercase text-kinetic-secondary-fixed-dim transition-colors hover:bg-kinetic-surface-container-highest hover:text-kinetic-primary"
+            className="flex w-full cursor-pointer items-center justify-start gap-3 rounded-xl px-4 py-3 text-xs font-bold uppercase text-kinetic-secondary transition-colors hover:bg-kinetic-surface-container-high hover:text-kinetic-primary"
           >
             <LogOut className="size-5" aria-hidden="true" />
             Sign out
@@ -100,7 +100,7 @@ export function AdminShell({
       </aside>
 
       <div className="relative flex min-h-svh flex-1 flex-col overflow-hidden">
-        <header className="sticky top-0 z-40 shrink-0 bg-linear-to-b from-kinetic-surface-dim/80 to-transparent backdrop-blur-md lg:hidden">
+        <header className="sticky top-0 z-40 shrink-0 bg-linear-to-b from-kinetic-surface/80 to-transparent backdrop-blur-md lg:hidden">
           <div className="flex h-16 items-center justify-between px-4">
             <Link
               href="/admin/dashboard"
@@ -109,8 +109,8 @@ export function AdminShell({
             >
               <LayoutDashboard className="size-5" aria-hidden="true" />
             </Link>
-            <p className="font-display text-lg font-bold uppercase tracking-tighter text-kinetic-primary">
-              Viper sport
+            <p className="font-display text-lg font-bold uppercase  text-kinetic-primary">
+              ViperSport
             </p>
             <div className="size-9" aria-hidden="true" />
           </div>
@@ -123,7 +123,7 @@ export function AdminShell({
                 <p className="mb-1 text-xs font-bold uppercase tracking-widest text-kinetic-primary-container">
                   {eyebrow}
                 </p>
-                <h2 className="font-display text-3xl font-extrabold text-kinetic-primary lg:text-5xl">
+                <h2 className=" text-3xl font-medium text-kinetic-primary lg:text-5xl">
                   {title}
                 </h2>
               </div>
@@ -153,7 +153,7 @@ export function AdminShell({
                     "flex flex-col items-center justify-center transition-transform active:scale-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-kinetic-primary-container",
                     active
                       ? "rounded-full bg-kinetic-primary-container/10 px-4 py-1 text-kinetic-primary shadow-[0_0_15px_rgba(227,254,149,0.3)]"
-                      : "text-kinetic-secondary-fixed-dim opacity-60 hover:text-kinetic-primary",
+                      : "text-kinetic-secondary opacity-60 hover:text-kinetic-primary",
                   )}
                 >
                   <Icon className="mb-1 size-5" aria-hidden="true" />
@@ -165,7 +165,7 @@ export function AdminShell({
             })}
             <Link
               href="/"
-              className="flex flex-col items-center justify-center text-kinetic-secondary-fixed-dim opacity-60 transition-transform hover:text-kinetic-primary active:scale-90"
+              className="flex flex-col items-center justify-center text-kinetic-secondary opacity-60 transition-transform hover:text-kinetic-primary active:scale-90"
             >
               <Home className="mb-1 size-5" aria-hidden="true" />
               <span className="text-[10px] font-bold uppercase">Home</span>
@@ -174,7 +174,7 @@ export function AdminShell({
               type="button"
               onClick={handleSignOut}
               aria-label="Sign out"
-              className="flex cursor-pointer flex-col text-kinetic-secondary-fixed-dim opacity-60 transition-transform hover:text-kinetic-primary active:scale-90"
+              className="flex cursor-pointer flex-col text-kinetic-secondary opacity-60 transition-transform hover:text-kinetic-primary active:scale-90"
             >
               <LogOut className="mb-1 size-5" aria-hidden="true" />
               <span className="text-[10px] font-bold uppercase">Sign out</span>
@@ -190,7 +190,7 @@ export function AdminScanQrLink() {
   return (
     <Button
       href="/admin/checkin"
-      variant="lime"
+      variant="coral"
       className="w-full px-6 py-3 text-sm sm:w-auto lg:text-base"
     >
       <QrCode className="size-5" aria-hidden="true" />

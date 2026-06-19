@@ -35,14 +35,11 @@ The live UI uses the **Kinetic Dark** system defined in `Design.md` and `app/glo
 
 - **Surface:** `#13140d` (dark charcoal)
 - **Primary accent:** Electric lime `#d3ed86` (`kinetic-primary-container`) — CTAs, focus, glow borders
-- **Live / urgent:** Coral `#ffb4ab` (`kinetic-error`) — event banner, live indicators
+- **Live / urgent:** Coral `#ffb4ab` (`secondary`) — event banner, live indicators
 - **On-surface text:** `#e4e3d8` with secondary cream `#cec4c2`
-- **Display font:** Anybody (700/800) — hero, headings, stats
+- **Display font:** Baloo Tamma 2 (500/600/700/800) — hero, headings, stats
 - **Body font:** Plus Jakarta Sans (400/700) — paragraphs, forms, admin UI
-- **Utility font:** Geist Sans / Geist Mono (layout defaults)
-- **Legacy print red:** `#990011` — original brand; prefer kinetic lime tokens in-app
-
----
+- **Utility font:** Plus Jakarta Sans (400/700) — paragraphs, forms, admin UI
 
 ## Development Workflow
 

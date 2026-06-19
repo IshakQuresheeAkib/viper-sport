@@ -227,7 +227,7 @@ export function GetYourCardFlow() {
       {step === "validate" ? (
         <section className="glass-card glow-border rounded-2xl border-t-2 border-kinetic-primary-container/40 p-8 shadow-2xl md:p-10">
           <div className="mb-8 text-center">
-            <h2 className="font-plus-jakarta text-3xl font-extrabold uppercase tracking-tighter text-kinetic-primary md:text-4xl">
+            <h2 className=" text-3xl font-medium uppercase  text-kinetic-primary md:text-4xl">
               Get Your{" "}
               <span className="text-kinetic-primary-container">Card</span>
             </h2>
@@ -251,10 +251,7 @@ export function GetYourCardFlow() {
             />
 
             {formError ? (
-              <p
-                role="alert"
-                className="text-sm font-semibold text-kinetic-error"
-              >
+              <p role="alert" className="text-sm font-semibold text-secondary">
                 {formError}
               </p>
             ) : null}
@@ -270,7 +267,7 @@ export function GetYourCardFlow() {
       {step === "upload" && registration ? (
         <section className="glass-card glow-border rounded-2xl border-t-2 border-kinetic-primary-container/40 p-8 shadow-2xl md:p-10">
           <div className="mb-6 text-center">
-            <h2 className="font-display text-2xl font-extrabold uppercase tracking-tighter text-kinetic-primary md:text-3xl">
+            <h2 className=" text-2xl font-medium uppercase  text-kinetic-primary md:text-3xl">
               Upload Your Photo
             </h2>
             <p className="mt-2 text-sm text-kinetic-secondary">
@@ -299,7 +296,7 @@ export function GetYourCardFlow() {
           {formError ? (
             <p
               role="alert"
-              className="mt-4 text-sm font-semibold text-kinetic-error"
+              className="mt-4 text-sm font-semibold text-secondary"
             >
               {formError}
             </p>
@@ -338,7 +335,7 @@ export function GetYourCardFlow() {
       {step === "done" && registration && cardDataUrl ? (
         <section className="glass-card glow-border rounded-2xl border-t-2 border-kinetic-primary-container/40 p-8 shadow-2xl md:p-10">
           <div className="mb-6 text-center">
-            <h2 className="font-plus-jakarta text-2xl font-extrabold uppercase tracking-tighter text-kinetic-primary md:text-3xl">
+            <h2 className="font-plus-jakarta text-2xl font-medium uppercase  text-kinetic-primary md:text-3xl">
               Your Card Is Ready
             </h2>
             <p className="mt-2 text-sm text-kinetic-secondary">
@@ -386,7 +383,7 @@ export function GetYourCardFlow() {
 
       {step === "error" ? (
         <section className="glass-card glow-border rounded-2xl p-8 text-center shadow-2xl md:p-10">
-          <p role="alert" className="text-sm font-semibold text-kinetic-error">
+          <p role="alert" className="text-sm font-semibold text-secondary">
             {error ?? "Something went wrong."}
           </p>
           <div className="mt-6 flex flex-col gap-3">

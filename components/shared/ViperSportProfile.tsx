@@ -18,8 +18,8 @@ export function ViperSportProfile() {
           <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-kinetic-primary-container">
             ViperSport
           </p>
-          <h2 className="font-display text-2xl font-extrabold uppercase tracking-tighter text-kinetic-primary">
-            Fuad Abdul-Aziz
+          <h2 className="text-2xl uppercase text-kinetic-primary">
+            Fuad <span className="font-extrabold">Abdul-Aziz</span>
           </h2>
         </div>
       </div>
