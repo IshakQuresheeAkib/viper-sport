@@ -21,6 +21,17 @@ export function preloadImage(src: string): Promise<void> {
   });
 }
 
+function waitForImageElement(image: HTMLImageElement): Promise<void> {
+  if (image.complete && image.naturalWidth > 0) {
+    return Promise.resolve();
+  }
+
+  return new Promise<void>((resolve, reject) => {
+    image.onload = () => resolve();
+    image.onerror = () => reject(new Error("Failed to load image for card."));
+  });
+}
+
 async function waitForCardImage(
   node: HTMLElement,
   selfieUrl: string,
@@ -28,17 +39,12 @@ async function waitForCardImage(
   await document.fonts.ready;
   await waitForNextFrame();
 
-  const image = node.querySelector("img");
+  const images = node.querySelectorAll("img");
 
-  if (image) {
-    if (image.complete && image.naturalWidth > 0) {
-      return;
-    }
-
-    await new Promise<void>((resolve, reject) => {
-      image.onload = () => resolve();
-      image.onerror = () => reject(new Error("Failed to load photo for card."));
-    });
+  if (images.length > 0) {
+    await Promise.all(
+      Array.from(images).map((image) => waitForImageElement(image)),
+    );
     return;
   }
 

@@ -11,6 +11,8 @@ const PHOTO_HEIGHT = 460;
 const INFO_HEIGHT = CARD_HEIGHT - PHOTO_HEIGHT;
 const ARG_BLUE = "#75AADB";
 const AUT_RED = "#ED1C24";
+const MATCHDAY_HEADLINE_SRC = "/images/home/matchday.webp";
+
 
 function Pill({ icon, label }: { icon: React.ReactNode; label: string }) {
   return (
@@ -30,9 +32,7 @@ function Pill({ icon, label }: { icon: React.ReactNode; label: string }) {
 }
 
 export const CardTemplate = forwardRef<HTMLDivElement, CardTemplateProps>(
-  function CardTemplate({ firstName, lastName, selfieUrl }, ref) {
-    const fullName = `${firstName} ${lastName}`.trim();
-
+  function CardTemplate({ selfieUrl }, ref) {
     return (
       <div
         ref={ref}
@@ -46,16 +46,32 @@ export const CardTemplate = forwardRef<HTMLDivElement, CardTemplateProps>(
         }}
       >
         {/* grain texture, full-card, drawn once via SVG filter — renders as static noise in canvas capture */}
-        <svg className="absolute inset-0" width={CARD_WIDTH} height={CARD_HEIGHT}>
+        <svg
+          className="absolute inset-0"
+          width={CARD_WIDTH}
+          height={CARD_HEIGHT}
+        >
           <filter id="grain">
-            <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" result="noise" />
-            <feColorMatrix in="noise" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.05 0" />
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency="0.9"
+              numOctaves="2"
+              result="noise"
+            />
+            <feColorMatrix
+              in="noise"
+              type="matrix"
+              values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.05 0"
+            />
           </filter>
           <rect width="100%" height="100%" filter="url(#grain)" />
         </svg>
 
         {/* ---- PHOTO ZONE ---- */}
-        <div className="relative w-full overflow-hidden" style={{ height: PHOTO_HEIGHT }}>
+        <div
+          className="relative w-full overflow-hidden"
+          style={{ height: PHOTO_HEIGHT }}
+        >
           {/* html-to-image capture requires a raw img — next/image breaks canvas export */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -79,9 +95,9 @@ export const CardTemplate = forwardRef<HTMLDivElement, CardTemplateProps>(
           <div
             className="absolute inset-x-0 bottom-0"
             style={{
-              height: 280,
+              height: 220,
               background:
-                "linear-gradient(to top, #0a0a08 0%, rgba(10,10,8,0.75) 55%, rgba(10,10,8,0) 100%)",
+                "linear-gradient(to top, #0a0a08 0%, rgba(10,10,8,0.65) 55%, rgba(10,10,8,0) 100%)",
             }}
           />
 
@@ -93,74 +109,43 @@ export const CardTemplate = forwardRef<HTMLDivElement, CardTemplateProps>(
             viewBox={`0 0 ${CARD_WIDTH} 48`}
             preserveAspectRatio="none"
           >
-            <polygon points={`0,48 ${CARD_WIDTH},14 ${CARD_WIDTH},48`} fill="#0a0a08" />
+            <polygon
+              points={`0,48 ${CARD_WIDTH},14 ${CARD_WIDTH},48`}
+              fill="#0a0a08"
+            />
           </svg>
 
           {/* ---- HEADLINE BLOCK, overlaid on lower photo ---- */}
-          <div className="absolute inset-x-0 bottom-12 px-8">
-            <p
-              className={`font-display uppercase text-white`}
-              style={{ fontSize: 64, letterSpacing: "0.01em" }}
-            >
-              MATCHDAY
-            </p>
-            <p
-              className={`font-display uppercase`}
-              style={{ fontSize: 64, color: "#facc15", letterSpacing: "0.01em" }}
-            >
-              LIVE:
-            </p>
-
-            <div className="mt-3 flex flex-wrap items-center gap-2">
-              <span
-                className={` inline-block -skew-x-6 px-4 py-1 uppercase text-white`}
-                style={{ fontSize: 30, backgroundColor: ARG_BLUE }}
-              >
-                ARGENTINA
-              </span>
-              <span
-                className={` uppercase`}
-                style={{ fontSize: 30, color: "#facc15" }}
-              >
-                VS
-              </span>
-              <span
-                className={` inline-block -skew-x-6 px-4 py-1 uppercase text-white`}
-                style={{ fontSize: 30, backgroundColor: AUT_RED }}
-              >
-                AUSTRIA
-              </span>
-            </div>
-
-            <p
-              className={` mt-1 uppercase`}
-              style={{ fontSize: 38, color: "#facc15" }}
-            >
-              IN <span className="font-display">SYLHET</span>
-            </p>
+          <div className="absolute inset-x-0 -bottom-6 w-10/12 -left-6 z-10">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={MATCHDAY_HEADLINE_SRC}
+                alt=""
+                crossOrigin="anonymous"
+                className="block w-full object-contain object-left drop-shadow-[0_6px_20px_rgba(0,0,0,0.55)]"
+              />
           </div>
         </div>
 
         {/* ---- INFO PANEL ---- */}
         <div
-          className="relative flex flex-col justify-between px-8"
+          className="relative flex flex-col justify-center px-8 gap-6"
           style={{ height: INFO_HEIGHT, backgroundColor: "#0a0a08" }}
         >
           {/* registrant name, secondary line */}
-          <div className="flex items-center gap-3 mb-2">
+          <div className="flex items-center gap-3">
             <span
-              className="inline-block rounded-full"
-              style={{ width: 8, height: 8, backgroundColor: AUT_RED }}
+              className="inline-block rounded-full size-4"
+              style={{ backgroundColor: AUT_RED }}
             />
             <p
-              className="font-bold uppercase tracking-[0.15em]"
+              className="font-bold uppercase tracking-[0.15em] text-kinetic-coral"
               style={{
                 fontFamily: "var(--font-plus-jakarta), sans-serif",
                 fontSize: 22,
-                color: AUT_RED,
               }}
             >
-              {fullName} is going
+              I am going to the event
             </p>
           </div>
 
@@ -169,10 +154,39 @@ export const CardTemplate = forwardRef<HTMLDivElement, CardTemplateProps>(
             <Pill
               icon={
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                  <rect x="3" y="4" width="18" height="18" rx="2" stroke="#facc15" strokeWidth="2" />
-                  <line x1="3" y1="9" x2="21" y2="9" stroke="#facc15" strokeWidth="2" />
-                  <line x1="8" y1="2" x2="8" y2="6" stroke="#facc15" strokeWidth="2" />
-                  <line x1="16" y1="2" x2="16" y2="6" stroke="#facc15" strokeWidth="2" />
+                  <rect
+                    x="3"
+                    y="4"
+                    width="18"
+                    height="18"
+                    rx="2"
+                    stroke="#facc15"
+                    strokeWidth="2"
+                  />
+                  <line
+                    x1="3"
+                    y1="9"
+                    x2="21"
+                    y2="9"
+                    stroke="#facc15"
+                    strokeWidth="2"
+                  />
+                  <line
+                    x1="8"
+                    y1="2"
+                    x2="8"
+                    y2="6"
+                    stroke="#facc15"
+                    strokeWidth="2"
+                  />
+                  <line
+                    x1="16"
+                    y1="2"
+                    x2="16"
+                    y2="6"
+                    stroke="#facc15"
+                    strokeWidth="2"
+                  />
                 </svg>
               }
               label="22ND JUNE"
@@ -180,8 +194,19 @@ export const CardTemplate = forwardRef<HTMLDivElement, CardTemplateProps>(
             <Pill
               icon={
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                  <circle cx="12" cy="12" r="9" stroke="#facc15" strokeWidth="2" />
-                  <path d="M12 7v5l4 2" stroke="#facc15" strokeWidth="2" strokeLinecap="round" />
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="9"
+                    stroke="#facc15"
+                    strokeWidth="2"
+                  />
+                  <path
+                    d="M12 7v5l4 2"
+                    stroke="#facc15"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
                 </svg>
               }
               label="9PM"
@@ -194,7 +219,13 @@ export const CardTemplate = forwardRef<HTMLDivElement, CardTemplateProps>(
                     stroke="#facc15"
                     strokeWidth="2"
                   />
-                  <circle cx="12" cy="9.5" r="2.5" stroke="#facc15" strokeWidth="2" />
+                  <circle
+                    cx="12"
+                    cy="9.5"
+                    r="2.5"
+                    stroke="#facc15"
+                    strokeWidth="2"
+                  />
                 </svg>
               }
               label="Kobi Nazrul Auditorium"
