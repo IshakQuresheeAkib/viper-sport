@@ -127,26 +127,30 @@ export function GetYourCardFlow() {
   async function onValidate(values: VerifyRegistrationInput) {
     setFormError(null);
 
-    const response = await fetch(
-      `/api/register/verify?id=${encodeURIComponent(values.registration_id)}`,
-    );
+    try {
+      const response = await fetch(
+        `/api/register/verify?id=${encodeURIComponent(values.registration_id)}`,
+      );
 
-    if (!response.ok) {
-      const payload = (await response.json().catch(() => null)) as {
-        error?: string;
-      } | null;
+      if (!response.ok) {
+        const payload = (await response.json().catch(() => null)) as {
+          error?: string;
+        } | null;
 
-      if (response.status === 404) {
-        setFormError("Registration ID not found.");
+        if (response.status === 404) {
+          setFormError("Registration ID not found.");
+          return;
+        }
+
+        setFormError(payload?.error ?? "Something went wrong, try again.");
         return;
       }
 
-      setFormError(payload?.error ?? "Something went wrong, try again.");
-      return;
+      const payload = (await response.json()) as CardRegistration;
+      setRegistration(payload);
+    } catch {
+      setFormError("Something went wrong, try again.");
     }
-
-    const payload = (await response.json()) as CardRegistration;
-    setRegistration(payload);
   }
 
   async function handlePhotoSelect(event: React.ChangeEvent<HTMLInputElement>) {

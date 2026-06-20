@@ -301,7 +301,7 @@ export function SuccessCard() {
           <div className="dash-divider mx-6 w-full" />
         </div>
 
-        <div className="flex flex-col items-center bg-white/5/50 px-6 pb-6">
+        <div className="flex flex-col items-center bg-white/5 px-6 pb-6">
           <div className="mb-6 flex w-full justify-between pt-3">
             <div className="flex flex-col">
               <span className="mb-1 text-xs font-bold text-kinetic-on-surface-variant">

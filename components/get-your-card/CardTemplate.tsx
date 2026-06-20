@@ -1,32 +1,40 @@
 import { forwardRef } from "react";
-import { CARD_HEIGHT, CARD_WIDTH } from "@/lib/card-constants";
+import {
+  CARD_HEIGHT,
+  CARD_PHOTO_HEIGHT,
+  CARD_SCALE,
+  CARD_WIDTH,
+} from "@/lib/card-constants";
 
 export interface CardTemplateProps {
-  firstName: string;
-  lastName: string;
   selfieUrl: string;
 }
 
-const PHOTO_HEIGHT = 460;
-const INFO_HEIGHT = CARD_HEIGHT - PHOTO_HEIGHT;
+const PHOTO_ZONE_CUT_HEIGHT = Math.round(48 * CARD_SCALE);
+const PHOTO_ZONE_SCRIM_HEIGHT = Math.round(220 * CARD_SCALE);
+const INFO_HEIGHT = CARD_HEIGHT - CARD_PHOTO_HEIGHT;
 const ARG_BLUE = "#75AADB";
 const AUT_RED = "#ED1C24";
-const MATCHDAY_HEADLINE_SRC = "/images/home/matchday.webp";
-
+const MATCHDAY_HEADLINE_SRC = "/images/heading.webp";
+const MATCHDAY_TITLE_SRC = "/images/title.webp";
 
 function Pill({ icon, label }: { icon: React.ReactNode; label: string }) {
   return (
     <div
-      className="flex flex-1 items-center justify-center gap-1.5 rounded-full px-2 py-2"
-      style={{ border: "1.5px solid #facc15" }}
+      className="flex flex-1 items-center justify-center rounded-full px-2 py-2"
+      style={{ border: "2px solid #F8AF07" }}
     >
-      {icon}
-      <span
-        className={` uppercase text-white`}
-        style={{ fontSize: 12, letterSpacing: "0.02em" }}
-      >
-        {label}
-      </span>
+      <div className="inline-flex max-w-full items-center justify-center gap-1.5 text-center">
+        <span className="flex shrink-0 items-center justify-center">
+          {icon}
+        </span>
+        <span
+          className="min-w-0 uppercase text-white"
+          style={{ fontSize: 16, letterSpacing: "0.02em" }}
+        >
+          {label}
+        </span>
+      </div>
     </div>
   );
 }
@@ -37,7 +45,7 @@ export const CardTemplate = forwardRef<HTMLDivElement, CardTemplateProps>(
       <div
         ref={ref}
         aria-hidden="true"
-        className={`pointer-events-none fixed left-0 overflow-hidden`}
+        className="pointer-events-none fixed left-0 overflow-hidden"
         style={{
           width: CARD_WIDTH,
           height: CARD_HEIGHT,
@@ -68,81 +76,92 @@ export const CardTemplate = forwardRef<HTMLDivElement, CardTemplateProps>(
         </svg>
 
         {/* ---- PHOTO ZONE ---- */}
-        <div
-          className="relative w-full overflow-hidden"
-          style={{ height: PHOTO_HEIGHT }}
-        >
-          {/* html-to-image capture requires a raw img — next/image breaks canvas export */}
+        <div className="relative w-full" style={{ height: CARD_PHOTO_HEIGHT }}>
+          {/* clip only the photo layer — headline must sit outside this box so negative bottom offsets are not cropped */}
+          <div className="absolute inset-0 overflow-hidden">
+            {/* html-to-image capture requires a raw img — next/image breaks canvas export */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={selfieUrl}
+              alt=""
+              crossOrigin="anonymous"
+              className="block size-full object-cover"
+              width={CARD_WIDTH}
+              height={CARD_PHOTO_HEIGHT}
+            />
+
+            {/* national-color diagonal gradient overlay, blue to red */}
+            <div
+              className="absolute inset-0"
+              style={{
+                background: `linear-gradient(135deg, ${ARG_BLUE}55 0%, transparent 45%, transparent 55%, ${AUT_RED}55 100%)`,
+              }}
+            />
+
+            {/* bottom scrim for headline legibility */}
+            <div
+              className="absolute inset-x-0 bottom-0"
+              style={{
+                height: PHOTO_ZONE_SCRIM_HEIGHT,
+                background:
+                  "linear-gradient(to top, #0a0a08 0%, rgba(10,10,8,0.65) 55%, rgba(10,10,8,0) 100%)",
+              }}
+            />
+
+            {/* angled cut at base of photo zone, clean single-edge (not jagged) */}
+            <svg
+              className="absolute inset-x-0 bottom-0"
+              width={CARD_WIDTH}
+              height={PHOTO_ZONE_CUT_HEIGHT}
+              viewBox={`0 0 ${CARD_WIDTH} ${PHOTO_ZONE_CUT_HEIGHT}`}
+              preserveAspectRatio="none"
+            >
+              <polygon
+                points={`0,${PHOTO_ZONE_CUT_HEIGHT} ${CARD_WIDTH},${Math.round(14 * CARD_SCALE)} ${CARD_WIDTH},${PHOTO_ZONE_CUT_HEIGHT}`}
+                fill="#0a0a08"
+              />
+            </svg>
+          </div>
+
+          {/* ---- TITLE, top center of photo ---- */}
+          <div className="absolute inset-x-0 top-0 z-10 mt-4 flex justify-center">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={MATCHDAY_TITLE_SRC}
+              alt=""
+              crossOrigin="anonymous"
+              className="block object-contain w-[280px] h-auto mx-auto drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)]"
+            />
+          </div>
+        </div>
+
+        {/* ---- HEADLINE BLOCK — card-level so it stacks above info panel and is not clipped by photo overflow ---- */}
+        <div className="absolute left-1/2 z-30 -translate-x-1/2 w-10/12 bottom-44">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={selfieUrl}
+            src={MATCHDAY_HEADLINE_SRC}
             alt=""
             crossOrigin="anonymous"
-            className="block size-full object-cover"
-            width={CARD_WIDTH}
-            height={PHOTO_HEIGHT}
+            className="block w-full object-contain object-left drop-shadow-[0_6px_20px_rgba(0,0,0,0.55)]"
           />
-
-          {/* national-color diagonal gradient overlay, blue to red */}
-          <div
-            className="absolute inset-0"
-            style={{
-              background: `linear-gradient(135deg, ${ARG_BLUE}55 0%, transparent 45%, transparent 55%, ${AUT_RED}55 100%)`,
-            }}
-          />
-
-          {/* bottom scrim for headline legibility */}
-          <div
-            className="absolute inset-x-0 bottom-0"
-            style={{
-              height: 220,
-              background:
-                "linear-gradient(to top, #0a0a08 0%, rgba(10,10,8,0.65) 55%, rgba(10,10,8,0) 100%)",
-            }}
-          />
-
-          {/* angled cut at base of photo zone, clean single-edge (not jagged) */}
-          <svg
-            className="absolute inset-x-0 bottom-0"
-            width={CARD_WIDTH}
-            height={48}
-            viewBox={`0 0 ${CARD_WIDTH} 48`}
-            preserveAspectRatio="none"
-          >
-            <polygon
-              points={`0,48 ${CARD_WIDTH},14 ${CARD_WIDTH},48`}
-              fill="#0a0a08"
-            />
-          </svg>
-
-          {/* ---- HEADLINE BLOCK, overlaid on lower photo ---- */}
-          <div className="absolute inset-x-0 -bottom-6 w-10/12 -left-6 z-10">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={MATCHDAY_HEADLINE_SRC}
-                alt=""
-                crossOrigin="anonymous"
-                className="block w-full object-contain object-left drop-shadow-[0_6px_20px_rgba(0,0,0,0.55)]"
-              />
-          </div>
         </div>
 
         {/* ---- INFO PANEL ---- */}
         <div
-          className="relative flex flex-col justify-center px-8 gap-6"
+          className="relative flex flex-col justify-end px-8 gap-10 pb-10"
           style={{ height: INFO_HEIGHT, backgroundColor: "#0a0a08" }}
         >
           {/* registrant name, secondary line */}
           <div className="flex items-center gap-3">
             <span
-              className="inline-block rounded-full size-4"
+              className="inline-block rounded-full size-6"
               style={{ backgroundColor: AUT_RED }}
             />
             <p
-              className="font-bold uppercase tracking-[0.15em] text-kinetic-coral"
+              className="min-w-0 truncate font-bold uppercase tracking-[0.15em] text-[#F8AF07]"
               style={{
                 fontFamily: "var(--font-plus-jakarta), sans-serif",
-                fontSize: 22,
+                fontSize: 30,
               }}
             >
               I am going to the event
@@ -153,14 +172,14 @@ export const CardTemplate = forwardRef<HTMLDivElement, CardTemplateProps>(
           <div className="flex items-stretch gap-2">
             <Pill
               icon={
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                   <rect
                     x="3"
                     y="4"
                     width="18"
                     height="18"
                     rx="2"
-                    stroke="#facc15"
+                    stroke="#F8AF07"
                     strokeWidth="2"
                   />
                   <line
@@ -168,7 +187,7 @@ export const CardTemplate = forwardRef<HTMLDivElement, CardTemplateProps>(
                     y1="9"
                     x2="21"
                     y2="9"
-                    stroke="#facc15"
+                    stroke="#F8AF07"
                     strokeWidth="2"
                   />
                   <line
@@ -176,7 +195,7 @@ export const CardTemplate = forwardRef<HTMLDivElement, CardTemplateProps>(
                     y1="2"
                     x2="8"
                     y2="6"
-                    stroke="#facc15"
+                    stroke="#F8AF07"
                     strokeWidth="2"
                   />
                   <line
@@ -184,7 +203,7 @@ export const CardTemplate = forwardRef<HTMLDivElement, CardTemplateProps>(
                     y1="2"
                     x2="16"
                     y2="6"
-                    stroke="#facc15"
+                    stroke="#F8AF07"
                     strokeWidth="2"
                   />
                 </svg>
@@ -193,17 +212,17 @@ export const CardTemplate = forwardRef<HTMLDivElement, CardTemplateProps>(
             />
             <Pill
               icon={
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                   <circle
                     cx="12"
                     cy="12"
                     r="9"
-                    stroke="#facc15"
+                    stroke="#F8AF07"
                     strokeWidth="2"
                   />
                   <path
                     d="M12 7v5l4 2"
-                    stroke="#facc15"
+                    stroke="#F8AF07"
                     strokeWidth="2"
                     strokeLinecap="round"
                   />
@@ -213,17 +232,17 @@ export const CardTemplate = forwardRef<HTMLDivElement, CardTemplateProps>(
             />
             <Pill
               icon={
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                   <path
                     d="M12 22s7-7.58 7-12.5A7 7 0 0 0 5 9.5C5 14.42 12 22 12 22Z"
-                    stroke="#facc15"
+                    stroke="#F8AF07"
                     strokeWidth="2"
                   />
                   <circle
                     cx="12"
                     cy="9.5"
                     r="2.5"
-                    stroke="#facc15"
+                    stroke="#F8AF07"
                     strokeWidth="2"
                   />
                 </svg>

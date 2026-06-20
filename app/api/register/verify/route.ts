@@ -1,16 +1,19 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { normalizeRegistrationId } from "@/lib/registration";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import type { CardRegistration } from "@/types";
 
 export async function GET(request: NextRequest) {
-  const id = request.nextUrl.searchParams.get("id")?.trim();
+  const rawId = request.nextUrl.searchParams.get("id");
 
-  if (!id) {
+  if (!rawId?.trim()) {
     return NextResponse.json(
       { error: "Registration ID is required." },
       { status: 400 },
     );
   }
+
+  const id = normalizeRegistrationId(rawId);
 
   const supabase = createSupabaseAdminClient();
   const registration = await supabase
