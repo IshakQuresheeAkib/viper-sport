@@ -65,7 +65,7 @@ export const KineticInput = forwardRef<HTMLInputElement, KineticInputProps>(
         {label ? (
           <label
             htmlFor={inputId}
-            className="text-[11px] font-bold uppercase text-seconday tracking-wider"
+            className="text-[11px] font-bold uppercase text-secondary tracking-wider"
           >
             {label}
           </label>
@@ -95,7 +95,7 @@ export const KineticInput = forwardRef<HTMLInputElement, KineticInputProps>(
               [errorId, ariaDescribedBy].filter(Boolean).join(" ") || undefined
             }
             className={cn(
-              "w-full border-none bg-transparent p-0 text-base text-kinetic-on-surface outline-none placeholder:text-kinetic-secondary/50 focus:ring-0",
+              "w-full border-none bg-transparent p-0 text-base text-kinetic-on-surface selection:text-black/70 outline-none placeholder:text-kinetic-secondary/50 focus:ring-0",
               className,
             )}
             {...props}

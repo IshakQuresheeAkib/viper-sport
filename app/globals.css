@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 @theme inline {
+  --color-kinetic-coral: #f86d6c;
   --color-kinetic: #d3ed86;
   --color-kinetic-surface: #13140d;
   --color-kinetic-charcoal: #262324;
@@ -13,7 +14,6 @@
   --color-kinetic-primary: #ffffff;
   --color-kinetic-dark: #b7d16d;
   --color-kinetic-secondary: #cec4c2;
-  --color-kinetic-coral: #f86d6c;
   --font-display: var(--font-baloo-tamma-2);
   --font-body: var(--font-plus-jakarta);
 }
@@ -55,7 +55,8 @@ body {
   }
 
   .glow-pulse,
-  .scanner-line {
+  .scanner-line,
+  .modal-enter {
     animation: none !important;
   }
 
@@ -80,7 +81,7 @@ select {
 
 ::selection {
   background: var(--color-kinetic);
-  color: black/70;
+  color: rgba(0, 0, 0, 0.867) / 70;
 }
 
 .container {
@@ -109,8 +110,8 @@ select {
 }
 
 .glass-input:focus-within {
-  border-color: var(--color-kinetic);
-  box-shadow: 0 0 15px rgb(var(--color-kinetic) / 30%);
+  border-color: #d3ed86;
+  box-shadow: 0 0 15px rgb(211 237 134 / 30%);
 }
 
 .retro-btn {
@@ -308,6 +309,22 @@ select {
 
 .scanner-line {
   animation: admin-scan 2s linear infinite;
+}
+
+.modal-enter {
+  animation: modal-slide-up 0.25s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes modal-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 @keyframes admin-scan {
