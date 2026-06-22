@@ -186,58 +186,79 @@ export function QRScanner({ registrations }: QRScannerProps) {
     return fetchRegistration(normalized);
   }
 
+  function recoverFromFailedLookup(message: string): void {
+    setErrorMessage(message);
+    isHandlingScanRef.current = false;
+    resumeScanner();
+    setState("scanning");
+  }
+
   async function handleScan(decodedText: string): Promise<void> {
     setState("submitting");
     setErrorMessage(null);
 
-    const registration = await resolveRegistration(decodedText);
+    try {
+      const registration = await resolveRegistration(decodedText);
 
-    if (!registration) {
-      setErrorMessage("Registration not found for this QR code.");
-      isHandlingScanRef.current = false;
-      resumeScanner();
-      setState("scanning");
-      return;
+      if (!registration) {
+        recoverFromFailedLookup("Registration not found for this QR code.");
+        return;
+      }
+
+      setResult(registration);
+      setState(registration.checked_in ? "modal-already-in" : "modal-clear");
+    } catch {
+      recoverFromFailedLookup(
+        "Could not look up registration. Please try again.",
+      );
     }
-
-    setResult(registration);
-    setState(registration.checked_in ? "modal-already-in" : "modal-clear");
   }
 
   async function submitCheckIn(registrationId: string): Promise<void> {
     setState("modal-confirming");
     setErrorMessage(null);
 
-    const response = await fetch("/api/admin/checkin", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ registration_id: registrationId }),
-    });
+    try {
+      const response = await fetch("/api/admin/checkin", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ registration_id: registrationId }),
+      });
 
-    if (!response.ok) {
+      if (!response.ok) {
+        setErrorMessage("Could not check in. Please try again.");
+        setState("modal-clear");
+        return;
+      }
+
+      const payload = (await response.json()) as CheckInResponse;
+
+      setResult((current) =>
+        current && current.registration_id === registrationId
+          ? {
+              ...current,
+              checked_in: true,
+              checked_in_at: payload.checked_in_at,
+            }
+          : current,
+      );
+
+      if (payload.already_checked_in) {
+        // Race condition: someone else checked this person in between our
+        // lookup and this confirm. Show the already-in state with fresh timestamp.
+        setState("modal-already-in");
+      } else {
+        setState("modal-success");
+        successTimeoutRef.current = setTimeout(() => {
+          successTimeoutRef.current = null;
+          dismissModal();
+        }, 1500);
+      }
+    } catch {
+      // Network failure or malformed response: recover to the retryable
+      // confirm state instead of leaving the modal stuck in "confirming".
       setErrorMessage("Could not check in. Please try again.");
       setState("modal-clear");
-      return;
-    }
-
-    const payload = (await response.json()) as CheckInResponse;
-
-    setResult((current) =>
-      current && current.registration_id === registrationId
-        ? { ...current, checked_in: true, checked_in_at: payload.checked_in_at }
-        : current,
-    );
-
-    if (payload.already_checked_in) {
-      // Race condition: someone else checked this person in between our
-      // lookup and this confirm. Show the already-in state with fresh timestamp.
-      setState("modal-already-in");
-    } else {
-      setState("modal-success");
-      successTimeoutRef.current = setTimeout(() => {
-        successTimeoutRef.current = null;
-        dismissModal();
-      }, 1500);
     }
   }
 

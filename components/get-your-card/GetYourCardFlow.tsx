@@ -316,12 +316,7 @@ export function GetYourCardFlow() {
 
       {step === "generating" && registration && selfieUrl
         ? createPortal(
-            <CardTemplate
-              ref={cardRef}
-              firstName={registration.first_name}
-              lastName={registration.last_name}
-              selfieUrl={selfieUrl}
-            />,
+            <CardTemplate ref={cardRef} selfieUrl={selfieUrl} />,
             document.body,
           )
         : null}
