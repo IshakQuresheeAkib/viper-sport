@@ -13,15 +13,8 @@ export type Registration = {
 
 export type PublicRegistration = Pick<
   Registration,
-  | "registration_id"
-  | "first_name"
-  | "last_name"
-  | "phone"
-  | "created_at"
-  | "checked_in"
+  "registration_id" | "first_name" | "last_name"
 >;
-
-export type RegistrationLookup = PublicRegistration & Pick<Registration, "id">;
 
 export type RegisterResponse = {
   registration_id: string;

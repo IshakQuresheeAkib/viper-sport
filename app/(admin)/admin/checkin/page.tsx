@@ -36,7 +36,7 @@ export default async function AdminCheckInPage() {
   return (
     <AdminShell
       title="Check-In"
-      eyebrow="Gate 4 · VIP Access"
+      eyebrow="Access Control"
       action={<AdminBackLink href="/admin/dashboard" />}
     >
       <CheckInExperience registrations={registrations} />
