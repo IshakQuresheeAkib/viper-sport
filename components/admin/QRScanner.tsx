@@ -35,7 +35,7 @@ type ScanState =
   | "modal-success";
 
 type LookupResult =
-  | { status: "found"; data: Registration }
+  | { status: "found"; data: Registration; fresh: boolean }
   | { status: "not-found" }
   | { status: "invalid-qr" }
   | { status: "unauthorized" }
@@ -76,6 +76,15 @@ export function QRScanner({ registrations }: QRScannerProps) {
   // Per-code cooldown: prevents the same QR from re-triggering after a dismiss
   // or error recovery while it is still in the camera frame.
   const lastScanRef = useRef<{ text: string; at: number } | null>(null);
+  // Records attendees checked in during this scanner session (id → timestamp).
+  // The preloaded `registrations` snapshot is captured at page load and never
+  // refreshes, so without this a re-scan of someone we just checked in would
+  // still read as "Clear". This override keeps re-scans accurate.
+  const sessionCheckInsRef = useRef<Map<string, string>>(new Map());
+  // Invalidation token for background status verification. Bumped on every new
+  // scan, confirm, and dismiss so a slow/late server response can never flip a
+  // modal the operator has already moved on from.
+  const scanTokenRef = useRef(0);
   // Focus management: track what had focus before the modal opened so we can
   // restore it when the modal closes.
   const previousFocusRef = useRef<HTMLElement | null>(null);
@@ -110,6 +119,8 @@ export function QRScanner({ registrations }: QRScannerProps) {
   }, [state]);
 
   const dismissModal = useCallback((): void => {
+    // Invalidate any in-flight background verification for the closing modal.
+    scanTokenRef.current += 1;
     if (successTimeoutRef.current !== null) {
       clearTimeout(successTimeoutRef.current);
       successTimeoutRef.current = null;
@@ -197,7 +208,11 @@ export function QRScanner({ registrations }: QRScannerProps) {
       if (response.status === 401) return { status: "unauthorized" };
       if (response.status === 404) return { status: "not-found" };
       if (!response.ok) return { status: "server-error" };
-      return { status: "found", data: (await response.json()) as Registration };
+      return {
+        status: "found",
+        data: (await response.json()) as Registration,
+        fresh: true,
+      };
     } catch {
       return { status: "server-error" };
     }
@@ -232,9 +247,47 @@ export function QRScanner({ registrations }: QRScannerProps) {
     const localMatch = registrations.find(
       (item) => item.registration_id === normalized,
     );
-    if (localMatch) return { status: "found", data: localMatch };
+    if (localMatch) return { status: "found", data: localMatch, fresh: false };
 
     return fetchRegistration(normalized);
+  }
+
+  /**
+   * Confirms a locally-resolved attendee's check-in status against the server in
+   * the background, so a check-in performed on another device is reflected even
+   * before the operator hits confirm. The instant local display is never blocked
+   * on this: any failure (offline, timeout, error) silently keeps what we showed.
+   */
+  async function verifyCheckInStatus(
+    registrationId: string,
+    token: number,
+  ): Promise<void> {
+    const lookup = await fetchRegistration(registrationId).catch(
+      (): LookupResult => ({ status: "server-error" }),
+    );
+
+    // Operator already moved on (new scan, confirm, or dismiss) — drop result.
+    if (scanTokenRef.current !== token) return;
+
+    // Only a confirmed "already checked in" changes the display. Anything else
+    // (not found, error, offline, still clear) leaves the local view untouched.
+    if (lookup.status !== "found" || !lookup.data.checked_in) return;
+
+    sessionCheckInsRef.current.set(
+      registrationId,
+      lookup.data.checked_in_at ?? new Date().toISOString(),
+    );
+
+    setResult((current) =>
+      current && current.registration_id === registrationId
+        ? {
+            ...current,
+            checked_in: true,
+            checked_in_at: lookup.data.checked_in_at ?? current.checked_in_at,
+          }
+        : current,
+    );
+    setState("modal-already-in");
   }
 
   function recoverFromFailedLookup(message: string): void {
@@ -245,6 +298,7 @@ export function QRScanner({ registrations }: QRScannerProps) {
   }
 
   async function handleScan(decodedText: string): Promise<void> {
+    const scanToken = (scanTokenRef.current += 1);
     setState("submitting");
     setErrorMessage(null);
 
@@ -253,10 +307,33 @@ export function QRScanner({ registrations }: QRScannerProps) {
     );
 
     switch (lookup.status) {
-      case "found":
-        setResult(lookup.data);
-        setState(lookup.data.checked_in ? "modal-already-in" : "modal-clear");
+      case "found": {
+        // The local snapshot's `checked_in` flag goes stale the moment we check
+        // someone in, so reconcile it against this session's check-ins.
+        const sessionCheckedInAt = sessionCheckInsRef.current.get(
+          lookup.data.registration_id,
+        );
+        const alreadyIn =
+          lookup.data.checked_in || sessionCheckedInAt !== undefined;
+        const data: Registration = alreadyIn
+          ? {
+              ...lookup.data,
+              checked_in: true,
+              checked_in_at:
+                lookup.data.checked_in_at ?? sessionCheckedInAt ?? null,
+            }
+          : lookup.data;
+        setResult(data);
+        setState(alreadyIn ? "modal-already-in" : "modal-clear");
+
+        // We showed "Clear" off a possibly-stale local snapshot. Confirm the
+        // status against the server in the background to catch cross-device
+        // check-ins; the operator isn't blocked while this runs.
+        if (!alreadyIn && !lookup.fresh) {
+          void verifyCheckInStatus(lookup.data.registration_id, scanToken);
+        }
         break;
+      }
       case "not-found":
         recoverFromFailedLookup("Registration not found for this QR code.");
         break;
@@ -273,6 +350,9 @@ export function QRScanner({ registrations }: QRScannerProps) {
   }
 
   async function submitCheckIn(registrationId: string): Promise<void> {
+    // Invalidate any in-flight background verification — the confirm flow now
+    // owns the modal state and the server response is authoritative.
+    scanTokenRef.current += 1;
     setState("modal-confirming");
     setErrorMessage(null);
 
@@ -290,6 +370,10 @@ export function QRScanner({ registrations }: QRScannerProps) {
       }
 
       const payload = (await response.json()) as CheckInResponse;
+
+      // Remember this check-in so a later re-scan reflects it despite the stale
+      // preloaded snapshot.
+      sessionCheckInsRef.current.set(registrationId, payload.checked_in_at);
 
       setResult((current) =>
         current && current.registration_id === registrationId
