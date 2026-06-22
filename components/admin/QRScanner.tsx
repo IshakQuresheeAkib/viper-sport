@@ -10,6 +10,8 @@ import {
   Loader2,
   QrCode,
   X,
+  Zap,
+  ZapOff,
 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
@@ -20,7 +22,7 @@ import type { CheckInResponse, Registration } from "@/types";
  *
  * idle ──► scanning ──► submitting ──► modal-clear ──► modal-confirming ──► modal-success ──► scanning
  *                                  └──► modal-already-in ──► scanning
- *                                  └──► scanning (not found)
+ *                                  └──► scanning (not found / invalid-qr / error)
  * scanning ──► idle (stop camera)
  */
 type ScanState =
@@ -32,9 +34,23 @@ type ScanState =
   | "modal-confirming"
   | "modal-success";
 
+type LookupResult =
+  | { status: "found"; data: Registration }
+  | { status: "not-found" }
+  | { status: "invalid-qr" }
+  | { status: "unauthorized" }
+  | { status: "server-error" };
+
+interface ExtendedMediaTrackCapabilities extends MediaTrackCapabilities {
+  torch?: boolean;
+}
+
 interface QRScannerProps {
   registrations: Registration[];
 }
+
+/** Prevents the same QR code from re-firing within this window after each decode. */
+const SCAN_COOLDOWN_MS = 2500;
 
 function getInitials(
   registration: Pick<Registration, "first_name" | "last_name">,
@@ -53,14 +69,23 @@ function formatCheckedInTime(timestamp: string | null): string {
 
 export function QRScanner({ registrations }: QRScannerProps) {
   const scannerRef = useRef<Html5Qrcode | null>(null);
-  // Guards against the html5-qrcode callback firing multiple times before
-  // the scanner is fully stopped (can happen on slow Android devices).
+  // Guards against html5-qrcode callback firing multiple times before the scanner
+  // is fully stopped (common on slow Android devices).
   const isHandlingScanRef = useRef(false);
   const successTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Per-code cooldown: prevents the same QR from re-triggering after a dismiss
+  // or error recovery while it is still in the camera frame.
+  const lastScanRef = useRef<{ text: string; at: number } | null>(null);
+  // Focus management: track what had focus before the modal opened so we can
+  // restore it when the modal closes.
+  const previousFocusRef = useRef<HTMLElement | null>(null);
+  const modalPrimaryRef = useRef<HTMLButtonElement | null>(null);
 
   const [state, setState] = useState<ScanState>("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [result, setResult] = useState<Registration | null>(null);
+  const [torchOn, setTorchOn] = useState(false);
+  const [torchSupported, setTorchSupported] = useState(false);
 
   useEffect(() => {
     return () => {
@@ -71,6 +96,19 @@ export function QRScanner({ registrations }: QRScannerProps) {
     };
   }, []);
 
+  // Move focus into the modal when it first opens; re-focus primary action after
+  // an inline PATCH error that returns state to "modal-clear".
+  useEffect(() => {
+    if (state === "modal-clear" || state === "modal-already-in") {
+      if (!previousFocusRef.current) {
+        previousFocusRef.current = document.activeElement as HTMLElement;
+      }
+      requestAnimationFrame(() => {
+        modalPrimaryRef.current?.focus();
+      });
+    }
+  }, [state]);
+
   const dismissModal = useCallback((): void => {
     if (successTimeoutRef.current !== null) {
       clearTimeout(successTimeoutRef.current);
@@ -79,6 +117,13 @@ export function QRScanner({ registrations }: QRScannerProps) {
     isHandlingScanRef.current = false;
     setResult(null);
     setErrorMessage(null);
+
+    // Restore focus to whatever held it before the modal opened.
+    const prev = previousFocusRef.current;
+    previousFocusRef.current = null;
+    requestAnimationFrame(() => {
+      prev?.focus();
+    });
 
     if (scannerRef.current) {
       try {
@@ -107,7 +152,6 @@ export function QRScanner({ registrations }: QRScannerProps) {
   function pauseScanner(): void {
     const scanner = scannerRef.current;
     if (!scanner) return;
-
     try {
       scanner.pause(true);
     } catch {
@@ -118,7 +162,6 @@ export function QRScanner({ registrations }: QRScannerProps) {
   function resumeScanner(): void {
     const scanner = scannerRef.current;
     if (!scanner) return;
-
     try {
       scanner.resume();
     } catch {
@@ -129,15 +172,14 @@ export function QRScanner({ registrations }: QRScannerProps) {
   async function releaseScanner(): Promise<void> {
     const scanner = scannerRef.current;
     if (!scanner) return;
-
     scannerRef.current = null;
-
+    setTorchOn(false);
+    setTorchSupported(false);
     try {
       await scanner.stop();
     } catch {
       // Scanner may already be stopped.
     }
-
     try {
       scanner.clear();
     } catch {
@@ -147,41 +189,50 @@ export function QRScanner({ registrations }: QRScannerProps) {
 
   async function fetchRegistration(
     registrationId: string,
-  ): Promise<Registration | null> {
-    const response = await fetch(
-      `/api/admin/registrations?registration_id=${encodeURIComponent(registrationId)}`,
-    );
-    if (!response.ok) return null;
-    return (await response.json()) as Registration;
+  ): Promise<LookupResult> {
+    try {
+      const response = await fetch(
+        `/api/admin/registrations?registration_id=${encodeURIComponent(registrationId)}`,
+      );
+      if (response.status === 401) return { status: "unauthorized" };
+      if (response.status === 404) return { status: "not-found" };
+      if (!response.ok) return { status: "server-error" };
+      return { status: "found", data: (await response.json()) as Registration };
+    } catch {
+      return { status: "server-error" };
+    }
   }
 
   /**
-   * Some Android camera apps inject a URL scheme (e.g. "http://…" or
-   * "https://…") in front of raw text QR codes. Strip it so we always
-   * match against the bare registration_id.
+   * Normalizes raw QR content to a plain uppercase registration ID.
+   * Some Android camera apps wrap QR data in a URL scheme — strip it.
+   * Returns uppercase so local exact-match lookups always succeed.
    */
   function extractRegistrationId(raw: string): string {
     const trimmed = raw.trim();
     try {
       const url = new URL(trimmed);
       const parts = url.pathname.split("/").filter(Boolean);
-      const candidate = parts.at(-1) ?? url.hostname;
-      return candidate.toUpperCase().startsWith("REG-") ? candidate : trimmed;
+      const candidate = (parts.at(-1) ?? url.hostname).toUpperCase();
+      return candidate.startsWith("REG-") ? candidate : trimmed.toUpperCase();
     } catch {
-      return trimmed;
+      return trimmed.toUpperCase();
     }
   }
 
-  async function resolveRegistration(
-    registrationId: string,
-  ): Promise<Registration | null> {
-    const normalized = extractRegistrationId(registrationId);
+  async function resolveRegistration(rawText: string): Promise<LookupResult> {
+    const normalized = extractRegistrationId(rawText);
+
+    // Reject non-ViperSport QR codes before making a network call.
+    if (!normalized.startsWith("REG-")) {
+      return { status: "invalid-qr" };
+    }
 
     // Fast local lookup first — avoids a round-trip for pre-loaded rows.
     const localMatch = registrations.find(
       (item) => item.registration_id === normalized,
     );
-    if (localMatch) return localMatch;
+    if (localMatch) return { status: "found", data: localMatch };
 
     return fetchRegistration(normalized);
   }
@@ -197,20 +248,27 @@ export function QRScanner({ registrations }: QRScannerProps) {
     setState("submitting");
     setErrorMessage(null);
 
-    try {
-      const registration = await resolveRegistration(decodedText);
+    const lookup = await resolveRegistration(decodedText).catch(
+      (): LookupResult => ({ status: "server-error" }),
+    );
 
-      if (!registration) {
+    switch (lookup.status) {
+      case "found":
+        setResult(lookup.data);
+        setState(lookup.data.checked_in ? "modal-already-in" : "modal-clear");
+        break;
+      case "not-found":
         recoverFromFailedLookup("Registration not found for this QR code.");
-        return;
-      }
-
-      setResult(registration);
-      setState(registration.checked_in ? "modal-already-in" : "modal-clear");
-    } catch {
-      recoverFromFailedLookup(
-        "Could not look up registration. Please try again.",
-      );
+        break;
+      case "invalid-qr":
+        recoverFromFailedLookup("Not a ViperSport pass.");
+        break;
+      case "unauthorized":
+        recoverFromFailedLookup("Session expired — please sign in again.");
+        break;
+      case "server-error":
+        recoverFromFailedLookup("Lookup failed — please try again.");
+        break;
     }
   }
 
@@ -244,8 +302,8 @@ export function QRScanner({ registrations }: QRScannerProps) {
       );
 
       if (payload.already_checked_in) {
-        // Race condition: someone else checked this person in between our
-        // lookup and this confirm. Show the already-in state with fresh timestamp.
+        // Race: another device checked this person in between our lookup and
+        // this confirm. Show the already-in state with the fresh server timestamp.
         setState("modal-already-in");
       } else {
         setState("modal-success");
@@ -255,14 +313,28 @@ export function QRScanner({ registrations }: QRScannerProps) {
         }, 1500);
       }
     } catch {
-      // Network failure or malformed response: recover to the retryable
-      // confirm state instead of leaving the modal stuck in "confirming".
+      // Network failure or malformed response: recover to retryable confirm state.
       setErrorMessage("Could not check in. Please try again.");
       setState("modal-clear");
     }
   }
 
+  async function toggleTorch(): Promise<void> {
+    const scanner = scannerRef.current;
+    if (!scanner) return;
+    const next = !torchOn;
+    try {
+      await scanner.applyVideoConstraints({
+        advanced: [{ torch: next } as MediaTrackConstraintSet],
+      });
+      setTorchOn(next);
+    } catch {
+      // Torch toggle not supported at runtime on this device.
+    }
+  }
+
   async function stopScanner(): Promise<void> {
+    lastScanRef.current = null;
     await releaseScanner();
     setState("idle");
   }
@@ -271,6 +343,7 @@ export function QRScanner({ registrations }: QRScannerProps) {
     setErrorMessage(null);
     setResult(null);
     isHandlingScanRef.current = false;
+    lastScanRef.current = null;
     await releaseScanner();
 
     const scanner = new Html5Qrcode("qr-reader");
@@ -282,17 +355,55 @@ export function QRScanner({ registrations }: QRScannerProps) {
         { facingMode: "environment" },
         { fps: 10, qrbox: { width: 240, height: 240 } },
         (decodedText) => {
-          // Guard: only process the very first successful decode.
+          // Guard: only one scan in flight at a time.
           if (isHandlingScanRef.current) return;
+
+          // Cooldown: ignore the same QR code within SCAN_COOLDOWN_MS of the
+          // last accepted decode. Prevents duplicate triggers when the code
+          // stays in frame after a dismiss or error recovery.
+          const now = Date.now();
+          const last = lastScanRef.current;
+          const normalized = decodedText.trim().toUpperCase();
+          if (
+            last &&
+            last.text === normalized &&
+            now - last.at < SCAN_COOLDOWN_MS
+          ) {
+            return;
+          }
+
           isHandlingScanRef.current = true;
+          lastScanRef.current = { text: normalized, at: now };
           pauseScanner();
           void handleScan(decodedText);
         },
         undefined,
       );
-    } catch {
+
+      // Probe for torch support after the camera stream is live.
+      try {
+        const caps =
+          scanner.getRunningTrackCapabilities() as ExtendedMediaTrackCapabilities;
+        setTorchSupported(!!caps.torch);
+      } catch {
+        // getRunningTrackCapabilities not available on all browsers — fine.
+      }
+    } catch (err) {
       await releaseScanner();
-      setErrorMessage("Could not access the camera.");
+      const name = err instanceof Error ? err.name : "";
+      if (name === "NotAllowedError") {
+        setErrorMessage(
+          "Camera permission denied. Allow camera access and try again.",
+        );
+      } else if (name === "NotFoundError") {
+        setErrorMessage("No camera found on this device.");
+      } else if (name === "NotReadableError") {
+        setErrorMessage(
+          "Camera is in use by another app. Close it and try again.",
+        );
+      } else {
+        setErrorMessage("Could not access the camera.");
+      }
       setState("idle");
     }
   }
@@ -454,6 +565,7 @@ export function QRScanner({ registrations }: QRScannerProps) {
                 <div className="p-5">
                   {state === "modal-already-in" ? (
                     <Button
+                      ref={modalPrimaryRef}
                       type="button"
                       variant="neutral"
                       fullWidth
@@ -466,6 +578,7 @@ export function QRScanner({ registrations }: QRScannerProps) {
                   ) : (
                     <div className="flex flex-col gap-3">
                       <Button
+                        ref={modalPrimaryRef}
                         type="button"
                         variant="coral"
                         fullWidth
@@ -542,9 +655,27 @@ export function QRScanner({ registrations }: QRScannerProps) {
             <div className="scanner-line pointer-events-none absolute inset-x-0 z-20 h-1 bg-kinetic shadow-[0_0_15px_rgba(227,254,149,0.8)]" />
           ) : null}
 
-          {/* Stop camera button */}
+          {/* Camera controls: torch toggle (if supported) + stop */}
           {state === "scanning" ? (
-            <div className="absolute inset-x-0 bottom-4 z-30 flex justify-center px-4">
+            <div className="absolute inset-x-0 bottom-4 z-30 flex items-center justify-center gap-2 px-4">
+              {torchSupported ? (
+                <button
+                  type="button"
+                  aria-label={torchOn ? "Turn off torch" : "Turn on torch"}
+                  onClick={() => void toggleTorch()}
+                  className={`flex size-9 shrink-0 items-center justify-center rounded-full border transition-colors ${
+                    torchOn
+                      ? "border-kinetic bg-kinetic text-kinetic-surface"
+                      : "border-white/20 bg-kinetic-surface/80 text-kinetic-on-surface-variant hover:border-kinetic/50 hover:text-kinetic"
+                  }`}
+                >
+                  {torchOn ? (
+                    <Zap className="size-4" aria-hidden="true" />
+                  ) : (
+                    <ZapOff className="size-4" aria-hidden="true" />
+                  )}
+                </button>
+              ) : null}
               <Button
                 type="button"
                 variant="neutral"
