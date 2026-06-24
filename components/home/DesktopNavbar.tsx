@@ -8,6 +8,7 @@ import { useActiveSection } from "@/hooks/useActiveSection";
 import { homeNavLinks, homeScrollSpySectionIds } from "@/lib/home-nav";
 import type { HomeSectionId } from "@/lib/home-nav";
 import { shouldSkipAnimation } from "@/lib/animation";
+import { ViperSportLogo } from "@/components/shared/ViperSportLogo";
 import { cn } from "@/lib/utils";
 
 export function DesktopNavbar() {
@@ -139,19 +140,7 @@ export function DesktopNavbar() {
           data-nav-animate
           className="group flex shrink-0 cursor-pointer items-center gap-2.5"
         >
-          <span className="relative flex size-5 items-center justify-center">
-            <Circle
-              className="size-5 fill-kinetic text-kinetic transition-transform duration-300 group-hover:scale-110"
-              aria-hidden="true"
-            />
-            <span
-              className="absolute inset-0 rounded-full bg-kinetic/40 blur-sm motion-safe:animate-pulse"
-              aria-hidden="true"
-            />
-          </span>
-          <span className=" text-xl font-bold  text-white">
-            Viper<span className="text-kinetic">Sport</span>
-          </span>
+          <ViperSportLogo size="sm" priority />
         </Link>
 
         <div data-nav-animate className="relative flex items-center gap-0.5">
