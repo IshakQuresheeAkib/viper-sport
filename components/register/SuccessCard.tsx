@@ -8,6 +8,7 @@ import { CheckCircle, Download, Share2 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
+import { ViperSportLogo } from "@/components/shared/ViperSportLogo";
 import { createQrDataUrl } from "@/lib/qr";
 import { buildPassImage } from "@/lib/pass";
 import { shouldSkipAnimation } from "@/lib/animation";
@@ -273,8 +274,9 @@ export function SuccessCard() {
         <div className="h-1 w-full bg-kinetic" />
 
         <div className="flex items-center justify-between bg-kinetic-surface-container/50 px-6 pb-4 pt-6">
-          <span className="text-xs font-bold uppercase tracking-widest text-kinetic-on-surface-variant">
-            ViperSport Pass
+          <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-kinetic-on-surface-variant">
+            <ViperSportLogo size="xs" />
+            Pass
           </span>
         </div>
 

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { SocialLinks } from "@/components/shared/SocialLinks";
+import { ViperSportLogo } from "@/components/shared/ViperSportLogo";
 
 export function FooterSection() {
   const year = new Date().getFullYear();
@@ -12,9 +13,9 @@ export function FooterSection() {
         <div className="space-y-3">
           <Link
             href="/"
-            className=" text-3xl font-medium uppercase  text-kinetic-primary transition-opacity duration-200 hover:opacity-80"
+            className="inline-flex justify-center transition-opacity duration-200 hover:opacity-80"
           >
-            ViperSport
+            <ViperSportLogo size="md" />
           </Link>
           <p className="mx-auto max-w-md text-sm leading-relaxed text-kinetic-on-surface-variant">
             Argentina vs Austria Live Show · 22 June 2026 · Kobi Nazrul

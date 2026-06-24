@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Calendar, Home, TicketX, Users } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { ViperSportLogo } from "@/components/shared/ViperSportLogo";
 
 export function RegistrationClosed() {
   return (
@@ -27,10 +28,9 @@ export function RegistrationClosed() {
       </div>
 
       <header className="relative z-10 mb-8 text-center">
-        <Link href="/">
-          <h1 className="font-display text-3xl font-medium  text-kinetic-primary drop-shadow-lg md:text-5xl">
-            ViperSport
-          </h1>
+        <Link href="/" className="inline-flex justify-center">
+          <h1 className="sr-only">ViperSport</h1>
+          <ViperSportLogo size="lg" />
         </Link>
       </header>
 

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ViperSportProfile } from "@/components/shared/ViperSportProfile";
+import { ViperSportLogo } from "@/components/shared/ViperSportLogo";
 import { RegisterEventDetails } from "@/components/register/RegisterEventDetails";
 import { RegisterForm } from "@/components/register/RegisterForm";
 import { RegistrationClosed } from "@/components/register/RegistrationClosed";
@@ -35,10 +36,9 @@ export default async function RegisterPage() {
       </div>
 
       <header className="mb-6 mt-2 w-full max-w-6xl text-center lg:mb-8 lg:mt-4">
-        <Link href="/">
-          <h1 className="font-display text-4xl font-medium  text-kinetic-primary drop-shadow-lg md:text-6xl lg:text-7xl">
-            ViperSport
-          </h1>
+        <Link href="/" className="inline-flex justify-center">
+          <h1 className="sr-only">ViperSport</h1>
+          <ViperSportLogo size="2xl" priority />
         </Link>
         <p className="mt-2 text-sm font-bold uppercase tracking-widest text-kinetic-dark md:text-base">
           Live Broadcast Experience

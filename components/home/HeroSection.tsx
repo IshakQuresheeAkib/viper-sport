@@ -3,8 +3,9 @@
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { ArrowRight, ChevronDown, Circle } from "lucide-react";
+import { ArrowRight, ChevronDown } from "lucide-react";
 import { SocialLinks } from "@/components/shared/SocialLinks";
+import { ViperSportLogo } from "@/components/shared/ViperSportLogo";
 import { Button } from "@/components/ui/Button";
 import { shouldSkipAnimation } from "@/lib/animation";
 
@@ -63,8 +64,7 @@ export function HeroSection() {
       {/* ── Mobile nav — absolute, sits above photo ── */}
       <header className="absolute inset-x-0 top-0 z-40 flex items-center px-4 py-4 lg:hidden">
         <div className="flex items-center gap-3">
-          <Circle className="size-5 fill-white text-white" aria-hidden="true" />
-          <span className=" text-2xl font-bold  text-white">ViperSport</span>
+          <ViperSportLogo size="sm" priority />
         </div>
       </header>
 
@@ -79,11 +79,11 @@ export function HeroSection() {
             <h1 className="text-[2.75rem] font-medium uppercase text-kinetic-primary lg:text-[4rem]">
               Fuad
               <br />
-              <span className="font-extrabold text-kinetic-coral">
+              <span className="font-extrabold text-kinetic">
                 Abdul-Aziz
               </span>
             </h1>
-            <p className="mt-3 text-xs font-bold uppercase tracking-[0.2em] text-kinetic lg:text-sm">
+            <p className="mt-3 text-xs font-bold uppercase tracking-[0.2em] lg:text-sm">
               Founder of ViperSport
             </p>
           </div>
@@ -95,7 +95,7 @@ export function HeroSection() {
 
           {/* CTA */}
           <div data-hero-animate>
-            <Button variant="coral" fullWidth href="/register">
+            <Button fullWidth href="/register">
               Register The Event
               <ArrowRight className="size-5" aria-hidden="true" />
             </Button>

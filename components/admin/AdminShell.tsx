@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { ArrowLeft, Home, LayoutDashboard, LogOut, QrCode } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { ViperSportLogo } from "@/components/shared/ViperSportLogo";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 
@@ -53,9 +54,8 @@ export function AdminShell({
           <div className="flex items-center justify-center rounded-full bg-kinetic/10 p-2 text-kinetic-primary">
             <LayoutDashboard className="size-5" aria-hidden="true" />
           </div>
-          <h1 className="font-display text-xl font-bold uppercase  text-kinetic-primary">
-            ViperSport
-          </h1>
+          <h1 className="sr-only">ViperSport</h1>
+          <ViperSportLogo size="sm" />
         </div>
 
         <nav
@@ -109,9 +109,7 @@ export function AdminShell({
             >
               <LayoutDashboard className="size-5" aria-hidden="true" />
             </Link>
-            <p className="font-display text-lg font-bold uppercase  text-kinetic-primary">
-              ViperSport
-            </p>
+            <ViperSportLogo size="sm" className="mx-auto" />
             <div className="size-9" aria-hidden="true" />
           </div>
         </header>

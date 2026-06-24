@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { VIPER_SPORT_BIO } from "@/lib/social";
+import { ViperSportLogo } from "@/components/shared/ViperSportLogo";
 import { SocialLinks } from "@/components/shared/SocialLinks";
 
 export function ViperSportProfile() {
@@ -15,11 +16,9 @@ export function ViperSportProfile() {
         />
         <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-kinetic-charcoal via-kinetic-charcoal/20 to-transparent" />
         <div className="absolute inset-x-0 bottom-0 p-5">
-          <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-kinetic">
-            ViperSport
-          </p>
+          <ViperSportLogo size="xs" className="mb-1" />
           <h2 className="text-2xl uppercase text-kinetic-primary">
-            Fuad <span className="font-extrabold">Abdul-Aziz</span>
+            Fuad <span className="font-extrabold text-kinetic">Abdul-Aziz</span>
           </h2>
         </div>
       </div>

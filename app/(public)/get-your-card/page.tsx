@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { GetYourCardFlow } from "@/components/get-your-card/GetYourCardFlow";
+import { ViperSportLogo } from "@/components/shared/ViperSportLogo";
 
 export const metadata: Metadata = {
   title: "Get Your Card",
@@ -23,10 +24,9 @@ export default function GetYourCardPage() {
       </div>
 
       <header className="relative z-10 mb-8 text-center">
-        <Link href="/">
-          <h1 className="font-display text-3xl text-kinetic-primary drop-shadow-lg md:text-5xl">
-            Viper<span className="font-medium">Sport</span>
-          </h1>
+        <Link href="/" className="inline-flex justify-center">
+          <h1 className="sr-only">ViperSport</h1>
+          <ViperSportLogo size="lg" />
         </Link>
       </header>
 

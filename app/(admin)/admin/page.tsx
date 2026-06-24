@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Shield } from "lucide-react";
 import { AdminLoginForm } from "@/components/admin/AdminLoginForm";
+import { ViperSportLogo } from "@/components/shared/ViperSportLogo";
 
 export const metadata: Metadata = {
   title: "Admin Login",
@@ -23,8 +24,8 @@ export default function AdminLoginPage() {
           <div className="clip-retro mb-6 flex size-16 items-center justify-center border border-white/60 bg-white/5 shadow-[0_0_20px_rgba(211,237,134,0.1)]">
             <Shield className="size-8 text-kinetic" aria-hidden="true" />
           </div>
-          <h1 className="mb-2  text-4xl font-medium uppercase  text-kinetic-primary">
-            ViperSport
+          <h1 className="mb-2 flex justify-center">
+            <ViperSportLogo size="lg" />
           </h1>
           <div className="inline-flex items-center border-l-2 border-kinetic bg-white/10 px-3 py-1">
             <span className="text-xs font-bold uppercase tracking-widest text-kinetic-on-surface-variant">
